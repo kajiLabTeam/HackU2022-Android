@@ -1,10 +1,7 @@
 package net.harutiro.test_bottomnavigation_withjetpackcompose
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import net.harutiro.xclothes.R
 
@@ -36,6 +33,12 @@ sealed class BottomBarScreen(
         route = "map",
         title = "Map",
         icon = Icons.Default.Map
+    )
+
+    object Add : BottomBarScreen(
+        route = "add",
+        title = "Add",
+        icon = Icons.Default.AddAPhoto
     )
 
 }

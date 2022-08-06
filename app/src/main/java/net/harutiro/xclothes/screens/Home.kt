@@ -27,13 +27,6 @@ fun HomeScreen() {
 
     Scaffold(
         modifier = Modifier.padding(0.dp,0.dp,0.dp,70.dp),
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { mContext.startActivity(Intent(mContext, CoordinateEditActivity::class.java))},
-            ) {
-                Icon(Icons.Filled.Add, contentDescription = "追加")
-            }
-        }
 
     ){
 

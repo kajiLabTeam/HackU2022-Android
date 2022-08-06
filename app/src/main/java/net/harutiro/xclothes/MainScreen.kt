@@ -33,18 +33,8 @@ fun MainScreen() {
     val navController = rememberNavController()
 
     Scaffold (
-        topBar = { TopBar()},
+//        topBar = { TopBar()},
         bottomBar = { BottomBar(navController = navController) } ,
-//        floatingActionButton = {
-//            FloatingActionButton(
-//                onClick = {
-//
-//                },
-//            ) {
-//                Icon(Icons.Filled.Add, contentDescription = "追加")
-//            }
-//        },
-//        floatingActionButtonPosition = FabPosition.Center,
     ){
 
         BottomNavGraph(navController = navController)
@@ -69,7 +59,9 @@ fun BottomBar(navController: NavHostController){
         BottomBarScreen.Profile,
         BottomBarScreen.Settings,
         BottomBarScreen.Map,
-    )
+        BottomBarScreen.Add,
+
+        )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination

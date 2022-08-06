@@ -4,9 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import net.harutiro.test_bottomnavigation_withjetpackcompose.screens.AddScreen
 import net.harutiro.test_bottomnavigation_withjetpackcompose.screens.HomeScreen
 import net.harutiro.test_bottomnavigation_withjetpackcompose.screens.MapScreen
-import net.harutiro.test_bottomnavigation_withjetpackcompose.screens.ProfileScreen
+import net.harutiro.xclothes.screens.ProfileScreen
 import net.harutiro.test_bottomnavigation_withjetpackcompose.screens.SettingsScreen
 
 @Composable
@@ -26,6 +27,9 @@ fun BottomNavGraph(navController:NavHostController) {
         }
         composable(route = BottomBarScreen.Map.route){
             MapScreen()
+        }
+        composable(route = BottomBarScreen.Add.route){
+            AddScreen()
         }
     }
 }

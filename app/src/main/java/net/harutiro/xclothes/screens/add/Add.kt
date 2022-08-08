@@ -5,21 +5,22 @@ import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.Style
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,10 +52,24 @@ fun AddScreen(viewModel: AddViewModel) {
                 .fillMaxSize()
         ){
             if(uriRemember.isEmpty()){
-                nottingPhotoIcon(launcher,uri)
+                NottingPhotoIcon(launcher,uri)
             }else{
-                photoView(uriRemember)
+                PhotoView(uriRemember)
             }
+
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+
+            ) {
+                Spinner("服の種類")
+                Spinner("体の部位")
+                Spinner("公開範囲",listOf("する","しない"))
+                SaveButton()
+                Spacer(modifier = Modifier.padding(16.dp))
+            }
+
+
 
 
 
@@ -64,8 +79,80 @@ fun AddScreen(viewModel: AddViewModel) {
     }
 }
 
+
 @Composable
-fun nottingPhotoIcon(launcher: ManagedActivityResultLauncher<Uri, Boolean>, uri: Uri) {
+fun SaveButton(){
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+    ){
+        Button(
+            onClick = { /*TODO*/ },
+        ) {
+            Text("保存をする")
+        }
+    }
+}
+
+
+@Composable
+fun Spinner(questionLabel:String,suggestions: List<String> = listOf("Item1","Item2","Item3")){
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf("") }
+
+    var dropDownWidth by remember { mutableStateOf(0) }
+
+    val icon = if (expanded) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown
+
+
+    Column(
+        modifier = Modifier.padding(16.dp)
+    ) {
+        OutlinedTextField(
+            value = selectedText,
+            onValueChange = { selectedText = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .onSizeChanged {
+                    dropDownWidth = it.width
+                },
+            label = {Text(questionLabel)},
+            trailingIcon = {
+                Icon(icon,"contentDescription", Modifier.clickable { expanded = !expanded })
+            },
+            leadingIcon = {
+                Icon(Icons.Filled.Style,"contentDescription")
+            },
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current){dropDownWidth.toDp()})
+        ) {
+            suggestions.forEach { label ->
+                DropdownMenuItem(
+                    onClick = {
+                        selectedText = label
+                        expanded = false
+                    },
+                    text = {
+                        Row{
+                            Icon(Icons.Filled.Style,"contentDescription")
+                            Spacer(modifier = Modifier.padding(8.dp))
+                            Text(text = label)
+                        }
+                    }
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun NottingPhotoIcon(launcher: ManagedActivityResultLauncher<Uri, Boolean>, uri: Uri) {
     Box(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.secondary)
@@ -88,7 +175,7 @@ fun nottingPhotoIcon(launcher: ManagedActivityResultLauncher<Uri, Boolean>, uri:
 }
 
 @Composable
-fun photoView(uriRemember:String){
+fun PhotoView(uriRemember:String){
     Box(){
         Image(
             painter = rememberAsyncImagePainter(

@@ -4,9 +4,13 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
@@ -27,44 +31,55 @@ import androidx.compose.ui.unit.toSize
 import net.harutiro.xclothes.R
 import net.harutiro.xclothes.ui.theme.XclothesTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ProfileScreen() {
 
 
     Surface(
-        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
-    ){
+//        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+    ) {
 
         Column(
-            modifier = Modifier.padding(24.dp)
-        ){
+        ) {
 
-            Spacer(modifier = Modifier.padding(top = 16.dp))
-            icon()
             Spacer(modifier = Modifier.padding(top = 64.dp))
-            textInput()
-            Spacer(modifier = Modifier.padding(top = 32.dp))
-            radioButton()
-            Spacer(modifier = Modifier.padding(top = 32.dp))
-            ageEditText()
-            Spacer(modifier = Modifier.padding(top = 32.dp))
-            heightEditText()
+            icon()
 
-
+            Card(
+                modifier = Modifier
+                    .padding(top = 64.dp)
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .verticalScroll(rememberScrollState())
+                ){
+                    textInput()
+                    Spacer(modifier = Modifier.padding(top = 32.dp))
+                    radioButton()
+                    Spacer(modifier = Modifier.padding(top = 32.dp))
+                    ageEditText()
+                    Spacer(modifier = Modifier.padding(top = 32.dp))
+                    heightEditText()
+                }
+            }
         }
     }
 }
 
 @Composable
-fun heightEditText(){
-    Row (
+fun heightEditText() {
+    Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .padding(vertical = 4.dp, horizontal = 8.dp)
             .heightIn()
-    ){
+    ) {
 
         Image(
             painter = painterResource(R.drawable.ic_launcher_background),
@@ -89,23 +104,23 @@ fun heightEditText(){
                 value = text,
                 onValueChange = { text = it },
                 label = { Text(text = "身長") },
-                placeholder = { Text(text = "身長を入力してください")},
+                placeholder = { Text(text = "身長を入力してください") },
                 singleLine = true,
-                keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
     }
 }
 
 @Composable
-fun ageEditText(){
-    Row (
+fun ageEditText() {
+    Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .padding(vertical = 4.dp, horizontal = 8.dp)
             .heightIn()
-    ){
+    ) {
 
         Image(
             painter = painterResource(R.drawable.ic_launcher_background),
@@ -130,21 +145,21 @@ fun ageEditText(){
                 value = text,
                 onValueChange = { text = it },
                 label = { Text(text = "年齢") },
-                placeholder = { Text(text = "年齢を入力してください")},
+                placeholder = { Text(text = "年齢を入力してください") },
                 singleLine = true,
-                keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
     }
 }
 
 @Composable
-fun ageSpinner(){
+fun ageSpinner() {
     var expanded by remember { mutableStateOf(false) }
-    val suggestions = listOf("","Item2","Item3")
+    val suggestions = listOf("", "Item2", "Item3")
     var selectedText by remember { mutableStateOf("") }
 
-    var textfieldSize by remember { mutableStateOf(Size.Zero)}
+    var textfieldSize by remember { mutableStateOf(Size.Zero) }
 
     val icon = if (expanded)
         Icons.Filled.ArrowDropUp //it requires androidx.compose.material:material-icons-extended
@@ -165,9 +180,9 @@ fun ageSpinner(){
                 .clickable {
                     expanded = !expanded
                 },
-            label = {Text("Label")},
+            label = { Text("Label") },
             trailingIcon = {
-                Icon(icon,"contentDescription",
+                Icon(icon, "contentDescription",
                     Modifier.clickable { expanded = !expanded })
             }
         )
@@ -175,14 +190,14 @@ fun ageSpinner(){
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .width(with(LocalDensity.current){textfieldSize.width.toDp()})
+                .width(with(LocalDensity.current) { textfieldSize.width.toDp() })
         ) {
             suggestions.forEach { label ->
                 DropdownMenuItem(
                     onClick = {
                         selectedText = label
                         expanded = false
-                              },
+                    },
                     text = { Text(text = label) }
                 )
             }
@@ -199,25 +214,25 @@ fun radioButton() {
         val selectedGender = remember { mutableStateOf("") }
         Row {
             IconToggleButton(
-                checked = selectedGender.value == Gender.male ,
+                checked = selectedGender.value == Gender.male,
                 onCheckedChange = { selectedGender.value = Gender.male }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.man_fill0_wght400_grad0_opsz48),
                     contentDescription = "Radio button icon",
-                    tint = if(selectedGender.value == Gender.male) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+                    tint = if (selectedGender.value == Gender.male) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
                 )
             }
             Spacer(modifier = Modifier.size(16.dp))
             Text(Gender.male)
             IconToggleButton(
-                checked = selectedGender.value == Gender.female ,
+                checked = selectedGender.value == Gender.female,
                 onCheckedChange = { selectedGender.value = Gender.female }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.woman_fill0_wght400_grad0_opsz48),
                     contentDescription = "Radio button icon",
-                    tint = if(selectedGender.value == Gender.female) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+                    tint = if (selectedGender.value == Gender.female) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
                 )
             }
             Spacer(modifier = Modifier.size(16.dp))
@@ -227,6 +242,7 @@ fun radioButton() {
         }
     }
 }
+
 object Gender {
     const val male = "Male"
     const val female = "Female"
@@ -234,15 +250,15 @@ object Gender {
 
 
 @Composable
-fun textInput(){
+fun textInput() {
 
-    Row (
+    Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .padding(vertical = 4.dp, horizontal = 8.dp)
             .heightIn()
-    ){
+    ) {
 
         Image(
             painter = painterResource(R.drawable.ic_launcher_background),
@@ -267,7 +283,7 @@ fun textInput(){
                 value = text,
                 onValueChange = { text = it },
                 label = { Text(text = "名前") },
-                placeholder = { Text(text = "名前を入力してください")},
+                placeholder = { Text(text = "名前を入力してください") },
                 singleLine = true,
             )
         }
@@ -277,16 +293,15 @@ fun textInput(){
 }
 
 
-
 @Composable
-fun icon(){
+fun icon() {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 30.dp)
 
-    ){
+    ) {
         Image(
             painter = painterResource(R.drawable.ic_launcher_background),
             contentDescription = "Contact profile picture",
@@ -313,7 +328,7 @@ fun icon(){
 @Preview(showBackground = true, widthDp = 320)
 @Composable
 fun agePreview() {
-    XclothesTheme{
+    XclothesTheme {
         Scaffold(
             modifier = Modifier.heightIn()
         ) {
@@ -333,7 +348,7 @@ fun agePreview() {
 @Preview(showBackground = true, widthDp = 320)
 @Composable
 fun radioButtonPreview() {
-    XclothesTheme{
+    XclothesTheme {
         Scaffold(
             modifier = Modifier.heightIn()
         ) {
@@ -353,7 +368,7 @@ fun radioButtonPreview() {
 @Preview(showBackground = true, widthDp = 320)
 @Composable
 fun textInputPreview() {
-    XclothesTheme{
+    XclothesTheme {
         Scaffold(
             modifier = Modifier.heightIn()
         ) {
@@ -374,7 +389,7 @@ fun textInputPreview() {
 @Preview(showBackground = true, widthDp = 320)
 @Composable
 fun iconPreview() {
-    XclothesTheme{
+    XclothesTheme {
         Scaffold(
             modifier = Modifier.heightIn()
         ) {
@@ -392,7 +407,7 @@ fun iconPreview() {
 @Preview(showBackground = true, widthDp = 320)
 @Composable
 fun ProfileScreenPreview() {
-    XclothesTheme{
+    XclothesTheme {
         ProfileScreen()
     }
 }

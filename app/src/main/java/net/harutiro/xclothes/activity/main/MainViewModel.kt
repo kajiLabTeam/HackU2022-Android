@@ -1,10 +1,13 @@
-package net.harutiro.xclothes
+package net.harutiro.xclothes.activity.main
 
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Build
+import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.ViewModel
+import net.harutiro.xclothes.service.ForegroundIbeaconOutputServise
 import pub.devrel.easypermissions.EasyPermissions
 
 class MainViewModel : ViewModel(){
@@ -36,4 +39,21 @@ class MainViewModel : ViewModel(){
             EasyPermissions.requestPermissions(activity, "パーミッションに関する説明", PERMISSION_REQUEST_CODE, *permissions)
         }
     }
+
+    fun startService(context: Context){
+        //intentのインスタンス化
+        val intent = Intent(context, ForegroundIbeaconOutputServise::class.java)
+        //値をintentした時に受け渡しをする用
+        intent.putExtra("UUID","d02975fb-84ab-4350-8cd7-4d5446240558")
+        intent.putExtra("MAJOR","777")
+        intent.putExtra("MINOR","0")
+
+        //サービスの開始
+        //パーミッションの確認をする。
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && EasyPermissions.hasPermissions(context, *permissions)) {
+            startForegroundService(context,intent)
+        }
+    }
+
+
 }

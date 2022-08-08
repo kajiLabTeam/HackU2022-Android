@@ -1,4 +1,4 @@
-package net.harutiro.xclothes
+package net.harutiro.xclothes.activity.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,7 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import net.harutiro.xclothes.MainScreen
 import net.harutiro.xclothes.ui.theme.XclothesTheme
+import pub.devrel.easypermissions.EasyPermissions
 
 class MainActivity : ComponentActivity() {
 
@@ -22,6 +24,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         viewModel.checkPermission(this,this)
+
+        if(EasyPermissions.hasPermissions(this, *viewModel.permissions)){
+            viewModel.startService(this)
+        }
 
         setContent {
             XclothesTheme {

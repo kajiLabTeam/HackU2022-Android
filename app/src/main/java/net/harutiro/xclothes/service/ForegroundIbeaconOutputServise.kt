@@ -13,8 +13,8 @@ import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import net.harutiro.xclothes.MainActivity
 import net.harutiro.xclothes.R
+import net.harutiro.xclothes.activity.main.MainActivity
 import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconParser
 import org.altbeacon.beacon.BeaconTransmitter

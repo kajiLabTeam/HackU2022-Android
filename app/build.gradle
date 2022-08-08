@@ -70,6 +70,12 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:1.2.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
 
+    //iBeacon
+    implementation 'org.altbeacon:android-beacon-library:2.19.5-beta5'
+
+    //easyPermission
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
 
 
 

@@ -1,12 +1,8 @@
 package net.harutiro.xclothes
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,7 +17,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import net.harutiro.test_bottomnavigation_withjetpackcompose.BottomBarScreen
+import net.harutiro.xclothes.nav.BottomBarScreen
 import net.harutiro.test_bottomnavigation_withjetpackcompose.BottomNavGraph
 import net.harutiro.xclothes.ui.theme.XclothesTheme
 

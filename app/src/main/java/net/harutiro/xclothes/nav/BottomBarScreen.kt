@@ -1,9 +1,8 @@
-package net.harutiro.test_bottomnavigation_withjetpackcompose
+package net.harutiro.xclothes.nav
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
-import net.harutiro.xclothes.R
 
 sealed class BottomBarScreen(
     val route:String,

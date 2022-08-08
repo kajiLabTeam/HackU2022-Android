@@ -9,6 +9,7 @@ import net.harutiro.test_bottomnavigation_withjetpackcompose.screens.HomeScreen
 import net.harutiro.test_bottomnavigation_withjetpackcompose.screens.MapScreen
 import net.harutiro.xclothes.screens.ProfileScreen
 import net.harutiro.test_bottomnavigation_withjetpackcompose.screens.SettingsScreen
+import net.harutiro.xclothes.nav.BottomBarScreen
 
 @Composable
 fun BottomNavGraph(navController:NavHostController) {

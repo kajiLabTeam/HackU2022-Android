@@ -6,6 +6,7 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -41,14 +42,21 @@ fun AddScreen(viewModel: AddViewModel) {
     }
 
     Surface (
-        modifier = Modifier
+        color = MaterialTheme.colorScheme.surface,
+        modifier = Modifier.padding(0.dp,0.dp,0.dp,70.dp),
     ){
-        Column {
+        Column (
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .fillMaxSize()
+        ){
             if(uriRemember.isEmpty()){
                 nottingPhotoIcon(launcher,uri)
             }else{
                 photoView(uriRemember)
             }
+
+
 
 
 
@@ -60,6 +68,7 @@ fun AddScreen(viewModel: AddViewModel) {
 fun nottingPhotoIcon(launcher: ManagedActivityResultLauncher<Uri, Boolean>, uri: Uri) {
     Box(
         modifier = Modifier
+            .background(MaterialTheme.colorScheme.secondary)
             .height(320.dp)
             .fillMaxWidth()
             .clickable {
@@ -70,7 +79,7 @@ fun nottingPhotoIcon(launcher: ManagedActivityResultLauncher<Uri, Boolean>, uri:
         Image(
             painter = painterResource(R.drawable.ic_baseline_add_a_photo_24),
             contentDescription = "My Picture",
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(42.dp)

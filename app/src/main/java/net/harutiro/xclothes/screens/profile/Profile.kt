@@ -2,15 +2,12 @@ package net.harutiro.xclothes.screens
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
@@ -28,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import coil.compose.AsyncImage
 import net.harutiro.xclothes.R
 import net.harutiro.xclothes.ui.theme.XclothesTheme
 
@@ -38,10 +36,12 @@ fun ProfileScreen() {
 
 
     Surface(
-//        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+        color = MaterialTheme.colorScheme.surface,
     ) {
 
         Column(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
         ) {
 
             Spacer(modifier = Modifier.padding(top = 64.dp))
@@ -302,17 +302,27 @@ fun icon() {
             .padding(horizontal = 30.dp)
 
     ) {
-        Image(
-            painter = painterResource(R.drawable.ic_launcher_background),
-            contentDescription = "Contact profile picture",
+        AsyncImage(
+            model = "https://mokelab.com/img/moke_512x512.png",
+            contentDescription = "もケラ",
             modifier = Modifier
                 // Set image size to 40 dp
                 .size(120.dp)
                 // Clip image to be shaped as a circle
                 .clip(CircleShape)
 //                        .fillMaxWidth()
-
         )
+//        Image(
+//            painter = painterResource(R.drawable.ic_launcher_background),
+//            contentDescription = "Contact profile picture",
+//            modifier = Modifier
+//                // Set image size to 40 dp
+//                .size(120.dp)
+//                // Clip image to be shaped as a circle
+//                .clip(CircleShape)
+////                        .fillMaxWidth()
+//
+//        )
     }
 }
 

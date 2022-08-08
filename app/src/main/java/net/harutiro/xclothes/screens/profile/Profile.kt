@@ -65,8 +65,26 @@ fun ProfileScreen() {
                     ageEditText()
                     Spacer(modifier = Modifier.padding(top = 32.dp))
                     heightEditText()
+                    Spacer(modifier = Modifier.padding(top = 32.dp))
+                    saveButton()
+
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun saveButton(){
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+        ){
+        Button(
+            onClick = { /*TODO*/ },
+        ) {
+            Text("保存をする")
         }
     }
 }

@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import net.harutiro.xclothes.CoordinateEditActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,7 +26,6 @@ fun HomeScreen() {
 
     Scaffold(
         modifier = Modifier.padding(0.dp,0.dp,0.dp,70.dp),
-
     ){
 
         Box(

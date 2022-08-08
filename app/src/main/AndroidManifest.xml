@@ -14,11 +14,6 @@
         android:theme="@style/Theme.Xclothes"
         tools:targetApi="31" >
         <activity
-            android:name=".CoordinateEditActivity"
-            android:exported="false"
-            android:label="@string/title_activity_coordinate_edit"
-            android:theme="@style/Theme.Xclothes" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"

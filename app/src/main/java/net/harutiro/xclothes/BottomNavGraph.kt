@@ -1,6 +1,8 @@
 package net.harutiro.test_bottomnavigation_withjetpackcompose
 
+import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,6 +12,7 @@ import net.harutiro.test_bottomnavigation_withjetpackcompose.screens.MapScreen
 import net.harutiro.xclothes.screens.ProfileScreen
 import net.harutiro.test_bottomnavigation_withjetpackcompose.screens.SettingsScreen
 import net.harutiro.xclothes.nav.BottomBarScreen
+import net.harutiro.xclothes.screens.add.AddViewModel
 
 @Composable
 fun BottomNavGraph(navController:NavHostController) {
@@ -17,6 +20,7 @@ fun BottomNavGraph(navController:NavHostController) {
         navController = navController,
         startDestination = BottomBarScreen.Home.route
     ){
+
         composable(route = BottomBarScreen.Home.route){
             HomeScreen()
         }
@@ -30,7 +34,8 @@ fun BottomNavGraph(navController:NavHostController) {
             MapScreen()
         }
         composable(route = BottomBarScreen.Add.route){
-            AddScreen()
+            val addViewModel:AddViewModel = viewModel()
+            AddScreen(addViewModel)
         }
     }
 }

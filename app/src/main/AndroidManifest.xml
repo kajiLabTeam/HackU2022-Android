@@ -41,6 +41,11 @@
                 android:resource="@xml/provider_path" />
         </provider>
 
+        <service
+            android:name=".service.ForegroundIbeaconOutputServise"
+            android:enabled="true"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

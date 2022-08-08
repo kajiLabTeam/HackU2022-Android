@@ -37,7 +37,8 @@ fun ProfileScreen() {
 
     Surface(
         color = MaterialTheme.colorScheme.surface,
-    ) {
+        modifier = Modifier.padding(0.dp,0.dp,0.dp,70.dp),
+        ) {
 
         Column(
             modifier = Modifier
@@ -59,14 +60,16 @@ fun ProfileScreen() {
                         .verticalScroll(rememberScrollState())
                 ){
                     textInput()
-                    Spacer(modifier = Modifier.padding(top = 32.dp))
+                    Spacer(modifier = Modifier.padding(top = 24.dp))
                     radioButton()
-                    Spacer(modifier = Modifier.padding(top = 32.dp))
+                    Spacer(modifier = Modifier.padding(top = 24.dp))
                     ageEditText()
-                    Spacer(modifier = Modifier.padding(top = 32.dp))
+                    Spacer(modifier = Modifier.padding(top = 24.dp))
                     heightEditText()
-                    Spacer(modifier = Modifier.padding(top = 32.dp))
+                    Spacer(modifier = Modifier.padding(top = 24.dp))
                     saveButton()
+                    Spacer(modifier = Modifier.padding(top = 24.dp))
+
 
                 }
             }
@@ -344,87 +347,87 @@ fun icon() {
     }
 }
 
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(
-    showBackground = true,
-    widthDp = 320,
-    uiMode = UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark"
-)
-@Preview(showBackground = true, widthDp = 320)
-@Composable
-fun agePreview() {
-    XclothesTheme {
-        Scaffold(
-            modifier = Modifier.heightIn()
-        ) {
-            ageEditText()
-        }
-    }
-}
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(
-    showBackground = true,
-    widthDp = 320,
-    uiMode = UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark"
-)
-@Preview(showBackground = true, widthDp = 320)
-@Composable
-fun radioButtonPreview() {
-    XclothesTheme {
-        Scaffold(
-            modifier = Modifier.heightIn()
-        ) {
-            radioButton()
-        }
-    }
-}
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(
-    showBackground = true,
-    widthDp = 320,
-    uiMode = UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark"
-)
-@Preview(showBackground = true, widthDp = 320)
-@Composable
-fun textInputPreview() {
-    XclothesTheme {
-        Scaffold(
-            modifier = Modifier.heightIn()
-        ) {
-            textInput()
-        }
-    }
-}
-
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(
-    showBackground = true,
-    widthDp = 320,
-    uiMode = UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark"
-)
-@Preview(showBackground = true, widthDp = 320)
-@Composable
-fun iconPreview() {
-    XclothesTheme {
-        Scaffold(
-            modifier = Modifier.heightIn()
-        ) {
-            icon()
-        }
-    }
-}
+//
+//@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Preview(
+//    showBackground = true,
+//    widthDp = 320,
+//    uiMode = UI_MODE_NIGHT_YES,
+//    name = "DefaultPreviewDark"
+//)
+//@Preview(showBackground = true, widthDp = 320)
+//@Composable
+//fun agePreview() {
+//    XclothesTheme {
+//        Scaffold(
+//            modifier = Modifier.heightIn()
+//        ) {
+//            ageEditText()
+//        }
+//    }
+//}
+//
+//@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Preview(
+//    showBackground = true,
+//    widthDp = 320,
+//    uiMode = UI_MODE_NIGHT_YES,
+//    name = "DefaultPreviewDark"
+//)
+//@Preview(showBackground = true, widthDp = 320)
+//@Composable
+//fun radioButtonPreview() {
+//    XclothesTheme {
+//        Scaffold(
+//            modifier = Modifier.heightIn()
+//        ) {
+//            radioButton()
+//        }
+//    }
+//}
+//
+//@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Preview(
+//    showBackground = true,
+//    widthDp = 320,
+//    uiMode = UI_MODE_NIGHT_YES,
+//    name = "DefaultPreviewDark"
+//)
+//@Preview(showBackground = true, widthDp = 320)
+//@Composable
+//fun textInputPreview() {
+//    XclothesTheme {
+//        Scaffold(
+//            modifier = Modifier.heightIn()
+//        ) {
+//            textInput()
+//        }
+//    }
+//}
+//
+//
+//@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Preview(
+//    showBackground = true,
+//    widthDp = 320,
+//    uiMode = UI_MODE_NIGHT_YES,
+//    name = "DefaultPreviewDark"
+//)
+//@Preview(showBackground = true, widthDp = 320)
+//@Composable
+//fun iconPreview() {
+//    XclothesTheme {
+//        Scaffold(
+//            modifier = Modifier.heightIn()
+//        ) {
+//            icon()
+//        }
+//    }
+//}
 
 @Preview(
     showBackground = true,

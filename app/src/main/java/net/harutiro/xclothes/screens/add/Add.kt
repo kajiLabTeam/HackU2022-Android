@@ -9,12 +9,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -23,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import net.harutiro.xclothes.R
+import net.harutiro.xclothes.screens.Gender
 import net.harutiro.xclothes.screens.add.AddViewModel
 import net.harutiro.xclothes.ui.theme.XclothesTheme
 
@@ -48,6 +51,7 @@ fun AddScreen(viewModel: AddViewModel) {
             }
 
 
+
         }
     }
 }
@@ -66,6 +70,7 @@ fun nottingPhotoIcon(launcher: ManagedActivityResultLauncher<Uri, Boolean>, uri:
         Image(
             painter = painterResource(R.drawable.ic_baseline_add_a_photo_24),
             contentDescription = "My Picture",
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(42.dp)

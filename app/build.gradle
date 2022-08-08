@@ -66,6 +66,11 @@ dependencies {
     //写真を用いるために使う
     implementation("io.coil-kt:coil-compose:2.1.0")
 
+    //viewModel
+    implementation "androidx.compose.runtime:runtime-livedata:1.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
+
+
 
 
 }

@@ -78,6 +78,10 @@ dependencies {
     //easyPermission
     implementation 'pub.devrel:easypermissions:3.0.0'
 
+    //viewpager
+    implementation "com.google.accompanist:accompanist-pager:0.22.0-rc"
+
+
 
 
 

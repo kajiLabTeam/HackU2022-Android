@@ -19,10 +19,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.VerticalPager
+import com.google.accompanist.pager.rememberPagerState
 import net.harutiro.xclothes.ui.theme.XclothesTheme
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun EvaluationScreen(viewModel: EvaluationViewModel) {
+
+    val tabTitles = listOf("Hello", "There", "World")
+    val pagerState = rememberPagerState() // 2.
 
     Surface (
         color = MaterialTheme.colorScheme.surface,
@@ -32,13 +39,17 @@ fun EvaluationScreen(viewModel: EvaluationViewModel) {
             modifier = Modifier
 
         ) {
-            PhotoView()
+            VerticalPager(
+                count = tabTitles.size,
+                state = pagerState,
+            ) { tabIndex ->
 
-            name()
+                PhotoView()
+                name(modifier = Modifier.align(Alignment.BottomEnd))
+                GoodButton(Modifier.align(Alignment.BottomEnd).padding(0.dp,0.dp,16.dp,158.dp).size(50.dp))
+                NextButton(Modifier.align(Alignment.BottomEnd).padding(0.dp,0.dp,16.dp,228.dp).size(50.dp))
 
-            GoodButton(Modifier.align(Alignment.BottomEnd).padding(0.dp,0.dp,16.dp,158.dp).size(50.dp))
-
-            NextButton(Modifier.align(Alignment.BottomEnd).padding(0.dp,0.dp,16.dp,228.dp).size(50.dp))
+            }
 
 
         }
@@ -70,9 +81,9 @@ fun GoodButton(align: Modifier) {
 }
 
 @Composable
-fun name(url: String = "https://mokelab.com/img/moke_512x512.png",name: String = "テスト太郎"){
+fun name(url: String = "https://mokelab.com/img/moke_512x512.png",name: String = "テスト太郎",modifier:Modifier){
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(128.dp)
             .background(

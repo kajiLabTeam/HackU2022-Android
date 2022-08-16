@@ -7,12 +7,20 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import net.harutiro.xclothes.service.ForegroundIbeaconOutputServise
+import org.altbeacon.beacon.Identifier
+import org.altbeacon.beacon.Region
 import pub.devrel.easypermissions.EasyPermissions
 
 class MainViewModel : ViewModel(){
+
+    val IBEACON_FORMAT = "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"
+
+    val region = Region("unique-id-001", null , Identifier.parse("777"), null)
+
     //intent用のID指定。Intentから戻ってくる時に使うとかなんとか。
-    private val PERMISSION_REQUEST_CODE = 1
+    val PERMISSION_REQUEST_CODE = 1
 
     //許可して欲しいパーミッションの記載、
     //Android１２以上ではBlueToothの新しいパーミッションを追加する。

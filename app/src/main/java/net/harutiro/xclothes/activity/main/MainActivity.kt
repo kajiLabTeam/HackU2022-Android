@@ -32,12 +32,6 @@ import pub.devrel.easypermissions.EasyPermissions
 class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
 
     private val viewModel :MainViewModel by lazy { ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java) }
-
-    private val IBEACON_FORMAT = "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"
-
-    val region = Region("unique-id-001", null , Identifier.parse("777"), null)
-
-
     val TAG = "mainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +73,7 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
 
 
             beaconManager.beaconParsers.clear()
-            beaconManager.beaconParsers.add(BeaconParser().setBeaconLayout(IBEACON_FORMAT))
+            beaconManager.beaconParsers.add(BeaconParser().setBeaconLayout(viewModel.IBEACON_FORMAT))
 
 
             // Uncomment the code below to use a foreground service to scan for beacons. This unlocks
@@ -123,11 +117,11 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
                 beaconManager.stopMonitoring(region!!)
             }
 
-            beaconManager.startMonitoring(region)
+            beaconManager.startMonitoring(viewModel.region)
 
             beaconManager.addRangeNotifier(this)
 
-            beaconManager.startRangingBeacons(region)
+            beaconManager.startRangingBeacons(viewModel.region)
         }
     }
 

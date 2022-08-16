@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Xclothes</string>
     <string name="title_activity_coordinate_edit">CoordinateEditActivity</string>
+    <string name="title_activity_evaluation">EvaluationActivity</string>
 </resources>

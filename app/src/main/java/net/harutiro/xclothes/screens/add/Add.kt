@@ -34,10 +34,8 @@ import net.harutiro.xclothes.ui.theme.XclothesTheme
 @Composable
 fun AddScreen(viewModel: AddViewModel) {
 
-    val context = LocalContext.current
-
     var uriRemember by remember { mutableStateOf("") }
-    val uri = viewModel.photoStartUp(context)
+    val uri = viewModel.photoStartUp()
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { _ ->
         uriRemember = uri.toString()
     }
@@ -213,6 +211,6 @@ fun PhotoView(uriRemember:String){
 fun AddScreenPreview() {
 
     XclothesTheme {
-        AddScreen(AddViewModel())
+//        AddScreen(AddViewModel)
     }
 }

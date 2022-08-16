@@ -17,9 +17,12 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddViewModel : ViewModel() {
+class AddViewModel (application: Application): AndroidViewModel(application) {
 
-    fun photoStartUp(context: Context): Uri {
+    @SuppressLint("StaticFieldLeak")
+    private val context = getApplication<Application>().applicationContext
+
+    fun photoStartUp(): Uri {
         // 保存先のフォルダー
         val cFolder: File? = context.getExternalFilesDir(Environment.DIRECTORY_DCIM)
 
@@ -39,7 +42,7 @@ class AddViewModel : ViewModel() {
 
     }
 
-    fun putToastHello(context:Context) {
+    fun putToastHello() {
         Toast.makeText(context, "This is a Sample Toast", Toast.LENGTH_LONG).show()
     }
 

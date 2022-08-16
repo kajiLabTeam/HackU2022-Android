@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.Style
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -94,83 +95,48 @@ fun saveButton(){
 
 @Composable
 fun heightEditText() {
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
+    Box(
         modifier = Modifier
-            .padding(vertical = 4.dp, horizontal = 8.dp)
-            .heightIn()
+            .fillMaxWidth()
+
     ) {
-
-        Image(
-            painter = painterResource(R.drawable.ic_launcher_background),
-            contentDescription = "Contact profile picture",
-            modifier = Modifier
-                // Set image size to 40 dp
-                .size(42.dp)
-                // Clip image to be shaped as a circle
-                .clip(CircleShape)
-//                        .fillMaxWidth()
-
+        var text by remember { mutableStateOf("") }
+        OutlinedTextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text(text = "身長") },
+            placeholder = { Text(text = "身長を入力してください") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            leadingIcon = {
+                Icon(Icons.Filled.Style,"contentDescription")
+            },
+            modifier = Modifier.fillMaxWidth(),
         )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp)
-
-        ) {
-            var text by remember { mutableStateOf("") }
-            OutlinedTextField(
-                value = text,
-                onValueChange = { text = it },
-                label = { Text(text = "身長") },
-                placeholder = { Text(text = "身長を入力してください") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
-        }
     }
 }
 
 @Composable
 fun ageEditText() {
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
+    Box(
         modifier = Modifier
-            .padding(vertical = 4.dp, horizontal = 8.dp)
-            .heightIn()
-    ) {
+            .fillMaxWidth()
 
-        Image(
-            painter = painterResource(R.drawable.ic_launcher_background),
-            contentDescription = "Contact profile picture",
-            modifier = Modifier
-                // Set image size to 40 dp
-                .size(42.dp)
-                // Clip image to be shaped as a circle
-                .clip(CircleShape)
-//                        .fillMaxWidth()
+    ) {
+        var text by remember { mutableStateOf("") }
+        OutlinedTextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text(text = "年齢") },
+            placeholder = { Text(text = "年齢を入力してください") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            leadingIcon = {
+                Icon(Icons.Filled.Style,"contentDescription")
+            },
+            modifier = Modifier.fillMaxWidth(),
 
         )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp)
-
-        ) {
-            var text by remember { mutableStateOf("") }
-            OutlinedTextField(
-                value = text,
-                onValueChange = { text = it },
-                label = { Text(text = "年齢") },
-                placeholder = { Text(text = "年齢を入力してください") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
-        }
     }
 }
 
@@ -186,6 +152,12 @@ fun ageSpinner() {
         Icons.Filled.ArrowDropUp //it requires androidx.compose.material:material-icons-extended
     else
         Icons.Filled.ArrowDropDown
+
+
+
+
+
+
 
 
     Column() {
@@ -273,42 +245,25 @@ object Gender {
 @Composable
 fun textInput() {
 
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .padding(vertical = 4.dp, horizontal = 8.dp)
-            .heightIn()
-    ) {
-
-        Image(
-            painter = painterResource(R.drawable.ic_launcher_background),
-            contentDescription = "Contact profile picture",
-            modifier = Modifier
-                // Set image size to 40 dp
-                .size(42.dp)
-                // Clip image to be shaped as a circle
-                .clip(CircleShape)
-//                        .fillMaxWidth()
-
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        var text by remember { mutableStateOf("") }
+        OutlinedTextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text(text = "名前") },
+            placeholder = { Text(text = "名前を入力してください") },
+            singleLine = true,
+            leadingIcon = {
+                Icon(Icons.Filled.Style,"contentDescription")
+            },
+            modifier = Modifier.fillMaxWidth(),
         )
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp)
-
-        ) {
-            var text by remember { mutableStateOf("") }
-            OutlinedTextField(
-                value = text,
-                onValueChange = { text = it },
-                label = { Text(text = "名前") },
-                placeholder = { Text(text = "名前を入力してください") },
-                singleLine = true,
-            )
-        }
     }
+
 
 
 }
@@ -333,105 +288,12 @@ fun icon() {
                 .clip(CircleShape)
 //                        .fillMaxWidth()
         )
-//        Image(
-//            painter = painterResource(R.drawable.ic_launcher_background),
-//            contentDescription = "Contact profile picture",
-//            modifier = Modifier
-//                // Set image size to 40 dp
-//                .size(120.dp)
-//                // Clip image to be shaped as a circle
-//                .clip(CircleShape)
-////                        .fillMaxWidth()
-//
-//        )
     }
 }
 
-//
-//@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Preview(
-//    showBackground = true,
-//    widthDp = 320,
-//    uiMode = UI_MODE_NIGHT_YES,
-//    name = "DefaultPreviewDark"
-//)
-//@Preview(showBackground = true, widthDp = 320)
-//@Composable
-//fun agePreview() {
-//    XclothesTheme {
-//        Scaffold(
-//            modifier = Modifier.heightIn()
-//        ) {
-//            ageEditText()
-//        }
-//    }
-//}
-//
-//@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Preview(
-//    showBackground = true,
-//    widthDp = 320,
-//    uiMode = UI_MODE_NIGHT_YES,
-//    name = "DefaultPreviewDark"
-//)
-//@Preview(showBackground = true, widthDp = 320)
-//@Composable
-//fun radioButtonPreview() {
-//    XclothesTheme {
-//        Scaffold(
-//            modifier = Modifier.heightIn()
-//        ) {
-//            radioButton()
-//        }
-//    }
-//}
-//
-//@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Preview(
-//    showBackground = true,
-//    widthDp = 320,
-//    uiMode = UI_MODE_NIGHT_YES,
-//    name = "DefaultPreviewDark"
-//)
-//@Preview(showBackground = true, widthDp = 320)
-//@Composable
-//fun textInputPreview() {
-//    XclothesTheme {
-//        Scaffold(
-//            modifier = Modifier.heightIn()
-//        ) {
-//            textInput()
-//        }
-//    }
-//}
-//
-//
-//@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Preview(
-//    showBackground = true,
-//    widthDp = 320,
-//    uiMode = UI_MODE_NIGHT_YES,
-//    name = "DefaultPreviewDark"
-//)
-//@Preview(showBackground = true, widthDp = 320)
-//@Composable
-//fun iconPreview() {
-//    XclothesTheme {
-//        Scaffold(
-//            modifier = Modifier.heightIn()
-//        ) {
-//            icon()
-//        }
-//    }
-//}
-
 @Preview(
     showBackground = true,
-    widthDp = 320,
+    widthDp = 730,
     uiMode = UI_MODE_NIGHT_YES,
     name = "DefaultPreviewDark"
 )

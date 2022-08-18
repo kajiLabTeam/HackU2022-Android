@@ -11,9 +11,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
@@ -26,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -34,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import dev.chrisbanes.snapper.ExperimentalSnapperApi
+import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import net.harutiro.xclothes.R
 import net.harutiro.xclothes.screens.Gender
 import net.harutiro.xclothes.screens.add.AddViewModel
@@ -72,11 +73,6 @@ fun AddScreen(viewModel: AddViewModel) {
             ClothesList()
 
 
-
-
-
-
-
         }
     }
 }
@@ -88,7 +84,9 @@ data class Clothes(
     var price:String = "",
 )
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalSnapperApi::class
+)
 @Composable
 fun ClothesList(){
     Surface(
@@ -122,10 +120,23 @@ fun ClothesList(){
                 Text("呼び出し")
             }
 
+            val lazyListState: LazyListState = rememberLazyListState()
+
+            val screenWidthDp = LocalConfiguration.current.screenWidthDp.dp.value
+            val itemWidthDp = 300f
+            val xForCenteredItemDp = ((screenWidthDp - itemWidthDp) / 2) - 12
+
             LazyRow(
-                modifier = Modifier
-                    .padding(vertical = 4.dp)
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                state = lazyListState,
+                flingBehavior = rememberSnapperFlingBehavior(lazyListState),
             ) {
+
+                item {
+                    Box(
+                        modifier = Modifier.width(xForCenteredItemDp.dp)
+                    )
+                }
 
                 itemsIndexed(
                     items = names,
@@ -136,12 +147,12 @@ fun ClothesList(){
                 ) { index , name ->
 
                     AnimatedVisibility(
-                        modifier = Modifier.animateItemPlacement().padding(16.dp),
+                        modifier = Modifier.animateItemPlacement(),
                         visible = names.contains(name),
                         enter = fadeIn(),
                         exit = fadeOut(),
                     ) {
-                        Card() {
+                        Card(Modifier.width(itemWidthDp.dp)) {
 //                            Column(
 //                                horizontalAlignment = Alignment.CenterHorizontally
 //                            ){
@@ -177,10 +188,17 @@ fun ClothesList(){
                     }
 
                 }
+
+                item {
+                    Box(
+                        modifier = Modifier.width(xForCenteredItemDp.dp)
+                    )
+                }
             }
         }
     }
 }
+
 
 
 @Composable

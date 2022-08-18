@@ -2,11 +2,18 @@ package net.harutiro.test_bottomnavigation_withjetpackcompose.screens
 
 import android.content.res.Configuration
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
@@ -24,12 +31,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import net.harutiro.xclothes.R
 import net.harutiro.xclothes.screens.Gender
 import net.harutiro.xclothes.screens.add.AddViewModel
 import net.harutiro.xclothes.ui.theme.XclothesTheme
+import java.util.*
 
 @Composable
 fun AddScreen(viewModel: AddViewModel) {
@@ -48,6 +57,7 @@ fun AddScreen(viewModel: AddViewModel) {
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ){
             if(uriRemember.isEmpty()){
                 NottingPhotoIcon(launcher,uri)
@@ -55,24 +65,119 @@ fun AddScreen(viewModel: AddViewModel) {
                 PhotoView(uriRemember)
             }
 
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
+            Spinner("公開範囲",listOf("する","しない"))
+            SaveButton()
+            Spacer(modifier = Modifier.padding(16.dp))
 
+            ClothesList()
+
+
+
+
+
+
+
+        }
+    }
+}
+
+data class Clothes(
+    var id:String = UUID.randomUUID().toString(),
+    var category:String = "",
+    var brand:String = "",
+    var price:String = "",
+)
+
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@Composable
+fun ClothesList(){
+    Surface(
+        color = MaterialTheme.colorScheme.background
+    ) {
+        val names = remember { mutableStateListOf<Clothes>() }
+
+        Column() {
+            Button(
+                onClick = {
+                    if(names.size > 0){
+                        names.add(names.size - 1,Clothes())
+                    }else {
+                        names.add(Clothes())
+                    }
+                }
             ) {
-                Spinner("服の種類")
-                Spinner("体の部位")
-                Spinner("公開範囲",listOf("する","しない"))
-                SaveButton()
-                Spacer(modifier = Modifier.padding(16.dp))
+                Text("追加")
             }
 
+            Button(
+                onClick = {
+                    for(i in names){
+                        Log.d("test",i.id)
+                        Log.d("test",i.category)
+                        Log.d("test",i.brand)
+                        Log.d("test",i.price)
+                    }
+                }
+            ) {
+                Text("呼び出し")
+            }
 
+            LazyRow(
+                modifier = Modifier
+                    .padding(vertical = 4.dp)
+            ) {
 
+                itemsIndexed(
+                    items = names,
+                    key = {index ,i ->
+                        i.id
+                    }
 
+                ) { index , name ->
 
+                    AnimatedVisibility(
+                        modifier = Modifier.animateItemPlacement().padding(16.dp),
+                        visible = names.contains(name),
+                        enter = fadeIn(),
+                        exit = fadeOut(),
+                    ) {
+                        Card() {
+//                            Column(
+//                                horizontalAlignment = Alignment.CenterHorizontally
+//                            ){
+//
+//                                var text by remember { mutableStateOf("") }
+//
+//                                OutlinedTextField(
+//                                    value = text,
+//                                    onValueChange = {
+//                                        text = it
+//                                        names[index] = Clothes(name.id, it)
+//                                    },
+//                                    label = { Text(text = "名前") },
+//                                    placeholder = { Text(text = "名前を入力してください") },
+//                                    singleLine = true,
+//                                )
+//                            }
 
+                            Button(
+                                modifier = Modifier.padding(16.dp),
+                                onClick = {
+                                    names.remove(name)
+                                }
+                            ){
+                                Text("delete")
+                            }
 
+                            Spinner("服の種類")
+                            Spinner("体の部位")
+                            Spinner("価格帯",listOf("0~1000","1001~3000","3001~5000","5001~10000","10001~"))
+
+                        }
+                    }
+
+                }
+            }
         }
     }
 }
@@ -211,6 +316,6 @@ fun PhotoView(uriRemember:String){
 fun AddScreenPreview() {
 
     XclothesTheme {
-//        AddScreen(AddViewModel)
+        AddScreen(viewModel())
     }
 }

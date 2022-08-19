@@ -12,9 +12,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Style
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -77,8 +79,6 @@ fun AddScreen(viewModel: AddViewModel) {
             Spacer(modifier = Modifier.padding(16.dp))
 
             ClothesList()
-
-
         }
     }
 }
@@ -96,31 +96,35 @@ data class Clothes(
 @Composable
 fun ClothesList(){
     Surface(
-        color = MaterialTheme.colorScheme.background
+        color = MaterialTheme.colorScheme.background,
+        modifier = Modifier.fillMaxWidth()
+
     ) {
         val names = remember { mutableStateListOf<Clothes>() }
 
         Column() {
-            Button(
+            OutlinedButton(
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp),
+                shape = RoundedCornerShape(20),
                 onClick = {
                     names.add(Clothes())
                 }
             ) {
-                Text("追加")
+                Text("服を追加")
             }
 
-            Button(
-                onClick = {
-                    for(i in names){
-                        Log.d("test",i.id)
-                        Log.d("test",i.category)
-                        Log.d("test",i.brand)
-                        Log.d("test",i.price)
-                    }
-                }
-            ) {
-                Text("呼び出し")
-            }
+//            Button(
+//                onClick = {
+//                    for(i in names){
+//                        Log.d("test",i.id)
+//                        Log.d("test",i.category)
+//                        Log.d("test",i.brand)
+//                        Log.d("test",i.price)
+//                    }
+//                }
+//            ) {
+//                Text("呼び出し")
+//            }
 
             val lazyListState: LazyListState = rememberLazyListState()
 
@@ -155,31 +159,13 @@ fun ClothesList(){
                         exit = fadeOut(),
                     ) {
                         Card(Modifier.width(itemWidthDp.dp)) {
-//                            Column(
-//                                horizontalAlignment = Alignment.CenterHorizontally
-//                            ){
-//
-//                                var text by remember { mutableStateOf("") }
-//
-//                                OutlinedTextField(
-//                                    value = text,
-//                                    onValueChange = {
-//                                        text = it
-//                                        names[index] = Clothes(name.id, it)
-//                                    },
-//                                    label = { Text(text = "名前") },
-//                                    placeholder = { Text(text = "名前を入力してください") },
-//                                    singleLine = true,
-//                                )
-//                            }
-
-                            Button(
-                                modifier = Modifier.padding(16.dp),
+                            IconButton(
+                                modifier = Modifier.padding(16.dp).align(Alignment.End),
                                 onClick = {
                                     names.remove(name)
                                 }
                             ){
-                                Text("delete")
+                                Icon(Icons.Filled.Delete,"contentDescription")
                             }
 
                             Spinner(

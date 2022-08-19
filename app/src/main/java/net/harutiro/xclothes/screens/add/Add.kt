@@ -66,7 +66,13 @@ fun AddScreen(viewModel: AddViewModel) {
                 PhotoView(uriRemember)
             }
 
-            Spinner("公開範囲",listOf("する","しない"))
+            Spinner(
+                questionLabel = "公開範囲",
+                suggestions = listOf("する","しない"),
+                fix = {
+
+                }
+            )
             SaveButton()
             Spacer(modifier = Modifier.padding(16.dp))
 
@@ -97,11 +103,7 @@ fun ClothesList(){
         Column() {
             Button(
                 onClick = {
-                    if(names.size > 0){
-                        names.add(names.size - 1,Clothes())
-                    }else {
-                        names.add(Clothes())
-                    }
+                    names.add(Clothes())
                 }
             ) {
                 Text("追加")
@@ -180,9 +182,25 @@ fun ClothesList(){
                                 Text("delete")
                             }
 
-                            Spinner("服の種類")
-                            Spinner("体の部位")
-                            Spinner("価格帯",listOf("0~1000","1001~3000","3001~5000","5001~10000","10001~"))
+                            Spinner(
+                                questionLabel = "服の種類" ,
+                                fix = {
+                                    names[index] = Clothes(name.id,it,name.brand,name.price)
+                                }
+                            )
+                            Spinner(
+                                questionLabel = "体の部位",
+                                fix = {
+                                    names[index] = Clothes(name.id,name.category,it,name.price)
+                                }
+                            )
+                            Spinner(
+                                questionLabel = "価格帯",
+                                suggestions =listOf("0~1000","1001~3000","3001~5000","5001~10000","10001~"),
+                                fix = {
+                                    names[index] = Clothes(name.id,name.category,name.brand,it)
+                                }
+                            )
 
                         }
                     }
@@ -218,7 +236,7 @@ fun SaveButton(){
 
 
 @Composable
-fun Spinner(questionLabel:String,suggestions: List<String> = listOf("Item1","Item2","Item3")){
+fun Spinner(questionLabel:String,suggestions: List<String> = listOf("Item1","Item2","Item3"),fix:(String) -> Unit){
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf("") }
 
@@ -232,7 +250,10 @@ fun Spinner(questionLabel:String,suggestions: List<String> = listOf("Item1","Ite
     ) {
         OutlinedTextField(
             value = selectedText,
-            onValueChange = { selectedText = it },
+            onValueChange = {
+                selectedText = it
+                fix(it)
+                            },
             modifier = Modifier
                 .fillMaxWidth()
                 .onSizeChanged {
@@ -257,6 +278,7 @@ fun Spinner(questionLabel:String,suggestions: List<String> = listOf("Item1","Ite
                     onClick = {
                         selectedText = label
                         expanded = false
+                        fix(selectedText)
                     },
                     text = {
                         Row{

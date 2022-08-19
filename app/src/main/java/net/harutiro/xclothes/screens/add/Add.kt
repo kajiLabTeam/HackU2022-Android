@@ -2,7 +2,6 @@ package net.harutiro.test_bottomnavigation_withjetpackcompose.screens
 
 import android.content.res.Configuration
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,22 +13,20 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Style
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -38,11 +35,10 @@ import coil.request.ImageRequest
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import net.harutiro.xclothes.R
+import net.harutiro.xclothes.models.AddSpinaers
 import net.harutiro.xclothes.models.Clothes
-import net.harutiro.xclothes.screens.Gender
 import net.harutiro.xclothes.screens.add.AddViewModel
 import net.harutiro.xclothes.ui.theme.XclothesTheme
-import java.util.*
 
 @Composable
 fun AddScreen(viewModel: AddViewModel) {
@@ -172,6 +168,7 @@ fun ClothesList(){
                         enter = fadeIn(),
                         exit = fadeOut(),
                     ) {
+
                         Card(Modifier.width(itemWidthDp.dp)) {
                             IconButton(
                                 modifier = Modifier.padding(16.dp).align(Alignment.End),
@@ -183,23 +180,73 @@ fun ClothesList(){
                             }
 
                             Spinner(
-                                questionLabel = "服の種類" ,
-                                fix = {
-                                    names[index] = Clothes(name.id,it,name.brand,name.price)
-                                }
+                                questionLabel = "ブランド" ,
+                                suggestions = listOf(
+                                    AddSpinaers("GU",ImageVector.vectorResource(id = R.drawable.gu_logo)),
+                                    AddSpinaers("ユニクロ",ImageVector.vectorResource(id = R.drawable.uniqlo)),
+                                    AddSpinaers("しまむら",ImageVector.vectorResource(id = R.drawable.simamura)),
+                                ),
+                                fix = { text , icon ->
+                                    names[index] = Clothes(
+                                        id = name.id,
+                                        category = name.category,
+                                        categoryIcon = name.categoryIcon,
+                                        brand = text,
+                                        brandIcon = icon,
+                                        price = name.price,
+                                        priceIcon = name.priceIcon
+                                    )
+                                },
+                                text = name.brand,
+                                comeIcon = name.brandIcon
                             )
+
                             Spinner(
-                                questionLabel = "体の部位",
-                                fix = {
-                                    names[index] = Clothes(name.id,name.category,it,name.price)
-                                }
+                                questionLabel = "カテゴリ",
+                                suggestions = listOf(
+                                    AddSpinaers("トップス",Icons.Filled.CurrencyYen),
+                                    AddSpinaers("Tシャツ",Icons.Filled.CurrencyYen),
+                                    AddSpinaers("ボトムス",Icons.Filled.CurrencyYen),
+                                    AddSpinaers("パンツ",Icons.Filled.CurrencyYen),
+                                    AddSpinaers("靴下",Icons.Filled.CurrencyYen),
+                                ),
+                                fix = { text , icon ->
+                                    names[index] = Clothes(
+                                        id = name.id,
+                                        category = text,
+                                        categoryIcon = icon,
+                                        brand = name.brand,
+                                        brandIcon = name.brandIcon,
+                                        price = name.price,
+                                        priceIcon = name.priceIcon
+                                    )
+                                },
+                                text = name.category,
+                                comeIcon = name.categoryIcon
                             )
+
                             Spinner(
                                 questionLabel = "価格帯",
-                                suggestions =listOf("0~1000","1001~3000","3001~5000","5001~10000","10001~"),
-                                fix = {
-                                    names[index] = Clothes(name.id,name.category,name.brand,it)
-                                }
+                                suggestions = listOf(
+                                    AddSpinaers("0~1000",Icons.Filled.CurrencyYen),
+                                    AddSpinaers("1001~3000",Icons.Filled.CurrencyYen),
+                                    AddSpinaers("3001~5000",Icons.Filled.CurrencyYen),
+                                    AddSpinaers("5001~10000",Icons.Filled.CurrencyYen),
+                                    AddSpinaers("10001~",Icons.Filled.CurrencyYen),
+                                ),
+                                fix = { text , icon ->
+                                    names[index] = Clothes(
+                                        id = name.id,
+                                        category = name.category,
+                                        categoryIcon = name.categoryIcon,
+                                        brand = name.brand,
+                                        brandIcon = name.brandIcon,
+                                        price = text,
+                                        priceIcon = icon
+                                    )
+                                },
+                                text = name.price,
+                                comeIcon = name.priceIcon
                             )
 
                         }
@@ -236,14 +283,24 @@ fun SaveButton(){
 
 
 @Composable
-fun Spinner(questionLabel:String,suggestions: List<String> = listOf("Item1","Item2","Item3"),fix:(String) -> Unit){
+fun Spinner(
+    questionLabel:String,suggestions: List<AddSpinaers> =
+    listOf(
+        AddSpinaers("Item1",Icons.Filled.Style),
+        AddSpinaers("Item1",Icons.Filled.Delete),
+        AddSpinaers("Item1",Icons.Filled.AddAPhoto),
+    ),
+    fix:(String,ImageVector) -> Unit,
+    text:String,
+    comeIcon:ImageVector
+){
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf("") }
+    var selectedText by remember { mutableStateOf(text) }
 
     var dropDownWidth by remember { mutableStateOf(0) }
 
     val icon = if (expanded) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown
-
+    var leadingIcon by remember { mutableStateOf(comeIcon) }
 
     Column(
         modifier = Modifier.padding(16.dp)
@@ -252,7 +309,7 @@ fun Spinner(questionLabel:String,suggestions: List<String> = listOf("Item1","Ite
             value = selectedText,
             onValueChange = {
                 selectedText = it
-                fix(it)
+                fix(it , leadingIcon)
                             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -264,7 +321,7 @@ fun Spinner(questionLabel:String,suggestions: List<String> = listOf("Item1","Ite
                 Icon(icon,"contentDescription", Modifier.clickable { expanded = !expanded })
             },
             leadingIcon = {
-                Icon(Icons.Filled.Style,"contentDescription")
+                Icon(leadingIcon,"contentDescription")
             },
         )
         DropdownMenu(
@@ -276,15 +333,16 @@ fun Spinner(questionLabel:String,suggestions: List<String> = listOf("Item1","Ite
             suggestions.forEach { label ->
                 DropdownMenuItem(
                     onClick = {
-                        selectedText = label
+                        selectedText = label.text
+                        leadingIcon = label.icon
                         expanded = false
-                        fix(selectedText)
+                        fix(selectedText , leadingIcon)
                     },
                     text = {
                         Row{
-                            Icon(Icons.Filled.Style,"contentDescription")
+                            Icon(label.icon,"contentDescription")
                             Spacer(modifier = Modifier.padding(8.dp))
-                            Text(text = label)
+                            Text(text = label.text)
                         }
                     }
                 )

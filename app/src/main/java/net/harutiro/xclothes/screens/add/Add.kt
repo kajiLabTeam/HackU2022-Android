@@ -61,6 +61,7 @@ fun AddScreen(viewModel: AddViewModel) {
                 .background(MaterialTheme.colorScheme.background)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+
         ){
             if(uriRemember.isEmpty()){
                 NottingPhotoIcon(launcher,uri)
@@ -68,17 +69,34 @@ fun AddScreen(viewModel: AddViewModel) {
                 PhotoView(uriRemember)
             }
 
-            Spinner(
-                questionLabel = "公開範囲",
-                suggestions = listOf("する","しない"),
-                fix = {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
 
-                }
-            )
+                val checkedState = remember { mutableStateOf(true) }
+                Switch(
+                    checked = checkedState.value,
+                    onCheckedChange = { checkedState.value = it },
+                    modifier = Modifier.align(Alignment.CenterVertically)
+
+                )
+                Text(
+                    text = "公開範囲",
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(16.dp),
+                )
+            }
+
+            ClothesList()
+            Spacer(modifier = Modifier.padding(16.dp))
             SaveButton()
             Spacer(modifier = Modifier.padding(16.dp))
 
-            ClothesList()
+
         }
     }
 }
@@ -100,7 +118,7 @@ fun ClothesList(){
         modifier = Modifier.fillMaxWidth()
 
     ) {
-        val names = remember { mutableStateListOf<Clothes>() }
+        val names = remember { mutableStateListOf(Clothes()) }
 
         Column() {
             OutlinedButton(
@@ -320,13 +338,13 @@ fun PhotoView(uriRemember:String){
                 .height(320.dp)
         )
 
-        Text(
-            text = "This is a dog.",
-            color = Color.White,
-            modifier = Modifier
-                .padding(32.dp)
-                .align(alignment = Alignment.BottomStart)
-        )
+//        Text(
+//            text = "This is a dog.",
+//            color = Color.White,
+//            modifier = Modifier
+//                .padding(32.dp)
+//                .align(alignment = Alignment.BottomStart)
+//        )
     }
 
 }

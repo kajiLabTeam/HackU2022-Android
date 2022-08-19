@@ -38,6 +38,7 @@ import coil.request.ImageRequest
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import net.harutiro.xclothes.R
+import net.harutiro.xclothes.models.Clothes
 import net.harutiro.xclothes.screens.Gender
 import net.harutiro.xclothes.screens.add.AddViewModel
 import net.harutiro.xclothes.ui.theme.XclothesTheme
@@ -101,12 +102,7 @@ fun AddScreen(viewModel: AddViewModel) {
     }
 }
 
-data class Clothes(
-    var id:String = UUID.randomUUID().toString(),
-    var category:String = "",
-    var brand:String = "",
-    var price:String = "",
-)
+
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
     ExperimentalSnapperApi::class

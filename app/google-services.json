@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "930686882818",
+    "project_id": "xclothes-cc8f2",
+    "storage_bucket": "xclothes-cc8f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930686882818:android:9be39bdac822bf18b5031b",
+        "android_client_info": {
+          "package_name": "net.harutiro.xclothes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "930686882818-jd2sq61i0jdhkqpe30ba0s7dgrp107g0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "net.harutiro.xclothes",
+            "certificate_hash": "9dcdf11fc93925c3146b12e4a340eccc39428f45"
+          }
+        },
+        {
+          "client_id": "930686882818-22tbvcuqveq1q8fmaeb4afhjk3q8ea55.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8rfiSOgzJ7j06TYtT0U7CgA-4N31shwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "930686882818-22tbvcuqveq1q8fmaeb4afhjk3q8ea55.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

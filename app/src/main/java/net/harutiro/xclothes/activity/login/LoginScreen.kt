@@ -39,12 +39,12 @@ fun AccountIcon(viewModel: LoginViewModel) {
 
     viewModel.navController = rememberNavController()
 
-    DotsIndicator(
-        totalDots = 2,
-        selectedIndex = pagerState.currentPage,
-        selectedColor = Color(0xFF070707),
-        unSelectedColor = Color(0xFF636363)
-    )
+//    DotsIndicator(
+//        totalDots = 2,
+//        selectedIndex = pagerState.currentPage,
+//        selectedColor = Color(0xFF070707),
+//        unSelectedColor = Color(0xFF636363)
+//    )
 
     NavHost(navController = viewModel.navController!!, startDestination = "main") {
         composable("main") {

@@ -38,7 +38,7 @@ fun ProfileScreen() {
 
     Surface(
         color = MaterialTheme.colorScheme.surface,
-        modifier = Modifier.padding(0.dp,0.dp,0.dp,70.dp),
+        modifier = Modifier.padding(0.dp,0.dp,0.dp,0.dp),
         ) {
 
         Column(

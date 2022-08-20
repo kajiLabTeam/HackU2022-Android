@@ -3,10 +3,8 @@ package net.harutiro.xclothes.screens
 import android.annotation.SuppressLint
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -18,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -28,12 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import coil.compose.AsyncImage
 import net.harutiro.xclothes.R
+import net.harutiro.xclothes.models.login.post.PostLoginRequestBody
 import net.harutiro.xclothes.ui.theme.XclothesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(userDataClass: PostLoginRequestBody) {
 
 
     Surface(
@@ -47,7 +45,7 @@ fun ProfileScreen() {
         ) {
 
             Spacer(modifier = Modifier.padding(top = 64.dp))
-            icon()
+            icon(userDataClass.icon)
 
             Card(
                 modifier = Modifier
@@ -60,13 +58,13 @@ fun ProfileScreen() {
                         .padding(16.dp)
                         .verticalScroll(rememberScrollState())
                 ){
-                    textInput()
+                    nameInput(userDataClass.name)
                     Spacer(modifier = Modifier.padding(top = 24.dp))
-                    radioButton()
+                    radioButton(userDataClass.gender)
                     Spacer(modifier = Modifier.padding(top = 24.dp))
-                    ageEditText()
+                    ageEditText(userDataClass.age)
                     Spacer(modifier = Modifier.padding(top = 24.dp))
-                    heightEditText()
+                    heightEditText(userDataClass.height)
                     Spacer(modifier = Modifier.padding(top = 24.dp))
                     saveButton()
                     Spacer(modifier = Modifier.padding(top = 24.dp))
@@ -95,13 +93,13 @@ fun saveButton(){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun heightEditText() {
+fun heightEditText(height: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
 
     ) {
-        var text by remember { mutableStateOf("") }
+        var text by remember { mutableStateOf(height) }
         OutlinedTextField(
             value = text,
             onValueChange = { text = it },
@@ -119,13 +117,13 @@ fun heightEditText() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ageEditText() {
+fun ageEditText(age: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
 
     ) {
-        var text by remember { mutableStateOf("") }
+        var text by remember { mutableStateOf(age) }
         OutlinedTextField(
             value = text,
             onValueChange = { text = it },
@@ -202,12 +200,12 @@ fun ageSpinner() {
 }
 
 @Composable
-fun radioButton() {
+fun radioButton(gender: String) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val selectedGender = remember { mutableStateOf("") }
+        val selectedGender = remember { mutableStateOf(gender) }
         Row {
             IconToggleButton(
                 checked = selectedGender.value == Gender.male,
@@ -247,13 +245,13 @@ object Gender {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun textInput() {
+fun nameInput(name: String) {
 
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        var text by remember { mutableStateOf("") }
+        var text by remember { mutableStateOf(name) }
         OutlinedTextField(
             value = text,
             onValueChange = { text = it },
@@ -274,7 +272,7 @@ fun textInput() {
 
 
 @Composable
-fun icon() {
+fun icon(icon: String) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -283,8 +281,8 @@ fun icon() {
 
     ) {
         AsyncImage(
-            model = "https://mokelab.com/img/moke_512x512.png",
-            contentDescription = "もケラ",
+            model = icon,
+            contentDescription = "ユーザーアイコン",
             modifier = Modifier
                 // Set image size to 40 dp
                 .size(120.dp)
@@ -305,6 +303,6 @@ fun icon() {
 @Composable
 fun ProfileScreenPreview() {
     XclothesTheme {
-        ProfileScreen()
+//        ProfileScreen(viewModel.userDataClass)
     }
 }

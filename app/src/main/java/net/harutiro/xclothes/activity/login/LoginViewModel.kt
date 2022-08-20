@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import net.harutiro.xclothes.models.login.post.PostLoginRequestBody
 
 class LoginViewModel: ViewModel() {
 
@@ -29,6 +30,8 @@ class LoginViewModel: ViewModel() {
     private val REQ_ONE_TAP = 2  // Can be any integer unique to the Activity
 
     var navController: NavHostController? = null
+
+    var userDataClass: PostLoginRequestBody = PostLoginRequestBody()
 
     fun login(activity: Activity) {
         // Initialize Firebase Auth
@@ -113,6 +116,11 @@ class LoginViewModel: ViewModel() {
                             val user = auth.currentUser
 
                             Log.d(TAG, user?.email.toString())
+
+                            userDataClass.icon = user?.photoUrl.toString()
+                            userDataClass.name = user?.displayName.toString()
+                            userDataClass.mail = user?.email.toString()
+
 
                             navController?.navigate("second")
 

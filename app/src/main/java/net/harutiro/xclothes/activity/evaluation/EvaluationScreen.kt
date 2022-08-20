@@ -1,6 +1,7 @@
 package net.harutiro.xclothes.activity.evaluation
 
 import android.content.res.Configuration
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -13,7 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -22,6 +25,7 @@ import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.VerticalPager
 import com.google.accompanist.pager.rememberPagerState
+import net.harutiro.xclothes.R
 import net.harutiro.xclothes.ui.theme.XclothesTheme
 
 @OptIn(ExperimentalPagerApi::class)
@@ -46,8 +50,16 @@ fun EvaluationScreen(viewModel: EvaluationViewModel) {
 
                 PhotoView()
                 name(modifier = Modifier.align(Alignment.BottomEnd))
-                GoodButton(Modifier.align(Alignment.BottomEnd).padding(0.dp,0.dp,16.dp,158.dp).size(50.dp))
-                NextButton(Modifier.align(Alignment.BottomEnd).padding(0.dp,0.dp,16.dp,228.dp).size(50.dp))
+                GoodButton(
+                    Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(0.dp, 0.dp, 16.dp, 158.dp)
+                        .size(50.dp))
+                NextButton(
+                    Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(0.dp, 0.dp, 16.dp, 228.dp)
+                        .size(50.dp))
 
             }
 
@@ -81,11 +93,11 @@ fun GoodButton(align: Modifier) {
 }
 
 @Composable
-fun name(url: String = "https://mokelab.com/img/moke_512x512.png",name: String = "テスト太郎",modifier:Modifier){
+fun name(modifier:Modifier){
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(128.dp)
+            .height(148.dp)
             .background(
                 Brush.verticalGradient(
                     colors = listOf(Color(0x8000000), Color(0xAA6F6F6F))
@@ -95,30 +107,51 @@ fun name(url: String = "https://mokelab.com/img/moke_512x512.png",name: String =
     ) {
         Row(
             modifier =  Modifier
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(16.dp)
+                .fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            AsyncImage(
-                modifier = Modifier
-                    .size(64.dp),
-                contentDescription = "My Picture",
-                contentScale = ContentScale.Crop,
-                model = url,
-            )
 
             Column(
-                modifier = Modifier.fillMaxHeight(),
-                horizontalAlignment = Alignment.Start, // 横方向
-                verticalArrangement = Arrangement.Center // 縦方向
-
-            ){
-                Text(
-                    text = name,
-                    fontSize = 22.sp,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    modifier = Modifier.size(84.dp),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.gender_neutral_user_icon_icons_com_55902),
+                    contentDescription = "hello",
                 )
+
                 Text(
-                    text = "男性　20〜25 125cm",
-                    fontSize = 16.sp,
+                    text = "男性"
+                )
+            }
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    modifier = Modifier.size(84.dp),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.human_male_height_variant_icon_136499),
+                    contentDescription = "hello",
+                )
+
+                Text(
+                    text = "125cm"
+                )
+            }
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    modifier = Modifier.size(84.dp),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.calendar_month_fill0_wght400_grad0_opsz48),
+                    contentDescription = "hello",
+                )
+
+                Text(
+                    text = "20~25"
                 )
             }
 

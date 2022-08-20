@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Style
 import androidx.compose.material.icons.filled.ThumbUp
@@ -33,7 +34,11 @@ import net.harutiro.xclothes.ui.theme.XclothesTheme
 @Composable
 fun EvaluationScreen(viewModel: EvaluationViewModel) {
 
-    val tabTitles = listOf("Hello", "There", "World")
+    val tabTitles = listOf(
+        "https://cdn.discordapp.com/attachments/1003329100649336892/1010179549557964860/IMG_4892.jpg",
+        "https://cdn.discordapp.com/attachments/1003329100649336892/1010179549901881395/IMG_4893.jpg",
+        "https://cdn.discordapp.com/attachments/1003329100649336892/1010179550224859287/IMG_4882.jpg"
+    )
     val pagerState = rememberPagerState() // 2.
 
     Surface (
@@ -49,7 +54,7 @@ fun EvaluationScreen(viewModel: EvaluationViewModel) {
                 state = pagerState,
             ) { tabIndex ->
 
-                PhotoView()
+                PhotoView(tabTitles[tabIndex])
                 name(modifier = Modifier.align(Alignment.BottomEnd))
                 GoodButton(
                     Modifier
@@ -66,15 +71,13 @@ fun EvaluationScreen(viewModel: EvaluationViewModel) {
 @Composable
 fun GoodButton(align: Modifier) {
 
-    Column {
-        Button(
-            shape = CircleShape,
-            modifier = align,
-            onClick = {},
-            contentPadding = PaddingValues(0.dp),
-        ){
-            Icon(Icons.Filled.ThumbUp,"contentDescription")
-        }
+    Button(
+        shape = CircleShape,
+        modifier = align,
+        onClick = {},
+        contentPadding = PaddingValues(0.dp),
+    ){
+        Icon(Icons.Filled.ThumbUp,"contentDescription")
     }
 
 }
@@ -84,11 +87,10 @@ fun name(modifier:Modifier){
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(148.dp)
+            .height(150.dp)
             .background(
-                Brush.verticalGradient(
-                    colors = listOf(Color(0x8000000), Color(0xAA6F6F6F))
-                )
+                color = MaterialTheme.colorScheme.secondary.copy(alpha = 1f),
+                shape = RoundedCornerShape(24.dp,24.dp,0.dp,0.dp)
             ),
         contentAlignment = Alignment.BottomStart,
     ) {
@@ -96,20 +98,22 @@ fun name(modifier:Modifier){
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
+                Icon(
                     modifier = Modifier.size(84.dp),
                     imageVector = ImageVector.vectorResource(id = R.drawable.gender_neutral_user_icon_icons_com_55902),
                     contentDescription = "hello",
+                    tint = MaterialTheme.colorScheme.onSecondary
                 )
 
                 Text(
+                    color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 22.sp,
                     text = "男性"
                 )
@@ -118,13 +122,15 @@ fun name(modifier:Modifier){
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
+                Icon(
                     modifier = Modifier.size(84.dp),
                     imageVector = ImageVector.vectorResource(id = R.drawable.human_male_height_variant_icon_136499),
                     contentDescription = "hello",
+                    tint = MaterialTheme.colorScheme.onSecondary
                 )
 
                 Text(
+                    color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 22.sp,
                     text = "125cm"
                 )
@@ -133,13 +139,15 @@ fun name(modifier:Modifier){
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
+                Icon(
                     modifier = Modifier.size(84.dp),
                     imageVector = ImageVector.vectorResource(id = R.drawable.calendar_month_fill0_wght400_grad0_opsz48),
                     contentDescription = "hello",
+                    tint = MaterialTheme.colorScheme.onSecondary
                 )
 
                 Text(
+                    color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 22.sp,
                     text = "20~25"
                 )
@@ -181,7 +189,7 @@ fun PhotoView(url:String = "https://res.cloudinary.com/dlg3xe2l2/image/upload/v1
     ){
         AsyncImage(
             contentDescription = "My Picture",
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.Fit,
             model = url,
             modifier = Modifier
                 .fillMaxSize()

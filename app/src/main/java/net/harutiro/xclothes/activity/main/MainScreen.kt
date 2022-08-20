@@ -38,6 +38,7 @@ fun MainScreen() {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(){
     SmallTopAppBar (

@@ -93,6 +93,7 @@ fun saveButton(){
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun heightEditText() {
     Box(
@@ -116,6 +117,7 @@ fun heightEditText() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ageEditText() {
     Box(
@@ -140,6 +142,7 @@ fun ageEditText() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ageSpinner() {
     var expanded by remember { mutableStateOf(false) }
@@ -242,6 +245,7 @@ object Gender {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun textInput() {
 

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Style
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -53,14 +54,8 @@ fun EvaluationScreen(viewModel: EvaluationViewModel) {
                 GoodButton(
                     Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(0.dp, 0.dp, 16.dp, 158.dp)
-                        .size(50.dp))
-                NextButton(
-                    Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(0.dp, 0.dp, 16.dp, 228.dp)
-                        .size(50.dp))
-
+                        .padding(0.dp, 0.dp, 24.dp, 178.dp)
+                        .size(60.dp))
             }
 
 
@@ -69,27 +64,19 @@ fun EvaluationScreen(viewModel: EvaluationViewModel) {
 }
 
 @Composable
-fun NextButton(align: Modifier) {
-    Button(
-        shape = CircleShape,
-        modifier = align,
-        onClick = {},
-        contentPadding = PaddingValues(0.dp),
-    ){
-        Icon(Icons.Filled.Style,"contentDescription")
-    }
-}
-
-@Composable
 fun GoodButton(align: Modifier) {
-    Button(
-        shape = CircleShape,
-        modifier = align,
-        onClick = {},
-        contentPadding = PaddingValues(0.dp),
-    ){
-        Icon(Icons.Filled.Style,"contentDescription")
+
+    Column {
+        Button(
+            shape = CircleShape,
+            modifier = align,
+            onClick = {},
+            contentPadding = PaddingValues(0.dp),
+        ){
+            Icon(Icons.Filled.ThumbUp,"contentDescription")
+        }
     }
+
 }
 
 @Composable
@@ -106,7 +93,7 @@ fun name(modifier:Modifier){
         contentAlignment = Alignment.BottomStart,
     ) {
         Row(
-            modifier =  Modifier
+            modifier = Modifier
                 .padding(16.dp)
                 .fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
@@ -123,6 +110,7 @@ fun name(modifier:Modifier){
                 )
 
                 Text(
+                    fontSize = 22.sp,
                     text = "男性"
                 )
             }
@@ -137,6 +125,7 @@ fun name(modifier:Modifier){
                 )
 
                 Text(
+                    fontSize = 22.sp,
                     text = "125cm"
                 )
             }
@@ -151,6 +140,7 @@ fun name(modifier:Modifier){
                 )
 
                 Text(
+                    fontSize = 22.sp,
                     text = "20~25"
                 )
             }

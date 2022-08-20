@@ -26,7 +26,7 @@ fun BottomNavGraph(navController:NavHostController) {
             HomeScreen()
         }
         composable(route = BottomBarScreen.Profile.route){
-            ProfileScreen(PostLoginRequestBody())
+            ProfileScreen(PostLoginRequestBody(),false)
         }
         composable(route = BottomBarScreen.Settings.route){
             SettingsScreen()

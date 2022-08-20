@@ -50,7 +50,7 @@ fun AccountIcon(viewModel: LoginViewModel) {
         }
         // ここを追加
         composable("second") {
-            ProfileScreen(viewModel.userDataClass)
+            ProfileScreen(viewModel.userDataClass,true)
         }
     }
 }

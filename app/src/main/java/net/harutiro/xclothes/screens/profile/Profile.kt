@@ -1,6 +1,7 @@
 package net.harutiro.xclothes.screens
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -31,7 +33,7 @@ import net.harutiro.xclothes.ui.theme.XclothesTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ProfileScreen(userDataClass: PostLoginRequestBody) {
+fun ProfileScreen(userDataClass: PostLoginRequestBody, isNewProfile: Boolean) {
 
 
     Surface(
@@ -66,7 +68,7 @@ fun ProfileScreen(userDataClass: PostLoginRequestBody) {
                     Spacer(modifier = Modifier.padding(top = 24.dp))
                     heightEditText(userDataClass.height)
                     Spacer(modifier = Modifier.padding(top = 24.dp))
-                    saveButton()
+                    saveButton(isNewProfile)
                     Spacer(modifier = Modifier.padding(top = 24.dp))
 
 
@@ -77,14 +79,20 @@ fun ProfileScreen(userDataClass: PostLoginRequestBody) {
 }
 
 @Composable
-fun saveButton(){
+fun saveButton(isNewProfile: Boolean) {
+    val activity = LocalContext.current as Activity
+
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
         ){
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                      if(isNewProfile){
+                          activity.finish()
+                      }
+                      },
         ) {
             Text("保存をする")
         }

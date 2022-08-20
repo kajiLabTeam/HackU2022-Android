@@ -2,6 +2,7 @@ package net.harutiro.test_bottomnavigation_withjetpackcompose.screens
 
 import android.content.res.Configuration
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -268,13 +269,18 @@ fun ClothesList(){
 
 @Composable
 fun SaveButton(){
+
+    val context = LocalContext.current
+
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
     ){
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                Toast.makeText(context, "服を登録しました", Toast.LENGTH_SHORT).show()
+            },
         ) {
             Text("保存をする")
         }

@@ -12,4 +12,6 @@ data class GetLoginResponse(
     var height:Int,
     var age:String,
     var mail:String,
+    var status:String,
+    var message:String,
 )

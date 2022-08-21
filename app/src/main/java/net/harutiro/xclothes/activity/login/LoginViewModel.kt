@@ -1,8 +1,10 @@
 package net.harutiro.xclothes.activity.login
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.core.app.ActivityCompat.startIntentSenderForResult
 import androidx.lifecycle.ViewModel
@@ -132,6 +134,14 @@ class LoginViewModel: ViewModel() {
                             apiLoginMethod.loginGet(userDataClass.mail){
                                 if(it.status){
                                     //TODO:ユーザーデータを保存する
+
+                                    val data: SharedPreferences = activity.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
+                                    val editor = data.edit()
+                                    val gson = Gson()
+                                    val json = gson.toJson(it)
+                                    editor.putString("userData",json)
+                                    editor.apply()
+
                                     activity.finish()
                                 }else{
                                     //メインスレッドで行うようにしてい

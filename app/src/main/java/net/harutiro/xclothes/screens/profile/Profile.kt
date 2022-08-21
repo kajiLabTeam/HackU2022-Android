@@ -37,7 +37,11 @@ fun ProfileScreen(userDataClass: PostLoginRequestBody, isNewProfile: Boolean , v
 
     viewModel.isNewProfile = isNewProfile
 
-    viewModel.userDataClass = userDataClass
+    if(isNewProfile) {
+        viewModel.userDataClass = userDataClass
+    }else{
+        viewModel.getUserData()
+    }
 
     val activity = LocalContext.current as Activity
 

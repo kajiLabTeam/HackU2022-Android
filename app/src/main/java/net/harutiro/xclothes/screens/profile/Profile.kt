@@ -39,6 +39,8 @@ fun ProfileScreen(userDataClass: PostLoginRequestBody, isNewProfile: Boolean , v
 
     viewModel.userDataClass = userDataClass
 
+    val activity = LocalContext.current as Activity
+
     Surface(
         color = MaterialTheme.colorScheme.surface,
         modifier = Modifier.padding(0.dp,0.dp,0.dp,0.dp),
@@ -123,7 +125,11 @@ fun ProfileScreen(userDataClass: PostLoginRequestBody, isNewProfile: Boolean , v
                         )
                     Spacer(modifier = Modifier.padding(top = padding))
 
-                    saveButton(isNewProfile , viewModel.userDataClass)
+                    saveButton(){
+
+                        Log.d("test",viewModel.userDataClass.toString())
+                        viewModel.loginPost(activity)
+                    }
                     Spacer(modifier = Modifier.padding(top = 70.dp))
 
 
@@ -238,7 +244,7 @@ fun EditTextField(
 }
 
 @Composable
-fun saveButton(isNewProfile: Boolean, userDataClass: PostLoginRequestBody) {
+fun saveButton(saveFunc:() -> Unit){
     val activity = LocalContext.current as Activity
 
     Row(
@@ -248,13 +254,7 @@ fun saveButton(isNewProfile: Boolean, userDataClass: PostLoginRequestBody) {
         ){
         Button(
             onClick = {
-
-                //Todo: Postをおくって新規ユーザー登録をする
-                Log.d("Saves", userDataClass.toString())
-                if(isNewProfile){
-                    activity.finish()
-                }
-
+                saveFunc()
             },
         ) {
             Text("保存をする")

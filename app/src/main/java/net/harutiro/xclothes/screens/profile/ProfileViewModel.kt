@@ -1,6 +1,7 @@
 package net.harutiro.xclothes.screens.profile
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import net.harutiro.xclothes.models.login.ApiLoginMethod
@@ -16,8 +17,11 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
 
     val apiLoginMethod = ApiLoginMethod()
 
-    fun loginPost(){
+    fun loginPost(activity: Activity){
         if(isNewProfile){
+            apiLoginMethod.loginPost(userDataClass){
+                activity.finish()
+            }
         }else{
         }
     }

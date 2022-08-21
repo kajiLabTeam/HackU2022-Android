@@ -65,7 +65,7 @@ fun SettingsScreen() {
             Button(
                 onClick = {
                     val apiLoginMethod = ApiLoginMethod()
-                    apiLoginMethod.loginGet("yada@aich.ac.jp")
+                    apiLoginMethod.loginGet("yada@aich.ac.jp",{})
                 },
                 modifier = Modifier.padding(it)
             ) {

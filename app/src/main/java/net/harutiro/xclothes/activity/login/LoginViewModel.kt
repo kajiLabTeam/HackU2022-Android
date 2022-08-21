@@ -16,6 +16,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
+import net.harutiro.xclothes.models.login.ApiLoginMethod
 import net.harutiro.xclothes.models.login.post.PostLoginRequestBody
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
@@ -37,6 +38,8 @@ class LoginViewModel: ViewModel() {
     var navController: NavHostController? = null
 
     var userDataClass: PostLoginRequestBody = PostLoginRequestBody()
+
+    val apiLoginMethod = ApiLoginMethod()
 
     fun login(activity: Activity) {
         // Initialize Firebase Auth
@@ -126,8 +129,18 @@ class LoginViewModel: ViewModel() {
                             userDataClass.name = user?.displayName.toString()
                             userDataClass.mail = user?.email.toString()
 
+                            apiLoginMethod.loginGet(userDataClass.mail){
+                                if(it.status){
+                                    //TODO:ユーザーデータを保存する
+                                    activity.finish()
+                                }else{
+                                    //メインスレッドで行うようにしてい
+                                    activity.runOnUiThread(){
+                                        navController?.navigate("second")
+                                    }
+                                }
+                            }
 
-                            navController?.navigate("second")
 
 //                                updateUI(user)
                         } else {

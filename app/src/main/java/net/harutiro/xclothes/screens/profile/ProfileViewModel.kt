@@ -18,7 +18,6 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
 
     fun loginPost(){
         if(isNewProfile){
-            apiLoginMethod.loginGet(userDataClass.mail)
         }else{
         }
     }

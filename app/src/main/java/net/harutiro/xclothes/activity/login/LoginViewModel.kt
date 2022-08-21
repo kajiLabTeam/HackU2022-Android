@@ -15,7 +15,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
 import net.harutiro.xclothes.models.login.post.PostLoginRequestBody
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.IOException
 
 class LoginViewModel: ViewModel() {
 
@@ -141,6 +146,44 @@ class LoginViewModel: ViewModel() {
 
     fun logout(){
         FirebaseAuth.getInstance().signOut()
+    }
+
+    fun newUserPusher(){
+        val CONNECTION_TIMEOUT_MILLISECONDS = 1000
+        val READ_TIMEOUT_MILLISECONDS = 1000
+
+        val client = OkHttpClient.Builder()
+            .connectTimeout(CONNECTION_TIMEOUT_MILLISECONDS.toLong(), java.util.concurrent.TimeUnit.MILLISECONDS
+            )
+            .readTimeout(READ_TIMEOUT_MILLISECONDS.toLong(), java.util.concurrent.TimeUnit.MILLISECONDS)
+            .build()
+
+        // Bodyのデータ（サンプル）
+        val JSON_MEDIA = "application/json; charset=utf-8".toMediaType()
+
+        val gson = Gson()
+        val sendDataJson = gson.toJson(userDataClass)
+        val urlStr = "http://20.168.98.13:8080/login"
+
+        // Requestを作成
+        val request = Request.Builder()
+            .url(urlStr)
+            .post(sendDataJson.toRequestBody(JSON_MEDIA))
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                // Responseの読み出し
+                val responseBody = response.body?.string().orEmpty()
+                Log.d("App", responseBody)
+                // 必要に応じてCallback
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("Error", e.toString())
+                // 必要に応じてCallback
+            }
+        })
     }
 
 }

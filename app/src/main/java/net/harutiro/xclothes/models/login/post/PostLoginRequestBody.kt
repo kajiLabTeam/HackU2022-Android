@@ -4,8 +4,8 @@ data class PostLoginRequestBody(
     var name: String = "",
     var uuid: String = "",
     var icon: String = "",
-    var gender: String = "",
+    var gender: Int = 0,
     var age: String = "",
-    var height: String = "",
+    var height: Int = 0,
     var mail: String = "",
 )

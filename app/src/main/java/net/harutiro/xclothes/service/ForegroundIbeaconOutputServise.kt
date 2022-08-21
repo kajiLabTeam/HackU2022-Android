@@ -22,7 +22,7 @@ import org.altbeacon.beacon.BeaconTransmitter
 class ForegroundIbeaconOutputServise : Service() {
 
     companion object {
-        const val CHANNEL_ID = "1111"
+        const val CHANNEL_ID = "search_notify"
     }
     override fun onBind(p0: Intent?): IBinder? {
         return null
@@ -46,21 +46,11 @@ class ForegroundIbeaconOutputServise : Service() {
             PendingIntent.getActivity(this, 0, it, PendingIntent.FLAG_IMMUTABLE)
         }
 
-        //2．通知チャネル登録
-        val channelId = CHANNEL_ID
-        val channelName = "TestService Channel"
-        val channel = NotificationChannel(
-            channelId, channelName,
-            NotificationManager.IMPORTANCE_DEFAULT
-        )
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        manager.createNotificationChannel(channel)
-
         //4．通知の作成（ここでPendingIntentを通知領域に渡す）
         val notification = NotificationCompat.Builder(this, CHANNEL_ID )
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("ビーコンの送信中")
-            .setContentText("ここに詳しい説明をかけるよ！！")
+            .setContentTitle("服の送信中")
+            .setContentText("あなたの服を電磁波に乗せて周りのスマホに発信しています。")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(openIntent)
             .build()

@@ -18,11 +18,21 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+        buildConfigField "String","CLOUD_NAME","\"${properties.getProperty("CLOUD_NAME")}\""
+        buildConfigField "String","API_KEY","\"${properties.getProperty("API_KEY")}\""
+        buildConfigField "String","API_SECRET","\"${properties.getProperty("API_SECRET")}\""
+        buildConfigField "String","API_ENVIRONMENT_VARIABLE","\"${properties.getProperty("API_ENVIRONMENT_VARIABLE")}\""
+
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

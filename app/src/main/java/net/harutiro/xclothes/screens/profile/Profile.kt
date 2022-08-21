@@ -26,13 +26,18 @@ import coil.compose.AsyncImage
 import net.harutiro.xclothes.R
 import net.harutiro.xclothes.models.AddSpinaers
 import net.harutiro.xclothes.models.login.post.PostLoginRequestBody
+import net.harutiro.xclothes.screens.add.AddViewModel
+import net.harutiro.xclothes.screens.profile.ProfileViewModel
 import net.harutiro.xclothes.ui.theme.XclothesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ProfileScreen(userDataClass: PostLoginRequestBody, isNewProfile: Boolean) {
+fun ProfileScreen(userDataClass: PostLoginRequestBody, isNewProfile: Boolean , viewModel: ProfileViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
 
+    viewModel.isNewProfile = isNewProfile
+
+    viewModel.userDataClass = userDataClass
 
     Surface(
         color = MaterialTheme.colorScheme.surface,
@@ -45,7 +50,7 @@ fun ProfileScreen(userDataClass: PostLoginRequestBody, isNewProfile: Boolean) {
         ) {
 
             Spacer(modifier = Modifier.padding(top = 64.dp))
-            icon(userDataClass.icon)
+            icon(viewModel.userDataClass.icon)
 
             Card(
                 modifier = Modifier
@@ -63,9 +68,9 @@ fun ProfileScreen(userDataClass: PostLoginRequestBody, isNewProfile: Boolean) {
                     EditTextField(
                         questionLabel = "名前",
                         fix = { name ->
-                            userDataClass.name = name
+                            viewModel.userDataClass.name = name
                         },
-                        text = userDataClass.name,
+                        text = viewModel.userDataClass.name,
                         comeIcon = ImageVector.vectorResource(id = R.drawable.gender_neutral_user_icon_icons_com_55902),
                         keyboardType = KeyboardType.Text,
                     )
@@ -79,10 +84,10 @@ fun ProfileScreen(userDataClass: PostLoginRequestBody, isNewProfile: Boolean) {
                         ),
                         fix = { text , icon ->
                             var genderNumber = if(text == "男性"){ 1 } else { 2 }
-                            userDataClass.gender = genderNumber
+                            viewModel.userDataClass.gender = genderNumber
                         },
-                        text = userDataClass.gender.toString(),
-                        comeIcon = if(userDataClass.gender == 1){
+                        text = viewModel.userDataClass.gender.toString(),
+                        comeIcon = if(viewModel.userDataClass.gender == 1){
                             ImageVector.vectorResource(id = R.drawable.man_fill0_wght400_grad0_opsz48)
                         }else{
                             ImageVector.vectorResource(id = R.drawable.woman_fill0_wght400_grad0_opsz48)
@@ -93,9 +98,9 @@ fun ProfileScreen(userDataClass: PostLoginRequestBody, isNewProfile: Boolean) {
                     EditTextField(
                         questionLabel = "年齢",
                         fix = {
-                            userDataClass.age = it
+                            viewModel.userDataClass.age = it
                         },
-                        text = userDataClass.age,
+                        text = viewModel.userDataClass.age,
                         comeIcon = ImageVector.vectorResource(id = R.drawable.gender_neutral_user_icon_icons_com_55902),
                         keyboardType = KeyboardType.Number,
 
@@ -106,19 +111,19 @@ fun ProfileScreen(userDataClass: PostLoginRequestBody, isNewProfile: Boolean) {
                         questionLabel = "身長",
                         fix = {
                             try{
-                                userDataClass.height = it.toInt()
+                                viewModel.userDataClass.height = it.toInt()
                             }catch (e:Exception){
                                 // TODO: throw exception
                             }
                         },
-                        text = userDataClass.height.toString(),
+                        text = viewModel.userDataClass.height.toString(),
                         comeIcon = ImageVector.vectorResource(id = R.drawable.gender_neutral_user_icon_icons_com_55902),
                         keyboardType = KeyboardType.Number,
 
                         )
                     Spacer(modifier = Modifier.padding(top = padding))
 
-                    saveButton(isNewProfile , userDataClass)
+                    saveButton(isNewProfile , viewModel.userDataClass)
                     Spacer(modifier = Modifier.padding(top = 70.dp))
 
 

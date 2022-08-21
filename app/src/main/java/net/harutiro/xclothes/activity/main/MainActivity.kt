@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import net.harutiro.xclothes.MainScreen
 import net.harutiro.xclothes.R
+import net.harutiro.xclothes.activity.evaluation.EvaluationActivity
 import net.harutiro.xclothes.ui.theme.XclothesTheme
 import org.altbeacon.beacon.*
 import pub.devrel.easypermissions.EasyPermissions
@@ -34,13 +35,15 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
     private val viewModel :MainViewModel by lazy { ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java) }
     val TAG = "mainActivity"
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel.checkPermission(this,this)
 
         if(EasyPermissions.hasPermissions(this, *viewModel.permissions)){
-            viewModel.startService(this)
+            viewModel.startService(this )
+            createNotificationChannel()
             ibeacon()
         }
 
@@ -57,6 +60,7 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun ibeacon(){
         //ここからビーコン関係
         if (EasyPermissions.hasPermissions(this, *viewModel.permissions)) {
@@ -83,24 +87,15 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
             //
             val builder = Notification.Builder(this)
             builder.setSmallIcon(R.drawable.ic_launcher_foreground)
-            builder.setContentTitle("入退室をチェック中")
+            builder.setContentTitle("すれ違いをチェック中")
             val intent = Intent(this, MainActivity::class.java)
             val pendingIntent = PendingIntent.getActivity(
                 this, 0, intent, PendingIntent.FLAG_MUTABLE
             )
             builder.setContentIntent(pendingIntent)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val channel = NotificationChannel(
-                    "My Notification Channel ID",
-                    "入退室チェック通知チャンネル", NotificationManager.IMPORTANCE_DEFAULT
-                )
-                channel.description = "ビーコンの読み取り時の通知チャンネル"
-                val notificationManager = getSystemService(
-                    NOTIFICATION_SERVICE
-                ) as NotificationManager
-                notificationManager.createNotificationChannel(channel)
-                builder.setChannelId(channel.id)
-            }
+
+            builder.setChannelId("search_notify")
+
             beaconManager.enableForegroundServiceScanning(builder.build(), 456)
 
             beaconManager.setEnableScheduledScanJobs(false)
@@ -127,11 +122,21 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
+
+        val channelId = "search_notify"
+        val channelName = "すれ違いのときのサービスを起動通知をするちゃんねる"
+        val channel2 = NotificationChannel(
+            channelId, channelName,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.createNotificationChannel(channel2)
+
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
-        val name = "入退室検知通知"
-        val descriptionText = "入退室を検知した時に通知するチャンネルです。"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val name = "すれ違い検出通知"
+        val descriptionText = "すれ違いを検知した時に通知するチャンネルです。"
+        val importance = NotificationManager.IMPORTANCE_HIGH
         val channel = NotificationChannel("room_inside_notify", name, importance).apply {
             description = descriptionText
         }
@@ -147,20 +152,22 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
 
         createNotificationChannel()
 
+        val intent = Intent(this, EvaluationActivity::class.java)
+
         val pendingIntent: PendingIntent =
             PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE)
 
         val builder = NotificationCompat.Builder(this, "room_inside_notify")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("入退室を検知しました。")
-            .setContentText("タップして体温の記入をお願いします。")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentTitle("すれ違いました！！")
+            .setContentText("タップして服の評価をお願いします。")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             // Set the intent that will fire when the user taps the notification
-            .setContentIntent(pendingIntent)
+            .setFullScreenIntent(pendingIntent,true)
             .setAutoCancel(true)
 
 
-        with(NotificationManagerCompat.from(this)) {
+                with(NotificationManagerCompat.from(this)) {
             // notificationId is a unique int for each notification that you must define
             notify(22, builder.build())
         }

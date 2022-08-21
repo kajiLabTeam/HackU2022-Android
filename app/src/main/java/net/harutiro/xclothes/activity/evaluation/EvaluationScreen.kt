@@ -171,23 +171,6 @@ fun name(modifier:Modifier){
 
 
 @Composable
-fun SaveButton(){
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-    ){
-        Button(
-            onClick = { /*TODO*/ },
-        ) {
-            Text("保存をする")
-        }
-    }
-}
-
-
-
-@Composable
 fun PhotoView(url:String = "https://res.cloudinary.com/dlg3xe2l2/image/upload/v1648506804/dkplq1odbhkd4nt2g6ba.jpg"){
     Box(
         modifier = Modifier,

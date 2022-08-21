@@ -243,6 +243,8 @@ fun saveButton(isNewProfile: Boolean, userDataClass: PostLoginRequestBody) {
         ){
         Button(
             onClick = {
+
+                //Todo: Postをおくって新規ユーザー登録をする
                 Log.d("Saves", userDataClass.toString())
                 if(isNewProfile){
                     activity.finish()

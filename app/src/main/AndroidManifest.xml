@@ -30,6 +30,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Xclothes"
+        tools:replace="android:fullBackupContent"
         tools:targetApi="31">
         <activity
             android:name=".activity.login.LoginActivity"

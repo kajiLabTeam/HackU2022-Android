@@ -1,8 +1,10 @@
 package net.harutiro.xclothes.activity.login
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.core.app.ActivityCompat.startIntentSenderForResult
 import androidx.lifecycle.ViewModel
@@ -16,6 +18,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
+import net.harutiro.xclothes.models.login.ApiLoginMethod
 import net.harutiro.xclothes.models.login.post.PostLoginRequestBody
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
@@ -37,6 +40,8 @@ class LoginViewModel: ViewModel() {
     var navController: NavHostController? = null
 
     var userDataClass: PostLoginRequestBody = PostLoginRequestBody()
+
+    val apiLoginMethod = ApiLoginMethod()
 
     fun login(activity: Activity) {
         // Initialize Firebase Auth
@@ -126,8 +131,26 @@ class LoginViewModel: ViewModel() {
                             userDataClass.name = user?.displayName.toString()
                             userDataClass.mail = user?.email.toString()
 
+                            apiLoginMethod.loginGet(userDataClass.mail){
+                                if(it.status){
+                                    //TODO:ユーザーデータを保存する
 
-                            navController?.navigate("second")
+                                    val data: SharedPreferences = activity.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
+                                    val editor = data.edit()
+                                    val gson = Gson()
+                                    val json = gson.toJson(it)
+                                    editor.putString("userData",json)
+                                    editor.apply()
+
+                                    activity.finish()
+                                }else{
+                                    //メインスレッドで行うようにしてい
+                                    activity.runOnUiThread(){
+                                        navController?.navigate("second")
+                                    }
+                                }
+                            }
+
 
 //                                updateUI(user)
                         } else {
@@ -147,43 +170,4 @@ class LoginViewModel: ViewModel() {
     fun logout(){
         FirebaseAuth.getInstance().signOut()
     }
-
-    fun newUserPusher(){
-        val CONNECTION_TIMEOUT_MILLISECONDS = 1000
-        val READ_TIMEOUT_MILLISECONDS = 1000
-
-        val client = OkHttpClient.Builder()
-            .connectTimeout(CONNECTION_TIMEOUT_MILLISECONDS.toLong(), java.util.concurrent.TimeUnit.MILLISECONDS
-            )
-            .readTimeout(READ_TIMEOUT_MILLISECONDS.toLong(), java.util.concurrent.TimeUnit.MILLISECONDS)
-            .build()
-
-        // Bodyのデータ（サンプル）
-        val JSON_MEDIA = "application/json; charset=utf-8".toMediaType()
-
-        val gson = Gson()
-        val sendDataJson = gson.toJson(userDataClass)
-        val urlStr = "http://20.168.98.13:8080/login"
-
-        // Requestを作成
-        val request = Request.Builder()
-            .url(urlStr)
-            .post(sendDataJson.toRequestBody(JSON_MEDIA))
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
-                // Responseの読み出し
-                val responseBody = response.body?.string().orEmpty()
-                Log.d("App", responseBody)
-                // 必要に応じてCallback
-            }
-
-            override fun onFailure(call: Call, e: IOException) {
-                Log.e("Error", e.toString())
-                // 必要に応じてCallback
-            }
-        })
-    }
-
 }

@@ -4,12 +4,14 @@ import android.text.style.LineHeightSpan
 import net.harutiro.xclothes.nav.BottomBarScreen
 
 data class GetLoginResponse(
-    var user_find:Boolean,
-    var icon:String,
-    var name:String,
-    var uuid:String,
-    var gender:Int,
-    var height:Int,
-    var age:String,
-    var mail:String,
+    var id:String = "",
+    var name:String = "",
+    var gender:Int = 0,
+    var age:String = "",
+    var height:Int = 0,
+    var uuid:String = "",
+    var mail:String = "",
+    var icon:String = "",
+    var status:Boolean = false,
+    var message:String = "",
 )

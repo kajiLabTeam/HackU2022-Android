@@ -20,8 +20,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
+import com.google.firebase.auth.FirebaseAuth
 import net.harutiro.xclothes.activity.evaluation.EvaluationActivity
 import net.harutiro.xclothes.activity.login.LoginActivity
+import net.harutiro.xclothes.models.login.ApiLoginMethod
 import net.harutiro.xclothes.service.ForegroundIbeaconOutputServise
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,6 +62,25 @@ fun SettingsScreen() {
                 modifier = Modifier.padding(it)
             ) {
                 Text("ログイン画面の起動")
+            }
+            Button(
+                onClick = {
+                    val apiLoginMethod = ApiLoginMethod()
+                    apiLoginMethod.loginGet("yada@aich.ac.jp",{})
+                },
+                modifier = Modifier.padding(it)
+            ) {
+                Text("postCheck")
+            }
+            Button(
+                onClick = {
+                    FirebaseAuth.getInstance().signOut()
+                    val intent = Intent(context, LoginActivity::class.java)
+                    startActivity(context,intent,null)
+
+                }
+            ){
+                Text("Logout")
             }
         }
 

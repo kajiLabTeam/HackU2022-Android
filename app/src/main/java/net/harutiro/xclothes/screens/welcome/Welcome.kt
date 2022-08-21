@@ -26,14 +26,6 @@ fun WelcomeScreen(
         ){
             Text("ログイン")
         }
-
-        Button(
-            modifier = Modifier,
-            onClick = {logout()},
-        ){
-            Text("ログアウト")
-        }
-
     }
 
 

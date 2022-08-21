@@ -1,6 +1,7 @@
 package net.harutiro.xclothes.activity.evaluation
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,6 +19,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -71,10 +73,14 @@ fun EvaluationScreen(viewModel: EvaluationViewModel) {
 @Composable
 fun GoodButton(align: Modifier) {
 
+    val context = LocalContext.current
+
     Button(
         shape = CircleShape,
         modifier = align,
-        onClick = {},
+        onClick = {
+                  Toast.makeText(context, "いいねしました", Toast.LENGTH_SHORT).show()
+        },
         contentPadding = PaddingValues(0.dp),
     ){
         Icon(Icons.Filled.ThumbUp,"contentDescription")
@@ -162,23 +168,6 @@ fun name(modifier:Modifier){
 
 
 }
-
-
-@Composable
-fun SaveButton(){
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-    ){
-        Button(
-            onClick = { /*TODO*/ },
-        ) {
-            Text("保存をする")
-        }
-    }
-}
-
 
 
 @Composable

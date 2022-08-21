@@ -29,6 +29,11 @@
         android:theme="@style/Theme.Xclothes"
         tools:targetApi="31">
         <activity
+            android:name=".activity.login.LoginActivity"
+            android:exported="false"
+            android:label="@string/title_activity_login"
+            android:theme="@style/Theme.Xclothes" />
+        <activity
             android:name=".activity.evaluation.EvaluationActivity"
             android:exported="false"
             android:label="@string/title_activity_evaluation"

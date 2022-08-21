@@ -11,6 +11,7 @@ import net.harutiro.test_bottomnavigation_withjetpackcompose.screens.HomeScreen
 import net.harutiro.test_bottomnavigation_withjetpackcompose.screens.MapScreen
 import net.harutiro.xclothes.screens.ProfileScreen
 import net.harutiro.test_bottomnavigation_withjetpackcompose.screens.SettingsScreen
+import net.harutiro.xclothes.models.login.post.PostLoginRequestBody
 import net.harutiro.xclothes.nav.BottomBarScreen
 import net.harutiro.xclothes.screens.add.AddViewModel
 
@@ -25,7 +26,7 @@ fun BottomNavGraph(navController:NavHostController) {
             HomeScreen()
         }
         composable(route = BottomBarScreen.Profile.route){
-            ProfileScreen()
+            ProfileScreen(PostLoginRequestBody(),false)
         }
         composable(route = BottomBarScreen.Settings.route){
             SettingsScreen()

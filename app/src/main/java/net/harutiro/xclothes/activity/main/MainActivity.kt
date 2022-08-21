@@ -167,11 +167,9 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
     }
 
     override fun didExitRegion(region: Region?) {
-//        TODO("Not yet implemented")
     }
 
     override fun didDetermineStateForRegion(state: Int, region: Region?) {
-//        TODO("Not yet implemented")
     }
 
     override fun didRangeBeaconsInRegion(beacons: MutableCollection<Beacon>?, region: Region?) {

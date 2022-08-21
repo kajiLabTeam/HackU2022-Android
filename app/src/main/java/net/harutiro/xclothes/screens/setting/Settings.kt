@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import net.harutiro.xclothes.activity.evaluation.EvaluationActivity
+import net.harutiro.xclothes.activity.login.LoginActivity
 import net.harutiro.xclothes.service.ForegroundIbeaconOutputServise
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,6 +51,15 @@ fun SettingsScreen() {
                 modifier = Modifier.padding(it)
             ) {
                 Text("評価画面の起動")
+            }
+            Button(
+                onClick = {
+                    val targetIntent = Intent(context, LoginActivity::class.java)
+                    startActivity(context,targetIntent,null)
+                },
+                modifier = Modifier.padding(it)
+            ) {
+                Text("ログイン画面の起動")
             }
         }
 

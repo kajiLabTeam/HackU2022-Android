@@ -1,19 +1,19 @@
-package net.harutiro.xclothes.models.login
+package net.harutiro.xclothes.models.coordinate
 
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import net.harutiro.xclothes.R
+import net.harutiro.xclothes.models.coordinate.get.GetCoordinateResponse
+import net.harutiro.xclothes.models.coordinate.post.PostCoordinateRequestBody
+import net.harutiro.xclothes.models.coordinate.post.PostCoordinateResponse
 import net.harutiro.xclothes.models.login.get.GetLoginResponse
-import net.harutiro.xclothes.models.login.post.PostLoginRequestBody
-import net.harutiro.xclothes.models.login.post.PostLoginResponse
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
-class ApiLoginMethod {
+class ApiCoordinateMethod {
 
     val CONNECTION_TIMEOUT_MILLISECONDS = 1000
     val READ_TIMEOUT_MILLISECONDS = 1000
@@ -23,14 +23,12 @@ class ApiLoginMethod {
         .readTimeout(READ_TIMEOUT_MILLISECONDS.toLong(), java.util.concurrent.TimeUnit.MILLISECONDS)
         .build()
 
-
-    fun loginGet(context: Context,email: String, nextStepFunc:(GetLoginResponse) -> Unit) {
+    fun coordinateGet(context: Context, ble:String, nextStepFunc:() -> Unit){
 
         val serverUrl = context.getString(R.string.server_url)
 
-        // Requestを作成
         val request = Request.Builder()
-            .url( serverUrl + "login?mail=$email")
+            .url(serverUrl + "cordinate:?ble=$ble")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -41,12 +39,12 @@ class ApiLoginMethod {
                 Log.d("App", responseBody)
 
                 val gson = Gson()
-                val userDataClass = gson.fromJson(responseBody, GetLoginResponse::class.java)
+                val coordinateDate = gson.fromJson(responseBody, GetCoordinateResponse::class.java)
 
-                Log.d("App", userDataClass.toString())
+                Log.d("App", coordinateDate.toString())
                 // 必要に応じてCallback
 
-                nextStepFunc(userDataClass)
+                nextStepFunc()
             }
 
             override fun onFailure(call: Call, e: IOException) {
@@ -56,18 +54,18 @@ class ApiLoginMethod {
         })
     }
 
-    fun loginPost(context: Context, userDataClass:PostLoginRequestBody, nextStepFunc:(PostLoginResponse) -> Unit){
+    fun coordinatePost(context:Context,postCoordinateRequestBody: PostCoordinateRequestBody,nextStepFunc: () -> Unit){
+
         val gson = Gson()
 
-        val jsonData = gson.toJson(userDataClass)
+        val jsonData = gson.toJson(postCoordinateRequestBody)
 
         val JSON_MEDIA = "application/json; charset=utf-8".toMediaType()
 
         val serverUrl = context.getString(R.string.server_url)
 
-        // Requestを作成
         val request = Request.Builder()
-            .url(serverUrl + "login")
+            .url(serverUrl + "coordinate")
             .post(jsonData.toRequestBody(JSON_MEDIA))
             .build()
 
@@ -78,13 +76,13 @@ class ApiLoginMethod {
 
                 Log.d("App", responseBody)
 
-                val userDataClass = gson.fromJson(responseBody,PostLoginResponse::class.java)
+                val gson = Gson()
+                val apiResponseStatus = gson.fromJson(responseBody, PostCoordinateResponse::class.java)
 
-                Log.d("App", userDataClass.toString())
+                Log.d("App", apiResponseStatus.toString())
                 // 必要に応じてCallback
-                //Todo 名前を変える　userDataClass
 
-                nextStepFunc(userDataClass)
+                nextStepFunc()
             }
 
             override fun onFailure(call: Call, e: IOException) {
@@ -92,7 +90,5 @@ class ApiLoginMethod {
                 // 必要に応じてCallback
             }
         })
-
-
     }
 }

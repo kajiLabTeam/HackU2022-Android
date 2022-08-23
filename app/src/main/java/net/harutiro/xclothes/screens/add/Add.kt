@@ -2,6 +2,7 @@ package net.harutiro.test_bottomnavigation_withjetpackcompose.screens
 
 import android.content.res.Configuration
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -31,23 +32,30 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
+import coil.compose.AsyncImage
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import net.harutiro.xclothes.R
 import net.harutiro.xclothes.models.AddSpinaers
 import net.harutiro.xclothes.models.Clothes
+import net.harutiro.xclothes.models.coordinate.post.PostCoordinateRequestBody
 import net.harutiro.xclothes.screens.add.AddViewModel
 import net.harutiro.xclothes.ui.theme.XclothesTheme
+import java.util.*
 
 @Composable
 fun AddScreen(viewModel: AddViewModel) {
 
-    var uriRemember by remember { mutableStateOf("") }
+    var urlRemember by remember { mutableStateOf("") }
     val uri = viewModel.photoStartUp()
+
+    //写真を取ったあとのURIを受け取る
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { _ ->
-        uriRemember = uri.toString()
+        viewModel.addCoordinatePost(uri){
+            //TODO ロード中画面ぐるぐるにする
+            urlRemember = it
+        }
+//        uriRemember = uri.toString()
     }
 
     Surface (
@@ -61,37 +69,26 @@ fun AddScreen(viewModel: AddViewModel) {
                 .verticalScroll(rememberScrollState())
 
         ){
-            if(uriRemember.isEmpty()){
+            if(urlRemember.isEmpty()){
                 NottingPhotoIcon(launcher,uri)
             }else{
-                PhotoView(uriRemember)
+                PhotoView(urlRemember)
             }
 
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
+            IsReleaseSwitch(viewModel)
 
-                val checkedState = remember { mutableStateOf(true) }
-                Switch(
-                    checked = checkedState.value,
-                    onCheckedChange = { checkedState.value = it },
-                    modifier = Modifier.align(Alignment.CenterVertically)
-
-                )
-                Text(
-                    text = "公開範囲",
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(16.dp),
-                )
-            }
-
-            ClothesList()
+            ClothesList(viewModel)
             Spacer(modifier = Modifier.padding(16.dp))
-            SaveButton()
+            SaveButton(){
+                Log.d("checkValue", viewModel.checkedState.toString())
+
+                for (i in viewModel.clothe){
+                    Log.d("checkValue", i.toString())
+                }
+
+                viewModel.pushApi()
+
+            }
             Spacer(modifier = Modifier.padding(16.dp))
 
 
@@ -99,43 +96,58 @@ fun AddScreen(viewModel: AddViewModel) {
     }
 }
 
+@Composable
+fun IsReleaseSwitch(viewModel: AddViewModel) {
 
+//    val checkedState = remember { mutableStateOf(true) }
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+
+        Switch(
+            checked = viewModel.checkedState,
+            onCheckedChange = { viewModel.checkedState = it },
+            modifier = Modifier.align(Alignment.CenterVertically)
+
+        )
+        Text(
+            text = "公開範囲",
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(16.dp),
+        )
+    }
+}
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
     ExperimentalSnapperApi::class
 )
 @Composable
-fun ClothesList(){
+fun ClothesList(viewModel: AddViewModel){
+
+
     Surface(
         color = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxWidth()
 
     ) {
-        val names = remember { mutableStateListOf(Clothes()) }
 
         Column() {
             OutlinedButton(
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(16.dp),
                 shape = RoundedCornerShape(20),
                 onClick = {
-                    names.add(Clothes())
+                    viewModel.clothe.add(Clothes())
                 }
             ) {
                 Text("服を追加")
             }
-
-//            Button(
-//                onClick = {
-//                    for(i in names){
-//                        Log.d("test",i.id)
-//                        Log.d("test",i.category)
-//                        Log.d("test",i.brand)
-//                        Log.d("test",i.price)
-//                    }
-//                }
-//            ) {
-//                Text("呼び出し")
-//            }
 
             val lazyListState: LazyListState = rememberLazyListState()
 
@@ -156,7 +168,7 @@ fun ClothesList(){
                 }
 
                 itemsIndexed(
-                    items = names,
+                    items = viewModel.clothe,
                     key = {index ,i ->
                         i.id
                     }
@@ -165,16 +177,18 @@ fun ClothesList(){
 
                     AnimatedVisibility(
                         modifier = Modifier.animateItemPlacement(),
-                        visible = names.contains(name),
+                        visible = viewModel.clothe.contains(name),
                         enter = fadeIn(),
                         exit = fadeOut(),
                     ) {
 
                         Card(Modifier.width(itemWidthDp.dp)) {
                             IconButton(
-                                modifier = Modifier.padding(16.dp).align(Alignment.End),
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .align(Alignment.End),
                                 onClick = {
-                                    names.remove(name)
+                                    viewModel.clothe.remove(name)
                                 }
                             ){
                                 Icon(Icons.Filled.Delete,"contentDescription")
@@ -188,7 +202,7 @@ fun ClothesList(){
                                     AddSpinaers("しまむら",ImageVector.vectorResource(id = R.drawable.simamura)),
                                 ),
                                 fix = { text , icon ->
-                                    names[index] = Clothes(
+                                    viewModel.clothe[index] = Clothes(
                                         id = name.id,
                                         category = name.category,
                                         categoryIcon = name.categoryIcon,
@@ -212,7 +226,7 @@ fun ClothesList(){
                                     AddSpinaers("靴下",Icons.Filled.CurrencyYen),
                                 ),
                                 fix = { text , icon ->
-                                    names[index] = Clothes(
+                                    viewModel.clothe[index] = Clothes(
                                         id = name.id,
                                         category = text,
                                         categoryIcon = icon,
@@ -236,7 +250,7 @@ fun ClothesList(){
                                     AddSpinaers("10001~",Icons.Filled.CurrencyYen),
                                 ),
                                 fix = { text , icon ->
-                                    names[index] = Clothes(
+                                    viewModel.clothe[index] = Clothes(
                                         id = name.id,
                                         category = name.category,
                                         categoryIcon = name.categoryIcon,
@@ -268,7 +282,7 @@ fun ClothesList(){
 
 
 @Composable
-fun SaveButton(){
+fun SaveButton(onClick: () -> Unit){
 
     val context = LocalContext.current
 
@@ -280,6 +294,7 @@ fun SaveButton(){
         Button(
             onClick = {
                 Toast.makeText(context, "服を登録しました", Toast.LENGTH_SHORT).show()
+                onClick()
             },
         ) {
             Text("保存をする")
@@ -383,15 +398,10 @@ fun NottingPhotoIcon(launcher: ManagedActivityResultLauncher<Uri, Boolean>, uri:
 }
 
 @Composable
-fun PhotoView(uriRemember:String){
+fun PhotoView(urlRemember:String){
     Box(){
-        Image(
-            painter = rememberAsyncImagePainter(
-                ImageRequest
-                    .Builder(LocalContext.current)
-                    .data(data = uriRemember)
-                    .build()
-            ),
+        AsyncImage(
+            model = urlRemember,
             contentDescription = "My Picture",
             contentScale = ContentScale.Crop,
             modifier = Modifier

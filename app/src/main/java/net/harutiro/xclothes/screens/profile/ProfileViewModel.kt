@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import com.google.gson.Gson
+import net.harutiro.xclothes.R
 import net.harutiro.xclothes.models.login.ApiLoginMethod
 import net.harutiro.xclothes.models.login.get.GetLoginResponse
 import net.harutiro.xclothes.models.login.post.PostLoginRequestBody
@@ -27,7 +28,8 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
 
     fun loginPost(activity: Activity){
         if(isNewProfile){
-            apiLoginMethod.loginPost(userDataClass){
+            apiLoginMethod.loginPost(context,userDataClass){
+                editor.putString("userId", it.id)
                 activity.finish()
             }
         }else{

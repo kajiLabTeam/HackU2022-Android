@@ -30,7 +30,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Xclothes"
+        tools:replace="android:fullBackupContent"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="CLOUDINARY_URL"
+            android:value="cloudinary://215683669526267:EPsWUdk-C1eulQ7HBIttLGa9qHY@dificqqyf"/>
+
+
         <activity
             android:name=".activity.login.LoginActivity"
             android:exported="false"

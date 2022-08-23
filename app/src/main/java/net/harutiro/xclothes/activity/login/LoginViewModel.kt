@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat.startIntentSenderForResult
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
@@ -82,7 +83,7 @@ class LoginViewModel: ViewModel() {
             }
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent? , activity: Activity){
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent? , activity: Activity , context: Context){
         when (requestCode) {
             REQ_ONE_TAP -> {
                 try {
@@ -94,7 +95,7 @@ class LoginViewModel: ViewModel() {
                             // with Firebase.
                             Log.d(TAG, "Got ID token.")
 
-                            firebaseCertification(data,activity)
+                            firebaseCertification(data,activity,context)
                         }
                         else -> {
                             // Shouldn't happen.
@@ -110,9 +111,11 @@ class LoginViewModel: ViewModel() {
         }
     }
 
-    fun firebaseCertification (data: Intent?, activity: Activity){
+    fun firebaseCertification (data: Intent?, activity: Activity , context:Context){
         val googleCredential = oneTapClient.getSignInCredentialFromIntent(data)
         val idToken = googleCredential.googleIdToken
+
+
         when {
             idToken != null -> {
                 // Got an ID token from Google. Use it to authenticate
@@ -131,7 +134,7 @@ class LoginViewModel: ViewModel() {
                             userDataClass.name = user?.displayName.toString()
                             userDataClass.mail = user?.email.toString()
 
-                            apiLoginMethod.loginGet(userDataClass.mail){
+                            apiLoginMethod.loginGet(context , userDataClass.mail){
                                 if(it.status){
                                     //TODO:ユーザーデータを保存する
 
@@ -140,6 +143,7 @@ class LoginViewModel: ViewModel() {
                                     val gson = Gson()
                                     val json = gson.toJson(it)
                                     editor.putString("userData",json)
+                                    editor.putString("userId",it.id)
                                     editor.apply()
 
                                     activity.finish()

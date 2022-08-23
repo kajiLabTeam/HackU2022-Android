@@ -1,8 +1,10 @@
 package net.harutiro.xclothes.models.login
 
+import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import net.harutiro.xclothes.R
 import net.harutiro.xclothes.models.login.get.GetLoginResponse
 import net.harutiro.xclothes.models.login.post.PostLoginRequestBody
 import net.harutiro.xclothes.models.login.post.PostLoginResponse
@@ -22,10 +24,13 @@ class ApiLoginMethod {
         .build()
 
 
-    fun loginGet(email: String, nextStepFunc:(GetLoginResponse) -> Unit) {
+    fun loginGet(context: Context,email: String, nextStepFunc:(GetLoginResponse) -> Unit) {
+
+        val serverUrl = context.getString(R.string.server_url)
+
         // Requestを作成
         val request = Request.Builder()
-            .url("http://20.168.98.13:8080/login?mail=$email")
+            .url( serverUrl + "login?mail=$email")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -51,16 +56,18 @@ class ApiLoginMethod {
         })
     }
 
-    fun loginPost(userDataClass:PostLoginRequestBody, nextStepFunc:(PostLoginResponse) -> Unit){
+    fun loginPost(context: Context, userDataClass:PostLoginRequestBody, nextStepFunc:(PostLoginResponse) -> Unit){
         val gson = Gson()
 
         val jsonData = gson.toJson(userDataClass)
 
         val JSON_MEDIA = "application/json; charset=utf-8".toMediaType()
 
+        val serverUrl = context.getString(R.string.server_url)
+
         // Requestを作成
         val request = Request.Builder()
-            .url("http://20.168.98.13:8080/login")
+            .url(serverUrl + "login")
             .post(jsonData.toRequestBody(JSON_MEDIA))
             .build()
 

@@ -1,7 +1,9 @@
 package net.harutiro.xclothes.models.coordinate
 
+import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
+import net.harutiro.xclothes.R
 import net.harutiro.xclothes.models.coordinate.get.GetCoordinateResponse
 import net.harutiro.xclothes.models.coordinate.post.PostCoordinateRequestBody
 import net.harutiro.xclothes.models.coordinate.post.PostCoordinateResponse
@@ -21,9 +23,12 @@ class ApiCoordinateMethod {
         .readTimeout(READ_TIMEOUT_MILLISECONDS.toLong(), java.util.concurrent.TimeUnit.MILLISECONDS)
         .build()
 
-    fun coordinateGet(ble:String , nextStepFunc:() -> Unit){
+    fun coordinateGet(context: Context, ble:String, nextStepFunc:() -> Unit){
+
+        val serverUrl = context.getString(R.string.server_url)
+
         val request = Request.Builder()
-            .url("http://20.168.98.13:8080/cordinate:?ble=$ble")
+            .url(serverUrl + "cordinate:?ble=$ble")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -49,7 +54,7 @@ class ApiCoordinateMethod {
         })
     }
 
-    fun coordinatePost(postCoordinateRequestBody: PostCoordinateRequestBody,nextStepFunc: () -> Unit){
+    fun coordinatePost(context:Context,postCoordinateRequestBody: PostCoordinateRequestBody,nextStepFunc: () -> Unit){
 
         val gson = Gson()
 
@@ -57,9 +62,10 @@ class ApiCoordinateMethod {
 
         val JSON_MEDIA = "application/json; charset=utf-8".toMediaType()
 
+        val serverUrl = context.getString(R.string.server_url)
 
         val request = Request.Builder()
-            .url("http://20.168.98.13:8080/cordinate")
+            .url(serverUrl + "cordinate")
             .post(jsonData.toRequestBody(JSON_MEDIA))
             .build()
 

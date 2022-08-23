@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -199,45 +200,20 @@ fun ClothesList(){
             ) {
 
                 Card(Modifier.width(itemWidthDp)) {
-                    Spinner(
+                    TextBox(
                         questionLabel = "ブランド" ,
-                        suggestions = listOf(
-                            AddSpinaers("GU",ImageVector.vectorResource(id = R.drawable.gu_logo)),
-                            AddSpinaers("ユニクロ",ImageVector.vectorResource(id = R.drawable.uniqlo)),
-                            AddSpinaers("しまむら",ImageVector.vectorResource(id = R.drawable.simamura)),
-                        ),
-                        fix = { text , icon ->
-                        },
                         text = name.brand,
                         comeIcon = name.brandIcon
                     )
 
-                    Spinner(
+                    TextBox(
                         questionLabel = "カテゴリ",
-                        suggestions = listOf(
-                            AddSpinaers("トップス",Icons.Filled.CurrencyYen),
-                            AddSpinaers("Tシャツ",Icons.Filled.CurrencyYen),
-                            AddSpinaers("ボトムス",Icons.Filled.CurrencyYen),
-                            AddSpinaers("パンツ",Icons.Filled.CurrencyYen),
-                            AddSpinaers("靴下",Icons.Filled.CurrencyYen),
-                        ),
-                        fix = { text , icon ->
-                        },
                         text = name.category,
                         comeIcon = name.categoryIcon
                     )
 
-                    Spinner(
+                    TextBox(
                         questionLabel = "価格帯",
-                        suggestions = listOf(
-                            AddSpinaers("0~1000",Icons.Filled.CurrencyYen),
-                            AddSpinaers("1001~3000",Icons.Filled.CurrencyYen),
-                            AddSpinaers("3001~5000",Icons.Filled.CurrencyYen),
-                            AddSpinaers("5001~10000",Icons.Filled.CurrencyYen),
-                            AddSpinaers("10001~",Icons.Filled.CurrencyYen),
-                        ),
-                        fix = { text , icon ->
-                        },
                         text = name.price,
                         comeIcon = name.priceIcon
                     )
@@ -258,22 +234,12 @@ fun ClothesList(){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextBox(
-    questionLabel:String,suggestions: List<AddSpinaers> =
-        listOf(
-            AddSpinaers("Item1",Icons.Filled.Style),
-            AddSpinaers("Item1",Icons.Filled.Delete),
-            AddSpinaers("Item1",Icons.Filled.AddAPhoto),
-        ),
-    fix:(String,ImageVector) -> Unit,
+    questionLabel:String,
     text:String,
     comeIcon:ImageVector
 ){
-    var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf(text) }
 
-    var dropDownWidth by remember { mutableStateOf(0) }
-
-    val icon = if (expanded) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown
     var leadingIcon by remember { mutableStateOf(comeIcon) }
 
     val focusManager = LocalFocusManager.current
@@ -285,25 +251,16 @@ fun TextBox(
             value = selectedText,
             onValueChange = {
                 selectedText = it
-                fix(it , leadingIcon)
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable {
-                    //フォーカスを外すようにする。
+                .onFocusChanged {
                     focusManager.clearFocus()
-                }
-                .onSizeChanged {
-                    dropDownWidth = it.width
                 },
             label = {Text(questionLabel)},
-            trailingIcon = {
-                Icon(icon,"contentDescription", Modifier.clickable { expanded = !expanded })
-            },
             leadingIcon = {
                 Icon(leadingIcon,"contentDescription")
             },
-            enabled = false
         )
     }
 }

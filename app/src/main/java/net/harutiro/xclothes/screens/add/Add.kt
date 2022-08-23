@@ -75,10 +75,15 @@ fun AddScreen(viewModel: AddViewModel) {
 
             IsReleaseSwitch(viewModel)
 
-            ClothesList()
+            ClothesList(viewModel)
             Spacer(modifier = Modifier.padding(16.dp))
             SaveButton(){
                 Log.d("checkValue", viewModel.checkedState.toString())
+
+                for (i in viewModel.clothe){
+                    Log.d("checkValue", i.toString())
+                }
+
             }
             Spacer(modifier = Modifier.padding(16.dp))
 
@@ -118,9 +123,8 @@ fun IsReleaseSwitch(viewModel: AddViewModel) {
     ExperimentalSnapperApi::class
 )
 @Composable
-fun ClothesList(){
+fun ClothesList(viewModel: AddViewModel){
 
-    val names = remember { mutableStateListOf(Clothes()) }
 
     Surface(
         color = MaterialTheme.colorScheme.background,
@@ -135,7 +139,7 @@ fun ClothesList(){
                     .padding(16.dp),
                 shape = RoundedCornerShape(20),
                 onClick = {
-                    names.add(Clothes())
+                    viewModel.clothe.add(Clothes())
                 }
             ) {
                 Text("服を追加")
@@ -160,7 +164,7 @@ fun ClothesList(){
                 }
 
                 itemsIndexed(
-                    items = names,
+                    items = viewModel.clothe,
                     key = {index ,i ->
                         i.id
                     }
@@ -169,7 +173,7 @@ fun ClothesList(){
 
                     AnimatedVisibility(
                         modifier = Modifier.animateItemPlacement(),
-                        visible = names.contains(name),
+                        visible = viewModel.clothe.contains(name),
                         enter = fadeIn(),
                         exit = fadeOut(),
                     ) {
@@ -180,7 +184,7 @@ fun ClothesList(){
                                     .padding(16.dp)
                                     .align(Alignment.End),
                                 onClick = {
-                                    names.remove(name)
+                                    viewModel.clothe.remove(name)
                                 }
                             ){
                                 Icon(Icons.Filled.Delete,"contentDescription")
@@ -194,7 +198,7 @@ fun ClothesList(){
                                     AddSpinaers("しまむら",ImageVector.vectorResource(id = R.drawable.simamura)),
                                 ),
                                 fix = { text , icon ->
-                                    names[index] = Clothes(
+                                    viewModel.clothe[index] = Clothes(
                                         id = name.id,
                                         category = name.category,
                                         categoryIcon = name.categoryIcon,
@@ -218,7 +222,7 @@ fun ClothesList(){
                                     AddSpinaers("靴下",Icons.Filled.CurrencyYen),
                                 ),
                                 fix = { text , icon ->
-                                    names[index] = Clothes(
+                                    viewModel.clothe[index] = Clothes(
                                         id = name.id,
                                         category = text,
                                         categoryIcon = icon,
@@ -242,7 +246,7 @@ fun ClothesList(){
                                     AddSpinaers("10001~",Icons.Filled.CurrencyYen),
                                 ),
                                 fix = { text , icon ->
-                                    names[index] = Clothes(
+                                    viewModel.clothe[index] = Clothes(
                                         id = name.id,
                                         category = name.category,
                                         categoryIcon = name.categoryIcon,

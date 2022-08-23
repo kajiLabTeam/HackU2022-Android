@@ -5,12 +5,10 @@ import android.app.Application
 import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
+import net.harutiro.xclothes.models.Clothes
 import net.harutiro.xclothes.models.coordinate.ApiCoordinateMethod
 import net.harutiro.xclothes.models.coordinate.CloudinaryPost
 import net.harutiro.xclothes.models.coordinate.post.PostCoordinateRequestBody
@@ -28,6 +26,8 @@ class AddViewModel (application: Application): AndroidViewModel(application) {
 
     //Composableのデータ
     var checkedState by mutableStateOf(false)
+    var clothe = mutableStateListOf(Clothes())
+
 
 
 

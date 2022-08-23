@@ -2,6 +2,7 @@ package net.harutiro.test_bottomnavigation_withjetpackcompose.screens
 
 import android.content.res.Configuration
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -32,8 +33,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import net.harutiro.xclothes.R
@@ -74,12 +73,12 @@ fun AddScreen(viewModel: AddViewModel) {
                 PhotoView(urlRemember)
             }
 
-            IsReleaseSwitch()
+            IsReleaseSwitch(viewModel)
 
             ClothesList()
             Spacer(modifier = Modifier.padding(16.dp))
             SaveButton(){
-                viewModel.pushApi()
+                Log.d("checkValue", viewModel.checkedState.toString())
             }
             Spacer(modifier = Modifier.padding(16.dp))
 
@@ -89,9 +88,9 @@ fun AddScreen(viewModel: AddViewModel) {
 }
 
 @Composable
-fun IsReleaseSwitch(){
+fun IsReleaseSwitch(viewModel: AddViewModel) {
 
-    val checkedState = remember { mutableStateOf(true) }
+//    val checkedState = remember { mutableStateOf(true) }
 
     Row(
         Modifier
@@ -101,8 +100,8 @@ fun IsReleaseSwitch(){
     ) {
 
         Switch(
-            checked = checkedState.value,
-            onCheckedChange = { checkedState.value = it },
+            checked = viewModel.checkedState,
+            onCheckedChange = { viewModel.checkedState = it },
             modifier = Modifier.align(Alignment.CenterVertically)
 
         )

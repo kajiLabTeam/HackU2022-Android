@@ -51,6 +51,7 @@ fun AddScreen(viewModel: AddViewModel) {
     //写真を取ったあとのURIを受け取る
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { _ ->
         viewModel.addCoordinatePost(uri){
+            //TODO ロード中画面ぐるぐるにする
             urlRemember = it
         }
 //        uriRemember = uri.toString()

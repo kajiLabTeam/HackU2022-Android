@@ -74,31 +74,13 @@ fun AddScreen(viewModel: AddViewModel) {
                 PhotoView(urlRemember)
             }
 
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-
-                val checkedState = remember { mutableStateOf(true) }
-                Switch(
-                    checked = checkedState.value,
-                    onCheckedChange = { checkedState.value = it },
-                    modifier = Modifier.align(Alignment.CenterVertically)
-
-                )
-                Text(
-                    text = "公開範囲",
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(16.dp),
-                )
-            }
+            IsReleaseSwitch()
 
             ClothesList()
             Spacer(modifier = Modifier.padding(16.dp))
-            SaveButton()
+            SaveButton(){
+                viewModel.pushApi()
+            }
             Spacer(modifier = Modifier.padding(16.dp))
 
 
@@ -106,23 +88,52 @@ fun AddScreen(viewModel: AddViewModel) {
     }
 }
 
+@Composable
+fun IsReleaseSwitch(){
 
+    val checkedState = remember { mutableStateOf(true) }
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+
+        Switch(
+            checked = checkedState.value,
+            onCheckedChange = { checkedState.value = it },
+            modifier = Modifier.align(Alignment.CenterVertically)
+
+        )
+        Text(
+            text = "公開範囲",
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(16.dp),
+        )
+    }
+}
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
     ExperimentalSnapperApi::class
 )
 @Composable
 fun ClothesList(){
+
+    val names = remember { mutableStateListOf(Clothes()) }
+
     Surface(
         color = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxWidth()
 
     ) {
-        val names = remember { mutableStateListOf(Clothes()) }
 
         Column() {
             OutlinedButton(
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(16.dp),
                 shape = RoundedCornerShape(20),
                 onClick = {
                     names.add(Clothes())
@@ -130,19 +141,6 @@ fun ClothesList(){
             ) {
                 Text("服を追加")
             }
-
-//            Button(
-//                onClick = {
-//                    for(i in names){
-//                        Log.d("test",i.id)
-//                        Log.d("test",i.category)
-//                        Log.d("test",i.brand)
-//                        Log.d("test",i.price)
-//                    }
-//                }
-//            ) {
-//                Text("呼び出し")
-//            }
 
             val lazyListState: LazyListState = rememberLazyListState()
 
@@ -179,7 +177,9 @@ fun ClothesList(){
 
                         Card(Modifier.width(itemWidthDp.dp)) {
                             IconButton(
-                                modifier = Modifier.padding(16.dp).align(Alignment.End),
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .align(Alignment.End),
                                 onClick = {
                                     names.remove(name)
                                 }
@@ -275,7 +275,7 @@ fun ClothesList(){
 
 
 @Composable
-fun SaveButton(){
+fun SaveButton(onClick: () -> Unit){
 
     val context = LocalContext.current
 
@@ -287,6 +287,7 @@ fun SaveButton(){
         Button(
             onClick = {
                 Toast.makeText(context, "服を登録しました", Toast.LENGTH_SHORT).show()
+                onClick()
             },
         ) {
             Text("保存をする")

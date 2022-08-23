@@ -7,7 +7,9 @@ import android.os.Environment
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
+import net.harutiro.xclothes.models.coordinate.ApiCoordinateMethod
 import net.harutiro.xclothes.models.coordinate.CloudinaryPost
+import net.harutiro.xclothes.models.coordinate.post.PostCoordinateRequestBody
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -18,6 +20,10 @@ class AddViewModel (application: Application): AndroidViewModel(application) {
     private val context = getApplication<Application>().applicationContext
 
     private val TAG = "Cloudinary"
+
+
+    //Composableのデータ
+
 
 
     fun photoStartUp(): Uri {
@@ -50,6 +56,16 @@ class AddViewModel (application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun pushApi(postCoordinateRequestBody: PostCoordinateRequestBody) {
+        val apiCoordinateMethod = ApiCoordinateMethod()
+        apiCoordinateMethod.coordinatePost(
+            context = context,
+            postCoordinateRequestBody = postCoordinateRequestBody,
+            nextStepFunc = {
+
+            }
+        )
+    }
 
 
 }

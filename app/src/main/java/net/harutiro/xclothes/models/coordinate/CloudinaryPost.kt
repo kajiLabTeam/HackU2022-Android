@@ -16,14 +16,8 @@ class CloudinaryPost {
 
     private val TAG = "Cloudinary"
 
-    val config = mapOf(
-        "cloud_name" to BuildConfig.CLOUD_NAME,
-        "api_key" to BuildConfig.API_KEY,
-        "api_secret" to BuildConfig.API_SECRET
-    )
 
     fun postPhoto(context: Context, postUri: Uri, getUrl:(String) -> Unit){
-        MediaManager.init(context, config);
 
         MediaManager.get().upload(postUri).callback(object : UploadCallback {
             override fun onStart(requestId: String) {

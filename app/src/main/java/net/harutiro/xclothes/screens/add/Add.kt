@@ -38,8 +38,10 @@ import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import net.harutiro.xclothes.R
 import net.harutiro.xclothes.models.AddSpinaers
 import net.harutiro.xclothes.models.Clothes
+import net.harutiro.xclothes.models.coordinate.post.PostCoordinateRequestBody
 import net.harutiro.xclothes.screens.add.AddViewModel
 import net.harutiro.xclothes.ui.theme.XclothesTheme
+import java.util.*
 
 @Composable
 fun AddScreen(viewModel: AddViewModel) {
@@ -83,6 +85,8 @@ fun AddScreen(viewModel: AddViewModel) {
                 for (i in viewModel.clothe){
                     Log.d("checkValue", i.toString())
                 }
+
+                viewModel.pushApi()
 
             }
             Spacer(modifier = Modifier.padding(16.dp))

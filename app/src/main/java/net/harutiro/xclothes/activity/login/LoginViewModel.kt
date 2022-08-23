@@ -143,6 +143,7 @@ class LoginViewModel: ViewModel() {
                                     val gson = Gson()
                                     val json = gson.toJson(it)
                                     editor.putString("userData",json)
+                                    editor.putString("userId",it.id)
                                     editor.apply()
 
                                     activity.finish()

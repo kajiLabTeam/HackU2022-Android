@@ -82,6 +82,7 @@ class ApiLoginMethod {
 
                 Log.d("App", userDataClass.toString())
                 // 必要に応じてCallback
+                //Todo 名前を変える　userDataClass
 
                 nextStepFunc(userDataClass)
             }

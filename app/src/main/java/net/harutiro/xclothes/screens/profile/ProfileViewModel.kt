@@ -29,6 +29,7 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
     fun loginPost(activity: Activity){
         if(isNewProfile){
             apiLoginMethod.loginPost(context,userDataClass){
+                editor.putString("userId", it.id)
                 activity.finish()
             }
         }else{

@@ -65,7 +65,7 @@ class ApiCoordinateMethod {
         val serverUrl = context.getString(R.string.server_url)
 
         val request = Request.Builder()
-            .url(serverUrl + "cordinate")
+            .url(serverUrl + "coordinate")
             .post(jsonData.toRequestBody(JSON_MEDIA))
             .build()
 

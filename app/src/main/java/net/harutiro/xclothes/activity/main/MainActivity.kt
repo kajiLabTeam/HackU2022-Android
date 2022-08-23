@@ -23,6 +23,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.cloudinary.android.MediaManager
+import net.harutiro.xclothes.BuildConfig
 import net.harutiro.xclothes.MainScreen
 import net.harutiro.xclothes.R
 import net.harutiro.xclothes.activity.evaluation.EvaluationActivity
@@ -38,6 +40,14 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val config = mapOf(
+            "cloud_name" to BuildConfig.CLOUD_NAME,
+            "api_key" to BuildConfig.API_KEY,
+            "api_secret" to BuildConfig.API_SECRET
+        )
+
+        MediaManager.init(this, config)
 
         viewModel.checkPermission(this,this)
 

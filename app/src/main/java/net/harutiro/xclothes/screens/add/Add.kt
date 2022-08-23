@@ -31,6 +31,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
@@ -44,10 +45,15 @@ import net.harutiro.xclothes.ui.theme.XclothesTheme
 @Composable
 fun AddScreen(viewModel: AddViewModel) {
 
-    var uriRemember by remember { mutableStateOf("") }
+    var urlRemember by remember { mutableStateOf("") }
     val uri = viewModel.photoStartUp()
+
+    //写真を取ったあとのURIを受け取る
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { _ ->
-        uriRemember = uri.toString()
+        viewModel.addCoordinatePost(uri){
+            urlRemember = it
+        }
+//        uriRemember = uri.toString()
     }
 
     Surface (
@@ -61,10 +67,10 @@ fun AddScreen(viewModel: AddViewModel) {
                 .verticalScroll(rememberScrollState())
 
         ){
-            if(uriRemember.isEmpty()){
+            if(urlRemember.isEmpty()){
                 NottingPhotoIcon(launcher,uri)
             }else{
-                PhotoView(uriRemember)
+                PhotoView(urlRemember)
             }
 
             Row(
@@ -383,15 +389,10 @@ fun NottingPhotoIcon(launcher: ManagedActivityResultLauncher<Uri, Boolean>, uri:
 }
 
 @Composable
-fun PhotoView(uriRemember:String){
+fun PhotoView(urlRemember:String){
     Box(){
-        Image(
-            painter = rememberAsyncImagePainter(
-                ImageRequest
-                    .Builder(LocalContext.current)
-                    .data(data = uriRemember)
-                    .build()
-            ),
+        AsyncImage(
+            model = urlRemember,
             contentDescription = "My Picture",
             contentScale = ContentScale.Crop,
             modifier = Modifier

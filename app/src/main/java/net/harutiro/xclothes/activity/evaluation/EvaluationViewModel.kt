@@ -36,6 +36,7 @@ class EvaluationViewModel :ViewModel() {
 
         GlobalScope.launch{
             clothePages = getCoordinateResponseDAO.getAllNatural()
+            getCoordinateResponseDAO.removeAll()
         }
     }
 

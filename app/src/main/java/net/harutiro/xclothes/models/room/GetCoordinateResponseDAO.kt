@@ -22,4 +22,7 @@ interface GetCoordinateResponseDAO {
     //クエリの中身
     @Query("select * from getcoordinateresponse")
     fun getAllNatural(): List<GetCoordinateResponse>
+
+    @Query("delete from getcoordinateresponse")
+    fun removeAll()
 }

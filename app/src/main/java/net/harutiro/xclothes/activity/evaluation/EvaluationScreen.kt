@@ -7,9 +7,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -18,21 +16,16 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -48,23 +41,16 @@ import com.google.accompanist.pager.rememberPagerState
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.rememberLazyListSnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
-import net.harutiro.test_bottomnavigation_withjetpackcompose.screens.Spinner
 import net.harutiro.xclothes.R
-import net.harutiro.xclothes.models.AddSpinaers
 import net.harutiro.xclothes.models.Clothes
+import net.harutiro.xclothes.models.coordinate.get.GetCoordinateResponse
 import net.harutiro.xclothes.ui.theme.XclothesTheme
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun EvaluationScreen(viewModel: EvaluationViewModel) {
 
-    val tabTitles = listOf(
-        "https://cdn.discordapp.com/attachments/1003329100649336892/1010179549557964860/IMG_4892.jpg",
-        "https://cdn.discordapp.com/attachments/1003329100649336892/1010179549901881395/IMG_4893.jpg",
-        "https://cdn.discordapp.com/attachments/1003329100649336892/1010179550224859287/IMG_4882.jpg"
-    )
     val pagerState = rememberPagerState() // 2.
-
 
     val openDialog = remember { mutableStateOf(false) }
 
@@ -81,12 +67,12 @@ fun EvaluationScreen(viewModel: EvaluationViewModel) {
 
         ) {
             VerticalPager(
-                count = tabTitles.size,
+                count = viewModel.clothePages.size,
                 state = pagerState,
             ) { tabIndex ->
 
-                PhotoView(tabTitles[tabIndex])
-                name(modifier = Modifier.align(Alignment.BottomEnd))
+                PhotoView(viewModel.clothePages[tabIndex])
+                PershonInformation(modifier = Modifier.align(Alignment.BottomEnd),viewModel.clothePages[tabIndex])
 
                 GoodButton(
                     Modifier
@@ -393,7 +379,7 @@ fun GoodButton(align: Modifier , onClick: () -> Unit) {
 }
 
 @Composable
-fun name(modifier:Modifier){
+fun PershonInformation(modifier: Modifier, coordinate: GetCoordinateResponse){
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -425,7 +411,7 @@ fun name(modifier:Modifier){
                 Text(
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 22.sp,
-                    text = "男性"
+                    text = if(coordinate.users.gender == 1) "男性" else "女性"
                 )
             }
 
@@ -442,7 +428,7 @@ fun name(modifier:Modifier){
                 Text(
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 22.sp,
-                    text = "125cm"
+                    text = coordinate.users.height.toString() + "cm"
                 )
             }
 
@@ -459,7 +445,7 @@ fun name(modifier:Modifier){
                 Text(
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 22.sp,
-                    text = "20~25"
+                    text = coordinate.users.age
                 )
             }
 
@@ -475,7 +461,7 @@ fun name(modifier:Modifier){
 
 
 @Composable
-fun PhotoView(url:String = "https://res.cloudinary.com/dlg3xe2l2/image/upload/v1648506804/dkplq1odbhkd4nt2g6ba.jpg"){
+fun PhotoView(clothe:GetCoordinateResponse){
     Box(
         modifier = Modifier,
         contentAlignment = Alignment.Center,
@@ -483,7 +469,7 @@ fun PhotoView(url:String = "https://res.cloudinary.com/dlg3xe2l2/image/upload/v1
         AsyncImage(
             contentDescription = "My Picture",
             contentScale = ContentScale.Fit,
-            model = url,
+            model = clothe.image,
             modifier = Modifier
                 .fillMaxSize()
         )

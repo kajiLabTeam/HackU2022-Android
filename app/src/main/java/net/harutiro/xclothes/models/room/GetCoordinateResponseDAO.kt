@@ -18,4 +18,8 @@ interface GetCoordinateResponseDAO {
     @Query("select * from getcoordinateresponse")
     fun getAll(): LiveData<List<GetCoordinateResponse>>
     //変更があったときに自動で取得をしてくれる。
+
+    //クエリの中身
+    @Query("select * from getcoordinateresponse")
+    fun getAllNatural(): List<GetCoordinateResponse>
 }

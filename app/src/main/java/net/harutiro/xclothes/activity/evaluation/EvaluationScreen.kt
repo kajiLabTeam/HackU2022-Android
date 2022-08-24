@@ -44,6 +44,7 @@ import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import net.harutiro.xclothes.R
 import net.harutiro.xclothes.models.Clothes
 import net.harutiro.xclothes.models.coordinate.get.GetCoordinateResponse
+import net.harutiro.xclothes.models.login.get.GetLoginResponse
 import net.harutiro.xclothes.ui.theme.XclothesTheme
 
 @OptIn(ExperimentalPagerApi::class)
@@ -72,7 +73,7 @@ fun EvaluationScreen(viewModel: EvaluationViewModel) {
             ) { tabIndex ->
 
                 PhotoView(viewModel.clothePages[tabIndex])
-                PershonInformation(modifier = Modifier.align(Alignment.BottomEnd),viewModel.clothePages[tabIndex])
+                PershonInformation(modifier = Modifier.align(Alignment.BottomEnd),viewModel.clothePages[tabIndex],viewModel.users[tabIndex])
 
                 GoodButton(
                     Modifier
@@ -379,7 +380,11 @@ fun GoodButton(align: Modifier , onClick: () -> Unit) {
 }
 
 @Composable
-fun PershonInformation(modifier: Modifier, coordinate: GetCoordinateResponse){
+fun PershonInformation(
+    modifier: Modifier,
+    coordinate: GetCoordinateResponse,
+    user: GetLoginResponse
+){
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -411,7 +416,7 @@ fun PershonInformation(modifier: Modifier, coordinate: GetCoordinateResponse){
                 Text(
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 22.sp,
-                    text = if(coordinate.users.gender == 1) "男性" else "女性"
+                    text = if(user.gender == 1) "男性" else "女性"
                 )
             }
 
@@ -428,7 +433,7 @@ fun PershonInformation(modifier: Modifier, coordinate: GetCoordinateResponse){
                 Text(
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 22.sp,
-                    text = coordinate.users.height.toString() + "cm"
+                    text = user.height.toString() + "cm"
                 )
             }
 
@@ -445,7 +450,7 @@ fun PershonInformation(modifier: Modifier, coordinate: GetCoordinateResponse){
                 Text(
                     color = MaterialTheme.colorScheme.onSecondary,
                     fontSize = 22.sp,
-                    text = coordinate.users.age
+                    text = user.age
                 )
             }
 

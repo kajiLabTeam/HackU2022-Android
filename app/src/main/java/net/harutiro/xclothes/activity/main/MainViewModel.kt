@@ -26,10 +26,8 @@ import net.harutiro.xclothes.BuildConfig
 import net.harutiro.xclothes.R
 import net.harutiro.xclothes.activity.evaluation.EvaluationActivity
 import net.harutiro.xclothes.models.coordinate.ApiCoordinateMethod
-import net.harutiro.xclothes.models.room.BleList
-import net.harutiro.xclothes.models.room.BleListDAO
-import net.harutiro.xclothes.models.room.BleListDatabase
-import net.harutiro.xclothes.models.room.GetCoordinateResponseDAO
+import net.harutiro.xclothes.models.login.ApiLoginMethod
+import net.harutiro.xclothes.models.room.*
 import net.harutiro.xclothes.service.ForegroundIbeaconOutputServise
 import org.altbeacon.beacon.*
 import pub.devrel.easypermissions.EasyPermissions
@@ -40,6 +38,8 @@ class MainViewModel : ViewModel(){
     private lateinit var db:BleListDatabase
     lateinit var bleListDao:BleListDAO
     lateinit var getCoordinateResponseDAO: GetCoordinateResponseDAO
+    lateinit var getLoginResponseDAO: GetLoginResponseDAO
+
 
     //gps
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -89,6 +89,7 @@ class MainViewModel : ViewModel(){
 
         this.bleListDao = this.db.bleListDAO()
         this.getCoordinateResponseDAO = this.db.getCoordinateResponseDAO()
+        this.getLoginResponseDAO = this.db.getLoginResponseDAO()
     }
 
     fun checkPermission(activity:Activity , context: Context){
@@ -222,9 +223,19 @@ class MainViewModel : ViewModel(){
                                     getCoordinateResponseDAO.insert(getCoordinateResponse)
                                 }
 
-                                didEnterRegion(context)
+                                val apiLoginMethod = ApiLoginMethod()
+                                apiLoginMethod.loginUserIdGet(context,getCoordinateResponse.user_id){ user ,code ->
+                                    if(code == 200){
+                                        GlobalScope.launch{
+                                            getLoginResponseDAO.insert(user)
+                                        }
+                                        didEnterRegion(context)
+
+                                    }
+                                }
                             }
                         }
+
 
                         val ble = BleList(id = 0, bleUuid = beacon.id1.toString())
                         bleListDao.insert(ble)

@@ -62,6 +62,44 @@ class ApiLoginMethod {
         })
     }
 
+    fun loginUserIdGet(context: Context,id: String, nextStepFunc:(GetLoginResponse,Int) -> Unit) {
+
+        val serverUrl = context.getString(R.string.server_url)
+
+        // Requestを作成
+        val request = Request.Builder()
+            .url( serverUrl + "users/$id")
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                var userDataClass = GetLoginResponse()
+
+                if(response.code == 200){
+
+                    // Responseの読み出し
+                    val responseBody = response.body?.string().orEmpty()
+
+                    Log.d("App", responseBody)
+
+                    val gson = Gson()
+                    userDataClass = gson.fromJson(responseBody, GetLoginResponse::class.java)
+
+                    Log.d("App", userDataClass.toString())
+                    // 必要に応じてCallback
+
+                }
+                nextStepFunc(userDataClass,response.code)
+
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("Error", e.toString())
+                // 必要に応じてCallback
+            }
+        })
+    }
+
     fun loginPost(context: Context, userDataClass:PostLoginRequestBody, nextStepFunc:(PostLoginResponse) -> Unit){
         val gson = Gson()
 

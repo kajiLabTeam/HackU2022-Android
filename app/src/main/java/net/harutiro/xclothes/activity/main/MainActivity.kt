@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.cloudinary.android.MediaManager
@@ -108,6 +109,14 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
         val notificationManager: NotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
+    }
+
+    override fun onStart(){
+        super.onStart()
+
+        viewModel.dao.getAll().observe(this, Observer {
+            println(it)
+        })
     }
 }
 

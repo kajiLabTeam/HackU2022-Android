@@ -11,6 +11,9 @@ interface BleListDAO {
     @Insert
     fun insert(memo:BleList)
 
+    @Query("select * from blelist where bleUuid = :bleUuid LIMIT 1")
+    fun checkBleList(bleUuid: String):BleList?
+
     //クエリの中身
     @Query("select * from blelist")
     fun getAll(): LiveData<List<BleList>>

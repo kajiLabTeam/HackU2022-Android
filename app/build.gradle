@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
     id 'kotlin-kapt'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 
 }
 
@@ -121,6 +122,11 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+
+
+    //map
+    implementation  "com.google.maps.android:maps-compose:2.2.0"
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
 
 
 

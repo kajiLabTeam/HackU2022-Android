@@ -8,12 +8,19 @@ import android.os.Build
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.room.Room
+import net.harutiro.xclothes.models.room.BleListDAO
+import net.harutiro.xclothes.models.room.BleListDatabase
 import net.harutiro.xclothes.service.ForegroundIbeaconOutputServise
 import org.altbeacon.beacon.Identifier
 import org.altbeacon.beacon.Region
 import pub.devrel.easypermissions.EasyPermissions
 
 class MainViewModel : ViewModel(){
+
+    private lateinit var db:BleListDatabase
+    private lateinit var dao:BleListDAO
+
 
     val IBEACON_FORMAT = "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"
 
@@ -38,6 +45,16 @@ class MainViewModel : ViewModel(){
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
         )
+    }
+
+    fun databaseBuild(context: Context){
+        this.db = Room.databaseBuilder(
+            context,
+            BleListDatabase::class.java,
+            "memo.db"
+        ).build()
+
+        this.dao = this.db.bleListDAO()
     }
 
     fun checkPermission(activity:Activity , context: Context){

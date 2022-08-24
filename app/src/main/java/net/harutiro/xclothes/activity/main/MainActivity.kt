@@ -41,6 +41,8 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel.databaseBuild(this)
+
         val config = mapOf(
             "cloud_name" to BuildConfig.CLOUD_NAME,
             "api_key" to BuildConfig.API_KEY,

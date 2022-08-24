@@ -43,13 +43,7 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
 
         viewModel.databaseBuild(this)
 
-        val config = mapOf(
-            "cloud_name" to BuildConfig.CLOUD_NAME,
-            "api_key" to BuildConfig.API_KEY,
-            "api_secret" to BuildConfig.API_SECRET
-        )
-
-        MediaManager.init(this, config)
+        viewModel.cloudinaryBuild(this)
 
         viewModel.checkPermission(this,this)
 

@@ -9,6 +9,8 @@ import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
+import com.cloudinary.android.MediaManager
+import net.harutiro.xclothes.BuildConfig
 import net.harutiro.xclothes.models.room.BleListDAO
 import net.harutiro.xclothes.models.room.BleListDatabase
 import net.harutiro.xclothes.service.ForegroundIbeaconOutputServise
@@ -45,6 +47,16 @@ class MainViewModel : ViewModel(){
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
         )
+    }
+
+    fun cloudinaryBuild(context: Context){
+        val config = mapOf(
+            "cloud_name" to BuildConfig.CLOUD_NAME,
+            "api_key" to BuildConfig.API_KEY,
+            "api_secret" to BuildConfig.API_SECRET
+        )
+
+        MediaManager.init(context, config)
     }
 
     fun databaseBuild(context: Context){

@@ -86,20 +86,13 @@ class AddViewModel (application: Application): AndroidViewModel(application) {
             )
         }
 
-        val uuid = UUID.randomUUID().toString()
 
         val postCoordinateRequestBody = PostCoordinateRequestBody()
-        postCoordinateRequestBody.ble = uuid
         postCoordinateRequestBody.user_id = data.getString("userId","").toString()
         postCoordinateRequestBody.image = imageUrl
         postCoordinateRequestBody.wears = coordinateItems
         
         val apiCoordinateMethod = ApiCoordinateMethod()
-
-        Log.d("ble",uuid)
-        Log.d("ble",postCoordinateRequestBody.toString())
-
-
         apiCoordinateMethod.coordinatePost(
             context = context,
             postCoordinateRequestBody = postCoordinateRequestBody,

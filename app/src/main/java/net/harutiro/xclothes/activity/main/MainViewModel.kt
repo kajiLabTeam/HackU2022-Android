@@ -2,20 +2,24 @@ package net.harutiro.xclothes.activity.main
 
 import android.Manifest
 import android.app.Activity
+import android.app.Notification
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.cloudinary.android.MediaManager
 import net.harutiro.xclothes.BuildConfig
+import net.harutiro.xclothes.R
 import net.harutiro.xclothes.models.room.BleListDAO
 import net.harutiro.xclothes.models.room.BleListDatabase
 import net.harutiro.xclothes.service.ForegroundIbeaconOutputServise
-import org.altbeacon.beacon.Identifier
-import org.altbeacon.beacon.Region
+import org.altbeacon.beacon.*
 import pub.devrel.easypermissions.EasyPermissions
 
 class MainViewModel : ViewModel(){
@@ -91,6 +95,69 @@ class MainViewModel : ViewModel(){
             startForegroundService(context,intent)
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun ibeacon(context: Context,rangeNotifier: RangeNotifier,monitorNotifier: MonitorNotifier){
+        val TAG = "BLE"
+
+        //ここからビーコン関係
+        if (EasyPermissions.hasPermissions(context, *permissions)) {
+            val beaconManager = BeaconManager.getInstanceForApplication(context)
+
+            // 初期化。これがないと画面を２回以上開いた時に２重でデータを受信してしまう
+            beaconManager.removeAllMonitorNotifiers()
+            beaconManager.removeAllRangeNotifiers()
+            beaconManager.rangedRegions.forEach {region ->
+                beaconManager.stopRangingBeacons(region)
+                beaconManager.stopMonitoring(region)
+
+            }
+
+
+            beaconManager.beaconParsers.clear()
+            beaconManager.beaconParsers.add(BeaconParser().setBeaconLayout(IBEACON_FORMAT))
+
+
+            // Uncomment the code below to use a foreground service to scan for beacons. This unlocks
+            // the ability to continually scan for long periods of time in the background on Andorid 8+
+            // in exchange for showing an icon at the top of the screen and a always-on notification to
+            // communicate to users that your app is using resources in the background.
+            //
+            val builder = Notification.Builder(context)
+            builder.setSmallIcon(R.drawable.ic_launcher_foreground)
+            builder.setContentTitle("すれ違いをチェック中")
+            val intent = Intent(context, MainActivity::class.java)
+            val pendingIntent = PendingIntent.getActivity(
+                context, 0, intent, PendingIntent.FLAG_MUTABLE
+            )
+            builder.setContentIntent(pendingIntent)
+
+            builder.setChannelId("search_notify")
+
+            beaconManager.enableForegroundServiceScanning(builder.build(), 456)
+
+            beaconManager.setEnableScheduledScanJobs(false)
+            beaconManager.backgroundBetweenScanPeriod = 0
+            beaconManager.backgroundScanPeriod = 1100
+
+            Log.d(TAG, "setting up background monitoring in app onCreate")
+            beaconManager.addMonitorNotifier(monitorNotifier)
+
+
+            // If we were monitoring *different* regions on the last run of this app, they will be
+            // remembered.  In this case we need to disable them here
+            for (region in beaconManager.monitoredRegions) {
+                beaconManager.stopMonitoring(region!!)
+            }
+
+            beaconManager.startMonitoring(region)
+
+            beaconManager.addRangeNotifier(rangeNotifier)
+
+            beaconManager.startRangingBeacons(region)
+        }
+    }
+
 
 
 }

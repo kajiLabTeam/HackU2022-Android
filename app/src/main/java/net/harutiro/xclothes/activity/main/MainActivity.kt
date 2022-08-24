@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
         if(EasyPermissions.hasPermissions(this, *viewModel.permissions)){
             viewModel.startService(this )
             createNotificationChannel()
-            ibeacon()
+            viewModel.ibeacon(this,this,this)
         }
 
         setContent {
@@ -66,65 +66,6 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun ibeacon(){
-        //ここからビーコン関係
-        if (EasyPermissions.hasPermissions(this, *viewModel.permissions)) {
-            val beaconManager = BeaconManager.getInstanceForApplication(this)
-
-            // 初期化。これがないと画面を２回以上開いた時に２重でデータを受信してしまう
-            beaconManager.removeAllMonitorNotifiers()
-            beaconManager.removeAllRangeNotifiers()
-            beaconManager.rangedRegions.forEach {region ->
-                beaconManager.stopRangingBeacons(region)
-                beaconManager.stopMonitoring(region)
-
-            }
-
-
-            beaconManager.beaconParsers.clear()
-            beaconManager.beaconParsers.add(BeaconParser().setBeaconLayout(viewModel.IBEACON_FORMAT))
-
-
-            // Uncomment the code below to use a foreground service to scan for beacons. This unlocks
-            // the ability to continually scan for long periods of time in the background on Andorid 8+
-            // in exchange for showing an icon at the top of the screen and a always-on notification to
-            // communicate to users that your app is using resources in the background.
-            //
-            val builder = Notification.Builder(this)
-            builder.setSmallIcon(R.drawable.ic_launcher_foreground)
-            builder.setContentTitle("すれ違いをチェック中")
-            val intent = Intent(this, MainActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(
-                this, 0, intent, PendingIntent.FLAG_MUTABLE
-            )
-            builder.setContentIntent(pendingIntent)
-
-            builder.setChannelId("search_notify")
-
-            beaconManager.enableForegroundServiceScanning(builder.build(), 456)
-
-            beaconManager.setEnableScheduledScanJobs(false)
-            beaconManager.backgroundBetweenScanPeriod = 0
-            beaconManager.backgroundScanPeriod = 1100
-
-            Log.d(TAG, "setting up background monitoring in app onCreate")
-            beaconManager.addMonitorNotifier(this)
-
-
-            // If we were monitoring *different* regions on the last run of this app, they will be
-            // remembered.  In this case we need to disable them here
-            for (region in beaconManager.monitoredRegions) {
-                beaconManager.stopMonitoring(region!!)
-            }
-
-            beaconManager.startMonitoring(viewModel.region)
-
-            beaconManager.addRangeNotifier(this)
-
-            beaconManager.startRangingBeacons(viewModel.region)
-        }
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {

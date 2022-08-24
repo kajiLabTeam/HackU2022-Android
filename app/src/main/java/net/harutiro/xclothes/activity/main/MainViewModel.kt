@@ -186,6 +186,16 @@ class MainViewModel : ViewModel(){
         }
     }
 
+    fun didRangeBeaconsInRegion(beacons: MutableCollection<Beacon>?){
+        // 検知したBeaconの情報
+        Log.d("MainActivity", "beacons.size ${beacons?.size}")
+        beacons?.let {
+            for (beacon in beacons) {
+                Log.d("MainActivity", "UUID: ${beacon.id1}, major: ${beacon.id2}, minor: ${beacon.id3}, RSSI: ${beacon.rssi}, TxPower: ${beacon.txPower}, Distance: ${beacon.distance}")
+            }
+        }
+    }
+
 
 
 }

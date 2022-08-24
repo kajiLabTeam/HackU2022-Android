@@ -106,13 +106,7 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
     }
 
     override fun didRangeBeaconsInRegion(beacons: MutableCollection<Beacon>?, region: Region?) {
-        // 検知したBeaconの情報
-        Log.d("MainActivity", "beacons.size ${beacons?.size}")
-        beacons?.let {
-            for (beacon in beacons) {
-                Log.d("MainActivity", "UUID: ${beacon.id1}, major: ${beacon.id2}, minor: ${beacon.id3}, RSSI: ${beacon.rssi}, TxPower: ${beacon.txPower}, Distance: ${beacon.distance}")
-            }
-        }
+        viewModel.didRangeBeaconsInRegion(beacons)
     }
 }
 

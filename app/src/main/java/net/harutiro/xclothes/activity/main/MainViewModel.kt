@@ -207,6 +207,8 @@ class MainViewModel : ViewModel(){
                         val apiCoordinateMethod = ApiCoordinateMethod()
                         apiCoordinateMethod.coordinateGet(context,beacon.id1.toString()) {
                             getCoordinateResponseDAO.insert(it)
+
+                            didEnterRegion(context)
                         }
 
                         val ble = BleList(id = 0, bleUuid = beacon.id1.toString())

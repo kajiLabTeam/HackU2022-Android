@@ -28,23 +28,31 @@ class ApiCoordinateMethod {
         val serverUrl = context.getString(R.string.server_url)
 
         val request = Request.Builder()
-            .url(serverUrl + "cordinate:?ble=$ble")
+            .url(serverUrl + "coordinate?ble=$ble")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 // Responseの読み出し
                 val responseBody = response.body?.string().orEmpty()
+                val code = response.code
 
                 Log.d("App", responseBody)
+                Log.d("App", code.toString())
 
-                val gson = Gson()
-                val coordinateDate = gson.fromJson(responseBody, GetCoordinateResponse::class.java)
 
-                Log.d("App", coordinateDate.toString())
-                // 必要に応じてCallback
+                if(code == 200){
 
-                nextStepFunc()
+                    Log.d("App", responseBody)
+
+                    val gson = Gson()
+                    val coordinateDate = gson.fromJson(responseBody, GetCoordinateResponse::class.java)
+
+                    Log.d("App", coordinateDate.toString())
+                    // 必要に応じてCallback
+
+                    nextStepFunc()
+                }
             }
 
             override fun onFailure(call: Call, e: IOException) {
@@ -73,16 +81,21 @@ class ApiCoordinateMethod {
             override fun onResponse(call: Call, response: Response) {
                 // Responseの読み出し
                 val responseBody = response.body?.string().orEmpty()
+                val code = response.code
 
                 Log.d("App", responseBody)
+                Log.d("App", code.toString())
 
-                val gson = Gson()
-                val apiResponseStatus = gson.fromJson(responseBody, PostCoordinateResponse::class.java)
+                if(code == 200){
 
-                Log.d("App", apiResponseStatus.toString())
-                // 必要に応じてCallback
+                    val gson = Gson()
+                    val apiResponseStatus = gson.fromJson(responseBody, PostCoordinateResponse::class.java)
 
-                nextStepFunc()
+                    Log.d("App", apiResponseStatus.toString())
+                    // 必要に応じてCallback
+
+                    nextStepFunc()
+                }
             }
 
             override fun onFailure(call: Call, e: IOException) {

@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import net.harutiro.xclothes.BuildConfig
 import net.harutiro.xclothes.R
 import net.harutiro.xclothes.activity.evaluation.EvaluationActivity
+import net.harutiro.xclothes.models.coordinate.ApiCoordinateMethod
 import net.harutiro.xclothes.models.room.BleList
 import net.harutiro.xclothes.models.room.BleListDAO
 import net.harutiro.xclothes.models.room.BleListDatabase
@@ -189,7 +190,7 @@ class MainViewModel : ViewModel(){
         }
     }
 
-    fun didRangeBeaconsInRegion(beacons: MutableCollection<Beacon>?){
+    fun didRangeBeaconsInRegion(beacons: MutableCollection<Beacon>?,context: Context){
         // 検知したBeaconの情報
         Log.d("MainActivity", "beacons.size ${beacons?.size}")
         beacons?.let {
@@ -199,8 +200,16 @@ class MainViewModel : ViewModel(){
                     Log.d("database", dao.checkBleList(beacon.id1.toString())?.bleUuid ?: "notting")
 
                     if(dao.checkBleList(beacon.id1.toString())?.bleUuid.isNullOrBlank()){
+
+                        val apiCoordinateMethod = ApiCoordinateMethod()
+                        apiCoordinateMethod.coordinateGet(context,beacon.id1.toString()) {
+
+                        }
+
                         val ble = BleList(id = 0, bleUuid = beacon.id1.toString())
                         dao.insert(ble)
+
+
                     }
                 }
 

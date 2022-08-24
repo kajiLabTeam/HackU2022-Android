@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
     }
 
     override fun didRangeBeaconsInRegion(beacons: MutableCollection<Beacon>?, region: Region?) {
-        viewModel.didRangeBeaconsInRegion(beacons)
+        viewModel.didRangeBeaconsInRegion(beacons,this)
     }
 
 

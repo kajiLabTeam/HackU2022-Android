@@ -18,4 +18,7 @@ interface BleListDAO {
     @Query("select * from blelist")
     fun getAll(): LiveData<List<BleList>>
     //変更があったときに自動で取得をしてくれる。
+
+    @Query("delete from blelist")
+    fun removeAll()
 }

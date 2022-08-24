@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
     @RequiresApi(Build.VERSION_CODES.O)
     override fun didEnterRegion(arg0: Region?) {
         createNotificationChannel()
-        viewModel.didEnterRegion(this)
+//        viewModel.didEnterRegion(this)
     }
 
     override fun didExitRegion(region: Region?) {
@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
     }
 
     override fun didRangeBeaconsInRegion(beacons: MutableCollection<Beacon>?, region: Region?) {
-        viewModel.didRangeBeaconsInRegion(beacons,this)
+        viewModel.didRangeBeaconsInRegion(beacons,this,this)
     }
 
 

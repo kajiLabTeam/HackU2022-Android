@@ -1,5 +1,6 @@
 package net.harutiro.xclothes.activity.evaluation
 
+import android.app.Activity
 import android.content.res.Configuration
 import android.util.Log
 import android.widget.Toast
@@ -55,6 +56,9 @@ fun EvaluationScreen(viewModel: EvaluationViewModel) {
 
     val openDialog = remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
+    val activity = LocalContext.current as Activity
+
     SimpleAlertDialog(openDialog.value){
         openDialog.value = false
     }
@@ -83,6 +87,7 @@ fun EvaluationScreen(viewModel: EvaluationViewModel) {
 
                     onClick = {
                         openDialog.value = true
+                        viewModel.postLike(context ,activity,viewModel.clothePages[tabIndex])
                     }
 
                 )

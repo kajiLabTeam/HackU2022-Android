@@ -23,7 +23,7 @@ class ApiCoordinateMethod {
         .readTimeout(READ_TIMEOUT_MILLISECONDS.toLong(), java.util.concurrent.TimeUnit.MILLISECONDS)
         .build()
 
-    fun coordinateGet(context: Context, ble:String, nextStepFunc:() -> Unit){
+    fun coordinateGet(context: Context, ble:String, nextStepFunc:(GetCoordinateResponse) -> Unit){
 
         val serverUrl = context.getString(R.string.server_url)
 
@@ -51,7 +51,7 @@ class ApiCoordinateMethod {
                     Log.d("App", coordinateDate.toString())
                     // 必要に応じてCallback
 
-                    nextStepFunc()
+                    nextStepFunc(coordinateDate)
                 }
             }
 

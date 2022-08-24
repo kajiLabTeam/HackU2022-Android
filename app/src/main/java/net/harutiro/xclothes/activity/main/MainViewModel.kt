@@ -25,6 +25,7 @@ import net.harutiro.xclothes.models.coordinate.ApiCoordinateMethod
 import net.harutiro.xclothes.models.room.BleList
 import net.harutiro.xclothes.models.room.BleListDAO
 import net.harutiro.xclothes.models.room.BleListDatabase
+import net.harutiro.xclothes.models.room.GetCoordinateResponseDAO
 import net.harutiro.xclothes.service.ForegroundIbeaconOutputServise
 import org.altbeacon.beacon.*
 import pub.devrel.easypermissions.EasyPermissions
@@ -32,7 +33,8 @@ import pub.devrel.easypermissions.EasyPermissions
 class MainViewModel : ViewModel(){
 
     private lateinit var db:BleListDatabase
-    lateinit var dao:BleListDAO
+    lateinit var bleListDao:BleListDAO
+    lateinit var getCoordinateResponseDAO: GetCoordinateResponseDAO
 
 
     val IBEACON_FORMAT = "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"
@@ -77,7 +79,8 @@ class MainViewModel : ViewModel(){
             "memo.db"
         ).build()
 
-        this.dao = this.db.bleListDAO()
+        this.bleListDao = this.db.bleListDAO()
+        this.getCoordinateResponseDAO = this.db.getCoordinateResponseDAO()
     }
 
     fun checkPermission(activity:Activity , context: Context){
@@ -197,17 +200,17 @@ class MainViewModel : ViewModel(){
             for (beacon in beacons) {
 
                 GlobalScope.launch{
-                    Log.d("database", dao.checkBleList(beacon.id1.toString())?.bleUuid ?: "notting")
+                    Log.d("database", bleListDao.checkBleList(beacon.id1.toString())?.bleUuid ?: "notting")
 
-                    if(dao.checkBleList(beacon.id1.toString())?.bleUuid.isNullOrBlank()){
+                    if(bleListDao.checkBleList(beacon.id1.toString())?.bleUuid.isNullOrBlank()){
 
                         val apiCoordinateMethod = ApiCoordinateMethod()
                         apiCoordinateMethod.coordinateGet(context,beacon.id1.toString()) {
-
+                            getCoordinateResponseDAO.insert(it)
                         }
 
                         val ble = BleList(id = 0, bleUuid = beacon.id1.toString())
-                        dao.insert(ble)
+                        bleListDao.insert(ble)
 
 
                     }

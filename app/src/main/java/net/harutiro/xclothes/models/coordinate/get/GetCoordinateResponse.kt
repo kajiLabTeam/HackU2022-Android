@@ -1,14 +1,21 @@
 package net.harutiro.xclothes.models.coordinate.get
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import net.harutiro.xclothes.models.coordinate.CoordinateItems
 
+@Entity
 data class GetCoordinateResponse(
+    @PrimaryKey
     var coordinate_id: String = "",
     var image: String = "",
-    var Items:MutableList<CoordinateItems> = mutableListOf(),
+    var items:MutableList<CoordinateItems> = mutableListOf(),
     var users:CoordinateUsers = CoordinateUsers(),
     var status:Boolean = false
 )
+
+@Entity
 data class CoordinateUsers(
     var id: String = "",
     var name: String = "",

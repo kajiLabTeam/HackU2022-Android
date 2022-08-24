@@ -114,7 +114,7 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
     override fun onStart(){
         super.onStart()
 
-        viewModel.dao.getAll().observe(this, Observer {
+        viewModel.bleListDao.getAll().observe(this, Observer {
             println(it)
         })
     }

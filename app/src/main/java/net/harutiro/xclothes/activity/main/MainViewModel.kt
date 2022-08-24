@@ -9,6 +9,8 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +18,7 @@ import androidx.room.Room
 import com.cloudinary.android.MediaManager
 import net.harutiro.xclothes.BuildConfig
 import net.harutiro.xclothes.R
+import net.harutiro.xclothes.activity.evaluation.EvaluationActivity
 import net.harutiro.xclothes.models.room.BleListDAO
 import net.harutiro.xclothes.models.room.BleListDatabase
 import net.harutiro.xclothes.service.ForegroundIbeaconOutputServise
@@ -155,6 +158,31 @@ class MainViewModel : ViewModel(){
             beaconManager.addRangeNotifier(rangeNotifier)
 
             beaconManager.startRangingBeacons(region)
+        }
+    }
+
+    fun didEnterRegion(context: Context){
+        val TAG = "beaconDidEnter"
+        Log.d(TAG, "did enter region.")
+
+        val intent = Intent(context, EvaluationActivity::class.java)
+
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE)
+
+        val builder = NotificationCompat.Builder(context, "room_inside_notify")
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("すれ違いました！！")
+            .setContentText("タップして服の評価をお願いします。")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            // Set the intent that will fire when the user taps the notification
+            .setFullScreenIntent(pendingIntent,true)
+            .setAutoCancel(true)
+
+
+        with(NotificationManagerCompat.from(context)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(22, builder.build())
         }
     }
 

@@ -95,29 +95,8 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun didEnterRegion(arg0: Region?) {
-        Log.d(TAG, "did enter region.")
-
         createNotificationChannel()
-
-        val intent = Intent(this, EvaluationActivity::class.java)
-
-        val pendingIntent: PendingIntent =
-            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE)
-
-        val builder = NotificationCompat.Builder(this, "room_inside_notify")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("すれ違いました！！")
-            .setContentText("タップして服の評価をお願いします。")
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            // Set the intent that will fire when the user taps the notification
-            .setFullScreenIntent(pendingIntent,true)
-            .setAutoCancel(true)
-
-
-                with(NotificationManagerCompat.from(this)) {
-            // notificationId is a unique int for each notification that you must define
-            notify(22, builder.build())
-        }
+        viewModel.didEnterRegion(this)
     }
 
     override fun didExitRegion(region: Region?) {

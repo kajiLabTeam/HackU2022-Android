@@ -24,29 +24,73 @@ class ApiLoginMethod {
         .build()
 
 
-    fun loginGet(context: Context,email: String, nextStepFunc:(GetLoginResponse) -> Unit) {
+    fun loginGet(context: Context,email: String, nextStepFunc:(GetLoginResponse,Int) -> Unit) {
 
         val serverUrl = context.getString(R.string.server_url)
 
         // Requestを作成
         val request = Request.Builder()
-            .url( serverUrl + "login?mail=$email")
+            .url( serverUrl + "users/mail/$email")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                // Responseの読み出し
-                val responseBody = response.body?.string().orEmpty()
+                var userDataClass = GetLoginResponse()
 
-                Log.d("App", responseBody)
+                if(response.code == 200){
 
-                val gson = Gson()
-                val userDataClass = gson.fromJson(responseBody, GetLoginResponse::class.java)
+                    // Responseの読み出し
+                    val responseBody = response.body?.string().orEmpty()
 
-                Log.d("App", userDataClass.toString())
+                    Log.d("App", responseBody)
+
+                    val gson = Gson()
+                    userDataClass = gson.fromJson(responseBody, GetLoginResponse::class.java)
+
+                    Log.d("App", userDataClass.toString())
+                    // 必要に応じてCallback
+
+                }
+                nextStepFunc(userDataClass,response.code)
+
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("Error", e.toString())
                 // 必要に応じてCallback
+            }
+        })
+    }
 
-                nextStepFunc(userDataClass)
+    fun loginUserIdGet(context: Context,id: String, nextStepFunc:(GetLoginResponse,Int) -> Unit) {
+
+        val serverUrl = context.getString(R.string.server_url)
+
+        // Requestを作成
+        val request = Request.Builder()
+            .url( serverUrl + "users/$id")
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                var userDataClass = GetLoginResponse()
+
+                if(response.code == 200){
+
+                    // Responseの読み出し
+                    val responseBody = response.body?.string().orEmpty()
+
+                    Log.d("App", responseBody)
+
+                    val gson = Gson()
+                    userDataClass = gson.fromJson(responseBody, GetLoginResponse::class.java)
+
+                    Log.d("App", userDataClass.toString())
+                    // 必要に応じてCallback
+
+                }
+                nextStepFunc(userDataClass,response.code)
+
             }
 
             override fun onFailure(call: Call, e: IOException) {
@@ -67,24 +111,26 @@ class ApiLoginMethod {
 
         // Requestを作成
         val request = Request.Builder()
-            .url(serverUrl + "login")
+            .url(serverUrl + "users/signup")
             .post(jsonData.toRequestBody(JSON_MEDIA))
             .build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 // Responseの読み出し
-                val responseBody = response.body?.string().orEmpty()
+                if(response.code == 201){
+                    val responseBody = response.body?.string().orEmpty()
 
-                Log.d("App", responseBody)
+                    Log.d("App", responseBody)
 
-                val userDataClass = gson.fromJson(responseBody,PostLoginResponse::class.java)
+                    val userDataClass = gson.fromJson(responseBody,PostLoginResponse::class.java)
 
-                Log.d("App", userDataClass.toString())
-                // 必要に応じてCallback
-                //Todo 名前を変える　userDataClass
+                    Log.d("App", userDataClass.toString())
+                    // 必要に応じてCallback
+                    //Todo 名前を変える　userDataClass
 
-                nextStepFunc(userDataClass)
+                    nextStepFunc(userDataClass)
+                }
             }
 
             override fun onFailure(call: Call, e: IOException) {

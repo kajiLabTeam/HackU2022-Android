@@ -1,9 +1,14 @@
 package net.harutiro.xclothes.models.login.get
 
 import android.text.style.LineHeightSpan
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import net.harutiro.xclothes.nav.BottomBarScreen
 
+@Entity
 data class GetLoginResponse(
+    @PrimaryKey
     var id:String = "",
     var name:String = "",
     var gender:Int = 0,
@@ -12,6 +17,5 @@ data class GetLoginResponse(
     var uuid:String = "",
     var mail:String = "",
     var icon:String = "",
-    var status:Boolean = false,
     var message:String = "",
 )

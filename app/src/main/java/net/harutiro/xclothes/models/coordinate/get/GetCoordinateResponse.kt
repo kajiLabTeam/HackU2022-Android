@@ -8,25 +8,12 @@ import net.harutiro.xclothes.models.coordinate.CoordinateItems
 @Entity
 data class GetCoordinateResponse(
     @PrimaryKey
-    var coordinate_id: String = "",
+    var id: String = "",
+    var put_flag:String = "",
+    var public:String = "",
     var image: String = "",
-    var items:MutableList<CoordinateItems> = mutableListOf(),
-    var users:CoordinateUsers = CoordinateUsers(),
-    var status:Boolean = false,
+    var wears:MutableList<CoordinateItems> = mutableListOf(),
+    var user_id:String = "",
     var lat:Float = 0f,
     var lon:Float = 0f,
 )
-
-
-@Entity
-data class CoordinateUsers(
-    var id: String = "",
-    var name: String = "",
-    var gender:Int = 0,
-    var age:String = "",
-    var height:Int = 0,
-    var uuid:String = "",
-    var mail: String = "",
-    var icon:String = "",
-)
-

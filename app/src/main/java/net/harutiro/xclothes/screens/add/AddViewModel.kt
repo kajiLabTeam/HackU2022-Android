@@ -92,7 +92,7 @@ class AddViewModel (application: Application): AndroidViewModel(application) {
         postCoordinateRequestBody.ble = uuid
         postCoordinateRequestBody.user_id = data.getString("userId","").toString()
         postCoordinateRequestBody.image = imageUrl
-        postCoordinateRequestBody.items = coordinateItems
+        postCoordinateRequestBody.wears = coordinateItems
         
         val apiCoordinateMethod = ApiCoordinateMethod()
 

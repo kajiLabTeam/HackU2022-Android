@@ -28,7 +28,7 @@ class ApiCoordinateMethod {
         val serverUrl = context.getString(R.string.server_url)
 
         val request = Request.Builder()
-            .url(serverUrl + "coordinate?ble=$ble")
+            .url(serverUrl + "coordinates/ble/$ble")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -73,7 +73,7 @@ class ApiCoordinateMethod {
         val serverUrl = context.getString(R.string.server_url)
 
         val request = Request.Builder()
-            .url(serverUrl + "coordinate")
+            .url(serverUrl + "coordinates")
             .post(jsonData.toRequestBody(JSON_MEDIA))
             .build()
 

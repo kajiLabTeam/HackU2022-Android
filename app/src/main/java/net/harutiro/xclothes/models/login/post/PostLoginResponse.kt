@@ -9,5 +9,4 @@ data class PostLoginResponse(
     val age: String = "",
     val height: Int = 0,
     val mail: String = "",
-    val status: Boolean = false,
 )

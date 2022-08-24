@@ -134,16 +134,16 @@ class LoginViewModel: ViewModel() {
                             userDataClass.name = user?.displayName.toString()
                             userDataClass.mail = user?.email.toString()
 
-                            apiLoginMethod.loginGet(context , userDataClass.mail){
-                                if(it.status){
+                            apiLoginMethod.loginGet(context , userDataClass.mail){ userDataClass , code ->
+                                if(code == 200){
                                     //TODO:ユーザーデータを保存する
 
                                     val data: SharedPreferences = activity.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
                                     val editor = data.edit()
                                     val gson = Gson()
-                                    val json = gson.toJson(it)
+                                    val json = gson.toJson(userDataClass)
                                     editor.putString("userData",json)
-                                    editor.putString("userId",it.id)
+                                    editor.putString("userId",userDataClass.id)
                                     editor.apply()
 
                                     activity.finish()

@@ -12,6 +12,5 @@ data class GetLoginResponse(
     var uuid:String = "",
     var mail:String = "",
     var icon:String = "",
-    var status:Boolean = false,
     var message:String = "",
 )

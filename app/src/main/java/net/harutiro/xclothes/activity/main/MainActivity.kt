@@ -68,6 +68,23 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
 
 
     @RequiresApi(Build.VERSION_CODES.O)
+    override fun didEnterRegion(arg0: Region?) {
+        createNotificationChannel()
+        viewModel.didEnterRegion(this)
+    }
+
+    override fun didExitRegion(region: Region?) {
+    }
+
+    override fun didDetermineStateForRegion(state: Int, region: Region?) {
+    }
+
+    override fun didRangeBeaconsInRegion(beacons: MutableCollection<Beacon>?, region: Region?) {
+        viewModel.didRangeBeaconsInRegion(beacons)
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
 
         val channelId = "search_notify"
@@ -91,22 +108,6 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
         val notificationManager: NotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun didEnterRegion(arg0: Region?) {
-        createNotificationChannel()
-        viewModel.didEnterRegion(this)
-    }
-
-    override fun didExitRegion(region: Region?) {
-    }
-
-    override fun didDetermineStateForRegion(state: Int, region: Region?) {
-    }
-
-    override fun didRangeBeaconsInRegion(beacons: MutableCollection<Beacon>?, region: Region?) {
-        viewModel.didRangeBeaconsInRegion(beacons)
     }
 }
 

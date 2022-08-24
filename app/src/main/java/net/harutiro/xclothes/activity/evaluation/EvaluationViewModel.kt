@@ -1,6 +1,9 @@
 package net.harutiro.xclothes.activity.evaluation
 
+import android.app.Activity
+import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.room.Room
@@ -8,7 +11,8 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.harutiro.xclothes.models.coordinate.get.GetCoordinateResponse
-import net.harutiro.xclothes.models.login.ApiLoginMethod
+import net.harutiro.xclothes.models.like.post.ApiLikeMethod
+import net.harutiro.xclothes.models.like.post.PostLikeRequestBody
 import net.harutiro.xclothes.models.login.get.GetLoginResponse
 import net.harutiro.xclothes.models.room.BleListDAO
 import net.harutiro.xclothes.models.room.BleListDatabase
@@ -44,6 +48,23 @@ class EvaluationViewModel :ViewModel() {
             }
             getCoordinateResponseDAO.removeAll()
             getLoginResponseDAO.removeAll()
+        }
+    }
+
+
+    fun postLike(context: Context, activity: Activity, coordinateDate:GetCoordinateResponse){
+        val data: SharedPreferences = activity.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
+
+        val apiLikeMethod = ApiLikeMethod()
+
+        val postLikeRequestBody = PostLikeRequestBody()
+        postLikeRequestBody.lat = coordinateDate.lat
+        postLikeRequestBody.lon = coordinateDate.lon
+        postLikeRequestBody.send_user_id = data.getString("userId", "").toString()
+        postLikeRequestBody.receive_user_id = coordinateDate.user_id
+
+        apiLikeMethod.likePost(context, coordinateDate.id, postLikeRequestBody){
+
         }
     }
 

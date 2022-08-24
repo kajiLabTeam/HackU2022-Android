@@ -1,11 +1,13 @@
 package net.harutiro.xclothes.activity.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -16,6 +18,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.cloudinary.android.MediaManager
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.harutiro.xclothes.BuildConfig
@@ -32,9 +36,13 @@ import pub.devrel.easypermissions.EasyPermissions
 
 class MainViewModel : ViewModel(){
 
+    //DB
     private lateinit var db:BleListDatabase
     lateinit var bleListDao:BleListDAO
     lateinit var getCoordinateResponseDAO: GetCoordinateResponseDAO
+
+    //gps
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
     val IBEACON_FORMAT = "m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"
@@ -193,7 +201,7 @@ class MainViewModel : ViewModel(){
         }
     }
 
-    fun didRangeBeaconsInRegion(beacons: MutableCollection<Beacon>?,context: Context){
+    fun didRangeBeaconsInRegion(beacons: MutableCollection<Beacon>?,context: Context,activity: Activity){
         // 検知したBeaconの情報
         Log.d("MainActivity", "beacons.size ${beacons?.size}")
         beacons?.let {
@@ -205,8 +213,17 @@ class MainViewModel : ViewModel(){
                     if(bleListDao.checkBleList(beacon.id1.toString())?.bleUuid.isNullOrBlank()){
 
                         val apiCoordinateMethod = ApiCoordinateMethod()
-                        apiCoordinateMethod.coordinateGet(context,beacon.id1.toString()) {
-                            getCoordinateResponseDAO.insert(it)
+                        apiCoordinateMethod.coordinateGet(context,beacon.id1.toString()) { getCoordinateResponse ->
+                            getLocation(context, activity){ location ->
+                                getCoordinateResponse.lat = location?.latitude?.toFloat()!!
+                                getCoordinateResponse.lon = location.longitude.toFloat()
+
+                                GlobalScope.launch{
+                                    getCoordinateResponseDAO.insert(getCoordinateResponse)
+                                }
+
+                                didEnterRegion(context)
+                            }
                         }
 
                         val ble = BleList(id = 0, bleUuid = beacon.id1.toString())
@@ -219,6 +236,21 @@ class MainViewModel : ViewModel(){
                 Log.d("MainActivity", "UUID: ${beacon.id1}, major: ${beacon.id2}, minor: ${beacon.id3}, RSSI: ${beacon.rssi}, TxPower: ${beacon.txPower}, Distance: ${beacon.distance}")
             }
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun getLocation(context: Context , activity: Activity,getLocation:(Location?) -> Unit) {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+
+        if (EasyPermissions.hasPermissions(context, *permissions)) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location : Location? ->
+                Log.d("gps",location.toString())
+
+                getLocation(location)
+
+            }
+        }
+
     }
 
 

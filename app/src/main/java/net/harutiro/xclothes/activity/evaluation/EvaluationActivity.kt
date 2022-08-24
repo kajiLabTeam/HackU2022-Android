@@ -15,6 +15,9 @@ class EvaluationActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        viewModel.databaseBuild(this,this)
+
         setContent {
             XclothesTheme {
                 // A surface container using the 'background' color from the theme

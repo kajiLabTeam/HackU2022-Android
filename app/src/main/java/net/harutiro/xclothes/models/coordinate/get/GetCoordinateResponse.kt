@@ -12,8 +12,11 @@ data class GetCoordinateResponse(
     var image: String = "",
     var items:MutableList<CoordinateItems> = mutableListOf(),
     var users:CoordinateUsers = CoordinateUsers(),
-    var status:Boolean = false
+    var status:Boolean = false,
+    var lat:Float = 0f,
+    var lon:Float = 0f,
 )
+
 
 @Entity
 data class CoordinateUsers(

@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.cloudinary.android.MediaManager
@@ -41,20 +42,16 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val config = mapOf(
-            "cloud_name" to BuildConfig.CLOUD_NAME,
-            "api_key" to BuildConfig.API_KEY,
-            "api_secret" to BuildConfig.API_SECRET
-        )
+        viewModel.databaseBuild(this)
 
-        MediaManager.init(this, config)
+        viewModel.cloudinaryBuild(this)
 
         viewModel.checkPermission(this,this)
 
         if(EasyPermissions.hasPermissions(this, *viewModel.permissions)){
             viewModel.startService(this )
             createNotificationChannel()
-            ibeacon()
+            viewModel.ibeacon(this,this,this)
         }
 
         setContent {
@@ -70,65 +67,23 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
         }
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
-    fun ibeacon(){
-        //ここからビーコン関係
-        if (EasyPermissions.hasPermissions(this, *viewModel.permissions)) {
-            val beaconManager = BeaconManager.getInstanceForApplication(this)
-
-            // 初期化。これがないと画面を２回以上開いた時に２重でデータを受信してしまう
-            beaconManager.removeAllMonitorNotifiers()
-            beaconManager.removeAllRangeNotifiers()
-            beaconManager.rangedRegions.forEach {region ->
-                beaconManager.stopRangingBeacons(region)
-                beaconManager.stopMonitoring(region)
-
-            }
-
-
-            beaconManager.beaconParsers.clear()
-            beaconManager.beaconParsers.add(BeaconParser().setBeaconLayout(viewModel.IBEACON_FORMAT))
-
-
-            // Uncomment the code below to use a foreground service to scan for beacons. This unlocks
-            // the ability to continually scan for long periods of time in the background on Andorid 8+
-            // in exchange for showing an icon at the top of the screen and a always-on notification to
-            // communicate to users that your app is using resources in the background.
-            //
-            val builder = Notification.Builder(this)
-            builder.setSmallIcon(R.drawable.ic_launcher_foreground)
-            builder.setContentTitle("すれ違いをチェック中")
-            val intent = Intent(this, MainActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(
-                this, 0, intent, PendingIntent.FLAG_MUTABLE
-            )
-            builder.setContentIntent(pendingIntent)
-
-            builder.setChannelId("search_notify")
-
-            beaconManager.enableForegroundServiceScanning(builder.build(), 456)
-
-            beaconManager.setEnableScheduledScanJobs(false)
-            beaconManager.backgroundBetweenScanPeriod = 0
-            beaconManager.backgroundScanPeriod = 1100
-
-            Log.d(TAG, "setting up background monitoring in app onCreate")
-            beaconManager.addMonitorNotifier(this)
-
-
-            // If we were monitoring *different* regions on the last run of this app, they will be
-            // remembered.  In this case we need to disable them here
-            for (region in beaconManager.monitoredRegions) {
-                beaconManager.stopMonitoring(region!!)
-            }
-
-            beaconManager.startMonitoring(viewModel.region)
-
-            beaconManager.addRangeNotifier(this)
-
-            beaconManager.startRangingBeacons(viewModel.region)
-        }
+    override fun didEnterRegion(arg0: Region?) {
+        createNotificationChannel()
+        viewModel.didEnterRegion(this)
     }
+
+    override fun didExitRegion(region: Region?) {
+    }
+
+    override fun didDetermineStateForRegion(state: Int, region: Region?) {
+    }
+
+    override fun didRangeBeaconsInRegion(beacons: MutableCollection<Beacon>?, region: Region?) {
+        viewModel.didRangeBeaconsInRegion(beacons,this)
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
@@ -156,47 +111,12 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
         notificationManager.createNotificationChannel(channel)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun didEnterRegion(arg0: Region?) {
-        Log.d(TAG, "did enter region.")
+    override fun onStart(){
+        super.onStart()
 
-        createNotificationChannel()
-
-        val intent = Intent(this, EvaluationActivity::class.java)
-
-        val pendingIntent: PendingIntent =
-            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE)
-
-        val builder = NotificationCompat.Builder(this, "room_inside_notify")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("すれ違いました！！")
-            .setContentText("タップして服の評価をお願いします。")
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            // Set the intent that will fire when the user taps the notification
-            .setFullScreenIntent(pendingIntent,true)
-            .setAutoCancel(true)
-
-
-                with(NotificationManagerCompat.from(this)) {
-            // notificationId is a unique int for each notification that you must define
-            notify(22, builder.build())
-        }
-    }
-
-    override fun didExitRegion(region: Region?) {
-    }
-
-    override fun didDetermineStateForRegion(state: Int, region: Region?) {
-    }
-
-    override fun didRangeBeaconsInRegion(beacons: MutableCollection<Beacon>?, region: Region?) {
-        // 検知したBeaconの情報
-        Log.d("MainActivity", "beacons.size ${beacons?.size}")
-        beacons?.let {
-            for (beacon in beacons) {
-                Log.d("MainActivity", "UUID: ${beacon.id1}, major: ${beacon.id2}, minor: ${beacon.id3}, RSSI: ${beacon.rssi}, TxPower: ${beacon.txPower}, Distance: ${beacon.distance}")
-            }
-        }
+        viewModel.bleListDao.getAll().observe(this, Observer {
+            println(it)
+        })
     }
 }
 

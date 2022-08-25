@@ -3,16 +3,13 @@ package net.harutiro.xclothes.activity.main
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Application
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.location.Location
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -42,8 +39,6 @@ class MainViewModel : ViewModel(){
     lateinit var bleListDao:BleListDAO
     lateinit var getCoordinateResponseDAO: GetCoordinateResponseDAO
     lateinit var getLoginResponseDAO: GetLoginResponseDAO
-
-
 
 
     //gps
@@ -105,25 +100,11 @@ class MainViewModel : ViewModel(){
         }
     }
 
-    fun startService(context: Context,application: Application,){
-
-        val data: SharedPreferences = application.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
-
+    fun startService(context: Context){
         //intentのインスタンス化
         val intent = Intent(context, ForegroundIbeaconOutputServise::class.java)
-        val bleUUID = data.getString("ble", "")
-
-        if(!data.getBoolean("isBlePosted",false)){
-            return
-        }
-
-        if(bleUUID.isNullOrBlank()){
-            Toast.makeText(context,"服情報を発信できませんでした。",Toast.LENGTH_SHORT).show()
-            return
-        }
-
         //値をintentした時に受け渡しをする用
-        intent.putExtra("UUID",bleUUID)
+        intent.putExtra("UUID","d02975fb-84ab-4350-8cd7-4d5446240558")
         intent.putExtra("MAJOR","777")
         intent.putExtra("MINOR","0")
 

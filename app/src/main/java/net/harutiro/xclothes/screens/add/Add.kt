@@ -1,6 +1,5 @@
 package net.harutiro.test_bottomnavigation_withjetpackcompose.screens
 
-import android.app.Activity
 import android.content.res.Configuration
 import android.net.Uri
 import android.util.Log
@@ -50,9 +49,6 @@ fun AddScreen(viewModel: AddViewModel) {
     var urlRemember by remember { mutableStateOf("") }
     val uri = viewModel.photoStartUp()
 
-    val activity = LocalContext.current as Activity
-    val context = LocalContext.current
-
     //写真を取ったあとのURIを受け取る
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { _ ->
         viewModel.addCoordinatePost(uri){
@@ -90,7 +86,7 @@ fun AddScreen(viewModel: AddViewModel) {
                     Log.d("checkValue", i.toString())
                 }
 
-                viewModel.pushApi(activity)
+                viewModel.pushApi()
 
             }
             Spacer(modifier = Modifier.padding(16.dp))

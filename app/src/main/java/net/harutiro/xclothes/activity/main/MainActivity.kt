@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
         viewModel.checkPermission(this,this)
 
         if(EasyPermissions.hasPermissions(this, *viewModel.permissions)){
-            viewModel.startService(this,this.application)
+            viewModel.startService(this )
             createNotificationChannel()
             viewModel.ibeacon(this,this,this)
         }

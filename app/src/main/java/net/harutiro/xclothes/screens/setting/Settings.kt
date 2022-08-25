@@ -1,24 +1,25 @@
 package net.harutiro.test_bottomnavigation_withjetpackcompose.screens
 
+import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Build
+import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
@@ -30,6 +31,7 @@ import net.harutiro.xclothes.models.login.ApiLoginMethod
 import net.harutiro.xclothes.models.room.BleListDAO
 import net.harutiro.xclothes.models.room.BleListDatabase
 import net.harutiro.xclothes.service.ForegroundIbeaconOutputServise
+import pub.devrel.easypermissions.EasyPermissions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,6 +39,24 @@ fun SettingsScreen() {
 
     val activity = LocalContext.current as Activity
     val context = LocalContext.current
+
+    //許可して欲しいパーミッションの記載、
+    //Android１２以上ではBlueToothの新しいパーミッションを追加する。
+    val permissions = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+        arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.BLUETOOTH_SCAN,
+            Manifest.permission.BLUETOOTH_ADVERTISE
+
+        )
+    }else{
+        arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+        )
+    }
 
     Scaffold() {
         Column {
@@ -83,6 +103,18 @@ fun SettingsScreen() {
                     val intent = Intent(context, LoginActivity::class.java)
                     startActivity(context,intent,null)
 
+                    var data: SharedPreferences = activity.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
+                    var editor = data.edit()
+
+                    editor.putString("userData","")
+                    editor.putString("userId","")
+                    editor.putString("ble","")
+                    editor.putBoolean("isBlePosted",false)
+                    editor.apply()
+
+                    val targetIntent = Intent(context, ForegroundIbeaconOutputServise::class.java)
+                    activity.stopService(targetIntent)
+
                 }
             ){
                 Text("Logout")
@@ -104,6 +136,59 @@ fun SettingsScreen() {
                 }
             ){
                 Text("bleListDelete")
+            }
+
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+
+                val data: SharedPreferences = activity.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
+                var editor = data.edit()
+
+                var isBlePosted by remember { mutableStateOf(data.getBoolean("isBlePosted",false)) }
+
+                Switch(
+                    checked = isBlePosted,
+                    onCheckedChange = {
+                        isBlePosted = it
+                        editor.putBoolean("isBlePosted",it)
+                        editor.apply()
+
+                        if(it){
+                            //intentのインスタンス化
+                            val intent = Intent(context, ForegroundIbeaconOutputServise::class.java)
+                            val bleUUID = data.getString("ble", "")
+                            if(bleUUID.isNullOrBlank()){
+                                Toast.makeText(context,"服情報を発信できませんでした。", Toast.LENGTH_SHORT).show()
+                            }else{
+                                //値をintentした時に受け渡しをする用
+                                intent.putExtra("UUID",bleUUID)
+                                intent.putExtra("MAJOR","777")
+                                intent.putExtra("MINOR","0")
+
+                                //サービスの開始
+                                //パーミッションの確認をする。
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && EasyPermissions.hasPermissions(context, *permissions)) {
+                                    ContextCompat.startForegroundService(context, intent)
+                                }
+                            }
+                        }else{
+                            val targetIntent = Intent(context, ForegroundIbeaconOutputServise::class.java)
+                            activity.stopService(targetIntent)
+                        }
+                    },
+                    modifier = Modifier.align(Alignment.CenterVertically)
+
+                )
+                Text(
+                    text = "BLEを発信する",
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(16.dp),
+                )
             }
         }
 

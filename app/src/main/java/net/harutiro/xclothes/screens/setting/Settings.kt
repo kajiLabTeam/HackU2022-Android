@@ -1,9 +1,7 @@
 package net.harutiro.test_bottomnavigation_withjetpackcompose.screens
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -84,14 +82,6 @@ fun SettingsScreen() {
                     FirebaseAuth.getInstance().signOut()
                     val intent = Intent(context, LoginActivity::class.java)
                     startActivity(context,intent,null)
-
-                    var data: SharedPreferences = activity.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
-                    var editor = data.edit()
-
-                    editor.putString("userData","")
-                    editor.putString("userId","")
-                    editor.putString("ble","")
-                    editor.apply()
 
                 }
             ){

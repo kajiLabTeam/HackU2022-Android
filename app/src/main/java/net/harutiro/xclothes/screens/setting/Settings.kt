@@ -86,6 +86,7 @@ fun SettingsScreen() {
                     editor.putString("userData","")
                     editor.putString("userId","")
                     editor.putString("ble","")
+                    editor.putBoolean("isBlePosted",false)
                     editor.apply()
 
                 }

@@ -44,6 +44,10 @@ import dev.chrisbanes.snapper.rememberLazyListSnapperLayoutInfo
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import net.harutiro.xclothes.R
 import net.harutiro.xclothes.models.Clothes
+import net.harutiro.xclothes.models.coordinate.BrandList
+import net.harutiro.xclothes.models.coordinate.CategoryList
+import net.harutiro.xclothes.models.coordinate.CoordinateItems
+import net.harutiro.xclothes.models.coordinate.PriceList
 import net.harutiro.xclothes.models.coordinate.get.GetCoordinateResponse
 import net.harutiro.xclothes.models.login.get.GetLoginResponse
 import net.harutiro.xclothes.ui.theme.XclothesTheme
@@ -59,10 +63,6 @@ fun EvaluationScreen(viewModel: EvaluationViewModel) {
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
 
-    SimpleAlertDialog(openDialog.value){
-        openDialog.value = false
-    }
-
     Surface (
         color = MaterialTheme.colorScheme.surface,
     ){
@@ -75,6 +75,10 @@ fun EvaluationScreen(viewModel: EvaluationViewModel) {
                 count = viewModel.clothePages.size,
                 state = pagerState,
             ) { tabIndex ->
+
+                SimpleAlertDialog(openDialog.value , viewModel.clothePages[tabIndex]){
+                    openDialog.value = false
+                }
 
                 PhotoView(viewModel.clothePages[tabIndex])
                 PershonInformation(modifier = Modifier.align(Alignment.BottomEnd),viewModel.clothePages[tabIndex],viewModel.users[tabIndex])
@@ -101,7 +105,7 @@ fun EvaluationScreen(viewModel: EvaluationViewModel) {
 }
 
 @Composable
-fun SimpleAlertDialog(openDialog: Boolean , fix:() -> Unit) {
+fun SimpleAlertDialog(openDialog: Boolean, coordinate: GetCoordinateResponse, fix: () -> Unit) {
 
     val clotheIndex = remember { mutableStateOf(0) }
 
@@ -119,12 +123,12 @@ fun SimpleAlertDialog(openDialog: Boolean , fix:() -> Unit) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    ClothesList(){
+                    ClothesList(coordinate.wears){
                         clotheIndex.value = it
                     }
 
                     DotsIndicator(
-                        totalDots = 5,
+                        totalDots = coordinate.wears.size,
                         selectedIndex = clotheIndex.value,
                         selectedColor = MaterialTheme.colorScheme.onPrimary,
                         unSelectedColor = MaterialTheme.colorScheme.primary
@@ -189,7 +193,7 @@ fun DotsIndicator(
 
 @OptIn(ExperimentalSnapperApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun ClothesList(indexChanged:(Int)-> Unit){
+fun ClothesList(items:MutableList<CoordinateItems>, indexChanged:(Int)-> Unit){
     val lazyListState: LazyListState = rememberLazyListState()
     val layoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
 
@@ -202,61 +206,6 @@ fun ClothesList(indexChanged:(Int)-> Unit){
     val itemWidthDp = 250f.dp
     val xForCenteredItemDp = ((screenWidth - itemWidthDp) / 2)
 
-    val huku1 = Clothes(
-        category = "トップス",
-        categoryIcon = Icons.Filled.CurrencyYen,
-        brand = "GU",
-        brandIcon = ImageVector.vectorResource(id = R.drawable.gu_logo),
-        price = "10001~",
-        priceIcon = Icons.Filled.CurrencyYen
-
-    )
-
-    val huku2 = Clothes(
-        category = "ボトムス",
-        categoryIcon = Icons.Filled.CurrencyYen,
-        brand = "しまむら",
-        brandIcon = ImageVector.vectorResource(id = R.drawable.simamura),
-        price = "10001~",
-        priceIcon = Icons.Filled.CurrencyYen
-
-    )
-    val huku3 = Clothes(
-        category = "ボトムス",
-        categoryIcon = Icons.Filled.CurrencyYen,
-        brand = "しまむら",
-        brandIcon = ImageVector.vectorResource(id = R.drawable.simamura),
-        price = "10001~",
-        priceIcon = Icons.Filled.CurrencyYen
-
-    )
-    val huku4 = Clothes(
-        category = "ボトムス",
-        categoryIcon = Icons.Filled.CurrencyYen,
-        brand = "しまむら",
-        brandIcon = ImageVector.vectorResource(id = R.drawable.simamura),
-        price = "10001~",
-        priceIcon = Icons.Filled.CurrencyYen
-
-    )
-    val huku5 = Clothes(
-        category = "ボトムス",
-        categoryIcon = Icons.Filled.CurrencyYen,
-        brand = "しまむら",
-        brandIcon = ImageVector.vectorResource(id = R.drawable.simamura),
-        price = "10001~",
-        priceIcon = Icons.Filled.CurrencyYen
-
-    )
-
-    val names = remember { mutableStateListOf(
-        huku1,
-        huku2,
-        huku3,
-        huku4,
-        huku5,
-
-        ) }
 
     LaunchedEffect(lazyListState.isScrollInProgress) {
         if (!lazyListState.isScrollInProgress) {
@@ -282,7 +231,7 @@ fun ClothesList(indexChanged:(Int)-> Unit){
         }
 
         itemsIndexed(
-            items = names,
+            items = items,
             key = {index ,i ->
                 i.id
             }
@@ -291,7 +240,7 @@ fun ClothesList(indexChanged:(Int)-> Unit){
 
             AnimatedVisibility(
                 modifier = Modifier.animateItemPlacement(),
-                visible = names.contains(name),
+                visible = items.contains(name),
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
@@ -300,19 +249,19 @@ fun ClothesList(indexChanged:(Int)-> Unit){
                     TextBox(
                         questionLabel = "ブランド" ,
                         text = name.brand,
-                        comeIcon = name.brandIcon
+                        comeIcon = BrandList().checkBrandIcon(name.brand)
                     )
 
                     TextBox(
                         questionLabel = "カテゴリ",
                         text = name.category,
-                        comeIcon = name.categoryIcon
+                        comeIcon = CategoryList().checkCategoryIcon(name.category)
                     )
 
                     TextBox(
                         questionLabel = "価格帯",
                         text = name.price,
-                        comeIcon = name.priceIcon
+                        comeIcon = PriceList().checkPriceIcon(name.price)
                     )
 
                 }
@@ -333,7 +282,7 @@ fun ClothesList(indexChanged:(Int)-> Unit){
 fun TextBox(
     questionLabel:String,
     text:String,
-    comeIcon:ImageVector
+    comeIcon:Int
 ){
     var selectedText by remember { mutableStateOf(text) }
 
@@ -356,7 +305,7 @@ fun TextBox(
                 },
             label = {Text(questionLabel)},
             leadingIcon = {
-                Icon(leadingIcon,"contentDescription")
+                Icon(ImageVector.vectorResource(leadingIcon),"contentDescription")
             },
         )
     }

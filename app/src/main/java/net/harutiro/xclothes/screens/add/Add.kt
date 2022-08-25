@@ -197,9 +197,9 @@ fun ClothesList(viewModel: AddViewModel){
                             Spinner(
                                 questionLabel = "ブランド" ,
                                 suggestions = listOf(
-                                    AddSpinaers("GU",ImageVector.vectorResource(id = R.drawable.gu_logo)),
-                                    AddSpinaers("ユニクロ",ImageVector.vectorResource(id = R.drawable.uniqlo)),
-                                    AddSpinaers("しまむら",ImageVector.vectorResource(id = R.drawable.simamura)),
+                                    AddSpinaers("GU",R.drawable.gu_logo),
+                                    AddSpinaers("ユニクロ",R.drawable.uniqlo),
+                                    AddSpinaers("しまむら",R.drawable.simamura),
                                 ),
                                 fix = { text , icon ->
                                     viewModel.clothe[index] = Clothes(
@@ -219,11 +219,11 @@ fun ClothesList(viewModel: AddViewModel){
                             Spinner(
                                 questionLabel = "カテゴリ",
                                 suggestions = listOf(
-                                    AddSpinaers("トップス",Icons.Filled.CurrencyYen),
-                                    AddSpinaers("Tシャツ",Icons.Filled.CurrencyYen),
-                                    AddSpinaers("ボトムス",Icons.Filled.CurrencyYen),
-                                    AddSpinaers("パンツ",Icons.Filled.CurrencyYen),
-                                    AddSpinaers("靴下",Icons.Filled.CurrencyYen),
+                                    AddSpinaers("トップス",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
+                                    AddSpinaers("Tシャツ",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
+                                    AddSpinaers("ボトムス",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
+                                    AddSpinaers("パンツ",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
+                                    AddSpinaers("靴下",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
                                 ),
                                 fix = { text , icon ->
                                     viewModel.clothe[index] = Clothes(
@@ -243,11 +243,11 @@ fun ClothesList(viewModel: AddViewModel){
                             Spinner(
                                 questionLabel = "価格帯",
                                 suggestions = listOf(
-                                    AddSpinaers("0~1000",Icons.Filled.CurrencyYen),
-                                    AddSpinaers("1001~3000",Icons.Filled.CurrencyYen),
-                                    AddSpinaers("3001~5000",Icons.Filled.CurrencyYen),
-                                    AddSpinaers("5001~10000",Icons.Filled.CurrencyYen),
-                                    AddSpinaers("10001~",Icons.Filled.CurrencyYen),
+                                    AddSpinaers("0~1000",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
+                                    AddSpinaers("1001~3000",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
+                                    AddSpinaers("3001~5000",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
+                                    AddSpinaers("5001~10000",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
+                                    AddSpinaers("10001~",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
                                 ),
                                 fix = { text , icon ->
                                     viewModel.clothe[index] = Clothes(
@@ -308,9 +308,9 @@ fun SaveButton(onClick: () -> Unit){
 fun Spinner(
     questionLabel:String,suggestions: List<AddSpinaers> =
     listOf(
-        AddSpinaers("Item1",Icons.Filled.Style),
-        AddSpinaers("Item1",Icons.Filled.Delete),
-        AddSpinaers("Item1",Icons.Filled.AddAPhoto),
+        AddSpinaers("Item1",R.drawable.ic_launcher_foreground),
+        AddSpinaers("Item1",R.drawable.ic_launcher_foreground),
+        AddSpinaers("Item1",R.drawable.ic_launcher_foreground),
     ),
     fix:(String,ImageVector) -> Unit,
     text:String,
@@ -346,6 +346,7 @@ fun Spinner(
                 Icon(leadingIcon,"contentDescription")
             },
         )
+
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
@@ -353,16 +354,19 @@ fun Spinner(
                 .width(with(LocalDensity.current){dropDownWidth.toDp()})
         ) {
             suggestions.forEach { label ->
+
+                val icon = ImageVector.vectorResource(label.iconDrawableId)
+
                 DropdownMenuItem(
                     onClick = {
                         selectedText = label.text
-                        leadingIcon = label.icon
+                        leadingIcon = icon
                         expanded = false
                         fix(selectedText , leadingIcon)
                     },
                     text = {
                         Row{
-                            Icon(label.icon,"contentDescription")
+                            Icon(icon,"contentDescription")
                             Spacer(modifier = Modifier.padding(8.dp))
                             Text(text = label.text)
                         }

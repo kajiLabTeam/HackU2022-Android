@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -23,11 +24,13 @@ import androidx.room.Room
 import com.cloudinary.android.MediaManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.harutiro.xclothes.BuildConfig
 import net.harutiro.xclothes.R
 import net.harutiro.xclothes.activity.evaluation.EvaluationActivity
+import net.harutiro.xclothes.activity.login.LoginActivity
 import net.harutiro.xclothes.models.coordinate.ApiCoordinateMethod
 import net.harutiro.xclothes.models.login.ApiLoginMethod
 import net.harutiro.xclothes.models.room.*
@@ -73,6 +76,22 @@ class MainViewModel : ViewModel(){
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
         )
+    }
+
+    fun userCheck(context: Context,activity:Activity){
+        val TAG = "login"
+
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            // User is signed in
+            Log.d(TAG,user.email.toString())
+        } else {
+            // No user is signed in
+            Log.d(TAG,"NoAccount")
+
+            val intent = Intent(context, LoginActivity::class.java)
+            activity.startActivity(intent)
+        }
     }
 
     fun cloudinaryBuild(context: Context){

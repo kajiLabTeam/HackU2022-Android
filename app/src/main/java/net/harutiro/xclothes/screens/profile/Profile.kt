@@ -85,8 +85,8 @@ fun ProfileScreen(userDataClass: PostLoginRequestBody, isNewProfile: Boolean , v
                     Spinner(
                         questionLabel = "性別",
                         suggestions = listOf(
-                            AddSpinaers("男性",ImageVector.vectorResource(id = R.drawable.man_fill0_wght400_grad0_opsz48)),
-                            AddSpinaers("女性",ImageVector.vectorResource(id = R.drawable.woman_fill0_wght400_grad0_opsz48))
+                            AddSpinaers("男性",R.drawable.man_fill0_wght400_grad0_opsz48),
+                            AddSpinaers("女性",R.drawable.woman_fill0_wght400_grad0_opsz48)
                         ),
                         fix = { text , icon ->
                             var genderNumber = if(text == "男性"){ 1 } else { 2 }
@@ -149,9 +149,9 @@ fun Spinner(
     questionLabel:String,
     suggestions: List<AddSpinaers> =
         listOf(
-            AddSpinaers("Item1",Icons.Filled.Style),
-            AddSpinaers("Item1",Icons.Filled.Delete),
-            AddSpinaers("Item1",Icons.Filled.AddAPhoto),
+            AddSpinaers("Item1",R.drawable.ic_launcher_foreground),
+            AddSpinaers("Item1",R.drawable.ic_launcher_foreground),
+            AddSpinaers("Item1",R.drawable.ic_launcher_foreground),
         ),
     fix:(String,ImageVector) -> Unit,
     text:String,
@@ -194,16 +194,19 @@ fun Spinner(
                 .width(with(LocalDensity.current){dropDownWidth.toDp()})
         ) {
             suggestions.forEach { label ->
+
+                val icon = ImageVector.vectorResource(label.iconDrawableId)
+
                 DropdownMenuItem(
                     onClick = {
                         selectedText = label.text
-                        leadingIcon = label.icon
+                        leadingIcon = icon
                         expanded = false
                         fix(selectedText , leadingIcon)
                     },
                     text = {
                         Row{
-                            Icon(label.icon,"contentDescription")
+                            Icon(icon,"contentDescription")
                             Spacer(modifier = Modifier.padding(8.dp))
                             Text(text = label.text)
                         }

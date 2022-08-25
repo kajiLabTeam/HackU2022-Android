@@ -8,7 +8,6 @@ data class PostCoordinateResponse(
     var put_flag:Boolean = false,
     var public:Boolean = false,
     var image:String = "",
-    var ble:String = "",
     var user_id:String = "",
     var created_at:String = "",
     var updated_at:String = "",

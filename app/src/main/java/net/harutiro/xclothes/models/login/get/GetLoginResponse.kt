@@ -14,7 +14,7 @@ data class GetLoginResponse(
     var gender:Int = 0,
     var age:String = "",
     var height:Int = 0,
-    var uuid:String = "",
+    var ble:String = "",
     var mail:String = "",
     var icon:String = "",
     var message:String = "",

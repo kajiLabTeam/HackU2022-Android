@@ -86,7 +86,7 @@ class ApiCoordinateMethod {
                 Log.d("App", responseBody)
                 Log.d("App", code.toString())
 
-                if(code == 200){
+                if(code == 201){
 
                     val gson = Gson()
                     val apiResponseStatus = gson.fromJson(responseBody, PostCoordinateResponse::class.java)

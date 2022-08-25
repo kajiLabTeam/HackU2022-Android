@@ -3,7 +3,7 @@ package net.harutiro.xclothes.models.login.post
 data class PostLoginResponse(
     val id: String = "",
     val name: String = "",
-    val ble: String = "",
+    val uuid: String = "",
     val icon: String = "",
     val gender: String = "",
     val age: String = "",

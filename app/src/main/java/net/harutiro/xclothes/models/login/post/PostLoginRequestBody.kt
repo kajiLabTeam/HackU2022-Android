@@ -4,7 +4,7 @@ import java.util.*
 
 data class PostLoginRequestBody(
     var name: String = "",
-    var ble: String = UUID.randomUUID().toString(),
+    var uuid: String = UUID.randomUUID().toString(),
     var icon: String = "",
     var gender: Int = 0,
     var age: String = "",

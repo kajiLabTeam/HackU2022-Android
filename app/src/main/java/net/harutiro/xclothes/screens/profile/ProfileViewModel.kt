@@ -11,7 +11,6 @@ import net.harutiro.xclothes.R
 import net.harutiro.xclothes.models.login.ApiLoginMethod
 import net.harutiro.xclothes.models.login.get.GetLoginResponse
 import net.harutiro.xclothes.models.login.post.PostLoginRequestBody
-import java.util.*
 
 
 class ProfileViewModel(application: Application): AndroidViewModel(application) {
@@ -28,22 +27,19 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
     var userId = ""
 
     fun loginPost(activity: Activity){
-        userDataClass.ble = UUID.randomUUID().toString()
         if(isNewProfile){
             apiLoginMethod.loginPost(context,userDataClass){
-                val gson = Gson()
-                val json = gson.toJson(it)
-                editor.putString("userData",json)
                 editor.putString("userId", it.id)
-                editor.putString("ble", it.ble)
-                editor.apply()
-
                 activity.finish()
             }
         }else{
 
         }
 
+        val gson = Gson()
+        val json = gson.toJson(userDataClass)
+        editor.putString("userData",json)
+        editor.apply()
     }
 
     fun getUserData(){
@@ -55,7 +51,7 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
         userDataClass.name = userData.name
         userDataClass.gender = userData.gender
         userDataClass.height = userData.height
-        userDataClass.ble = userData.ble
+        userDataClass.uuid = userData.uuid
         userDataClass.mail = userData.mail
         userId = userData.id
     }

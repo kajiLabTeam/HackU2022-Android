@@ -1,11 +1,13 @@
-package net.harutiro.xclothes.models.like.post
+package net.harutiro.xclothes.models.like
 
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import net.harutiro.xclothes.R
-import net.harutiro.xclothes.models.coordinate.post.PostCoordinateRequestBody
-import net.harutiro.xclothes.models.coordinate.post.PostCoordinateResponse
+import net.harutiro.xclothes.models.like.get.GetLikeResponse
+import net.harutiro.xclothes.models.like.post.PostLikeRequestBody
+import net.harutiro.xclothes.models.like.post.PostLikeResponse
+import net.harutiro.xclothes.models.login.get.GetLoginResponse
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -21,7 +23,45 @@ class ApiLikeMethod {
         .readTimeout(READ_TIMEOUT_MILLISECONDS.toLong(), java.util.concurrent.TimeUnit.MILLISECONDS)
         .build()
 
-    fun likePost(context: Context,userId: String, postLikeRequestBody: PostLikeRequestBody, nextStepFunc: () -> Unit){
+    fun likeGet(context: Context,id: String, nextStepFunc:(GetLikeResponse) -> Unit) {
+
+        val serverUrl = context.getString(R.string.server_url)
+
+        // Requestを作成
+        val request = Request.Builder()
+            .url( serverUrl + "coordinates/$id/likes")
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                var coordinateLikes = GetLikeResponse()
+
+                if(response.code == 200){
+
+                    // Responseの読み出し
+                    val responseBody = response.body?.string().orEmpty()
+
+                    Log.d("App", responseBody)
+
+                    val gson = Gson()
+                    coordinateLikes  = gson.fromJson(responseBody, GetLikeResponse::class.java)
+
+                    Log.d("App", coordinateLikes.toString())
+                    // 必要に応じてCallback
+
+                }
+                nextStepFunc(coordinateLikes)
+
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("Error", e.toString())
+                // 必要に応じてCallback
+            }
+        })
+    }
+
+    fun likePost(context: Context, userId: String, postLikeRequestBody: PostLikeRequestBody, nextStepFunc: () -> Unit){
 
         val gson = Gson()
 

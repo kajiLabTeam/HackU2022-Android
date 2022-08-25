@@ -42,6 +42,8 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel.userCheck(this,this)
+
         viewModel.databaseBuild(this)
 
         viewModel.cloudinaryBuild(this)

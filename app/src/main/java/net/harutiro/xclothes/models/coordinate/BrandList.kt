@@ -10,7 +10,17 @@ class BrandList {
         AddSpinaers("GU",  R.drawable.gu_logo),
         AddSpinaers("ユニクロ", R.drawable.uniqlo),
         AddSpinaers("しまむら", R.drawable.simamura),
-    )
+        AddSpinaers("BEAMS", R.drawable.beams),
+        AddSpinaers("GAP", R.drawable.gap),
+        AddSpinaers("H&M", R.drawable.h_m),
+        AddSpinaers("PaulSmith", R.drawable.paulsmith),
+        AddSpinaers("RAGEBLUE", R.drawable.rageblue),
+        AddSpinaers("RifhtOn", R.drawable.right_on),
+        AddSpinaers("WEGO", R.drawable.wego),
+        AddSpinaers("ZARA", R.drawable.zara),
+        AddSpinaers("無印良品", R.drawable.mujirushiryohin),
+
+        )
 
     fun checkBrandIcon(text:String):Int{
         var count = 0

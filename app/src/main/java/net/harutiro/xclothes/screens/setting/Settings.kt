@@ -31,6 +31,7 @@ import net.harutiro.xclothes.activity.evaluation.EvaluationActivity
 import net.harutiro.xclothes.activity.login.LoginActivity
 import net.harutiro.xclothes.models.login.ApiLoginMethod
 import net.harutiro.xclothes.models.login.get.GetLoginResponse
+import net.harutiro.xclothes.models.map.ApiMapMethod
 import net.harutiro.xclothes.models.room.BleListDAO
 import net.harutiro.xclothes.models.room.BleListDatabase
 import net.harutiro.xclothes.service.ForegroundIbeaconOutputServise
@@ -218,6 +219,20 @@ fun SettingsScreen() {
                         .padding(16.dp),
                 )
             }
+
+            Button(
+                onClick = {
+                    val data: SharedPreferences = activity.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
+
+                    val apiMapMethod = ApiMapMethod()
+                    apiMapMethod.mapGet(context,data.getString("userId","").toString()){
+                        Log.d("apiget",it.toString())
+                    }
+                }
+            ) {
+                Text("Mapを受け取る")
+            }
+
         }
 
     }

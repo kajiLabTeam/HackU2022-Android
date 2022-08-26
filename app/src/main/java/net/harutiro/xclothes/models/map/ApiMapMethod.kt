@@ -40,7 +40,7 @@ class ApiMapMethod {
                     Log.d("App", responseBody)
 
                     val gson = Gson()
-                    userCoordinateDates = gson.fromJson(responseBody, GetMapResponse::class.java)
+//                    userCoordinateDates = gson.fromJson(responseBody, GetMapResponse::class.java)
 
                     Log.d("App", userCoordinateDates.toString())
                     // 必要に応じてCallback

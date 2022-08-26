@@ -83,6 +83,13 @@ class HomeViewModel (application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun likeGet(coordinateId:String,getFunc:(MutableList<GetLikeResponse>) -> Unit){
+        val apiLikeMethod = ApiLikeMethod()
+        apiLikeMethod.likeGet(context,coordinateId){
+            getFunc(it)
+        }
+    }
+
 
     @SuppressLint("MissingPermission")
     fun getLocation( getLocation:(Location?) -> Unit) {

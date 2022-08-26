@@ -38,6 +38,7 @@ import net.harutiro.xclothes.models.coordinate.BrandList
 import net.harutiro.xclothes.models.coordinate.CategoryList
 import net.harutiro.xclothes.models.coordinate.CoordinateItems
 import net.harutiro.xclothes.models.coordinate.PriceList
+import net.harutiro.xclothes.models.like.get.GetLikeResponse
 import net.harutiro.xclothes.models.login.get.GetLoginResponse
 import net.harutiro.xclothes.models.map.get.GetMapResponse
 import net.harutiro.xclothes.screens.home.HomeViewModel
@@ -114,6 +115,7 @@ fun Map(paddingValues: PaddingValues, viewModel: HomeViewModel) {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             clothes(
+                viewModel = viewModel,
                 items = viewModel.coordinates.value,
                 indexChanged = {}
             )
@@ -124,7 +126,7 @@ fun Map(paddingValues: PaddingValues, viewModel: HomeViewModel) {
 
 @OptIn(ExperimentalSnapperApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun clothes(items:MutableList<GetMapResponse>, indexChanged:(Int)-> Unit) {
+fun clothes(viewModel: HomeViewModel,items:MutableList<GetMapResponse>, indexChanged:(Int)-> Unit) {
     val lazyListState: LazyListState = rememberLazyListState()
     val layoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
 
@@ -179,11 +181,18 @@ fun clothes(items:MutableList<GetMapResponse>, indexChanged:(Int)-> Unit) {
                     
                     MapPhotoView(urlRemember = item.image)
 
+
+                    val likePeople = remember { mutableStateOf(0)}
+
+                    viewModel.likeGet(item.id){
+                        likePeople.value = it.size
+                    }
+
                     Text(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .padding(0.dp, 4.dp),
-                        text = "\uD83D\uDC96１０"
+                        text = "\uD83D\uDC96 ${likePeople.value}"
                     )
 
                 }

@@ -65,6 +65,46 @@ class ApiLikeMethod {
         })
     }
 
+    fun likeGet(context: Context,coordinateId: String, nextStepFunc:(MutableList<GetLikeResponse>) -> Unit) {
+
+        val serverUrl = context.getString(R.string.server_url)
+
+        // Requestを作成
+        val request = Request.Builder()
+            .url( serverUrl + "coordinates/$coordinateId/likes")
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                var coordinateLikes = mutableListOf<GetLikeResponse>()
+
+                if(response.code == 200){
+
+                    // Responseの読み出し
+                    val responseBody = response.body?.string().orEmpty()
+
+                    Log.d("App", responseBody)
+
+                    val gson = Gson()
+                    val listType: Type = object : TypeToken<MutableList<GetLikeResponse?>?>() {}.type
+                    coordinateLikes = gson.fromJson(responseBody, listType)
+
+
+                    Log.d("App", coordinateLikes.toString())
+                    // 必要に応じてCallback
+
+                }
+                nextStepFunc(coordinateLikes)
+
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("Error", e.toString())
+                // 必要に応じてCallback
+            }
+        })
+    }
+
     fun likePost(context: Context, userId: String, postLikeRequestBody: PostLikeRequestBody, nextStepFunc: () -> Unit){
 
         val gson = Gson()

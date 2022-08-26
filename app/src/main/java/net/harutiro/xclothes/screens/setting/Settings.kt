@@ -247,6 +247,19 @@ fun SettingsScreen() {
                 Text("自分のIDから評価をすべて受け取る")
             }
 
+            Button(
+                onClick = {
+                    val data: SharedPreferences = activity.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
+
+                    val apiLikeMethod = ApiLikeMethod()
+                    apiLikeMethod.likeGet(context,"0or28F0aM"){
+                        Log.d("apiget",it.toString())
+                    }
+                }
+            ) {
+                Text("一つの服についての評価をもらえる")
+            }
+
         }
 
     }

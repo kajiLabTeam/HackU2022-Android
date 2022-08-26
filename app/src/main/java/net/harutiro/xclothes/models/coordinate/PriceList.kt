@@ -23,6 +23,6 @@ class PriceList {
             count++
         }
 
-        return priceList[count].iconDrawableId
+        return if(count >= priceList.size) R.drawable.ic_baseline_radio_button_unchecked_24 else priceList[count].iconDrawableId
     }
 }

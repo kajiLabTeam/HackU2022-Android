@@ -92,7 +92,7 @@ fun ProfileScreen(userDataClass: PostLoginRequestBody, isNewProfile: Boolean , v
                             var genderNumber = if(text == "男性"){ 1 } else { 2 }
                             viewModel.userDataClass.gender = genderNumber
                         },
-                        text = viewModel.userDataClass.gender.toString(),
+                        text = if(viewModel.userDataClass.gender == 1) {"男性"} else {"女性"},
                         comeIcon = if(viewModel.userDataClass.gender == 1){
                             ImageVector.vectorResource(id = R.drawable.man_fill0_wght400_grad0_opsz48)
                         }else{
@@ -101,16 +101,28 @@ fun ProfileScreen(userDataClass: PostLoginRequestBody, isNewProfile: Boolean , v
                     )
                     Spacer(modifier = Modifier.padding(top = padding))
 
-                    EditTextField(
-                        questionLabel = "年齢",
-                        fix = {
-                            viewModel.userDataClass.age = it
+                    Spinner(
+                        questionLabel = "年代",
+                        suggestions = listOf(
+                            AddSpinaers("0~10",R.drawable.gender_neutral_user_icon_icons_com_55902),
+                            AddSpinaers("11~20",R.drawable.gender_neutral_user_icon_icons_com_55902),
+                            AddSpinaers("21~30",R.drawable.gender_neutral_user_icon_icons_com_55902),
+                            AddSpinaers("31~40",R.drawable.gender_neutral_user_icon_icons_com_55902),
+                            AddSpinaers("41~50",R.drawable.gender_neutral_user_icon_icons_com_55902),
+                            AddSpinaers("51~60",R.drawable.gender_neutral_user_icon_icons_com_55902),
+                            AddSpinaers("61~70",R.drawable.gender_neutral_user_icon_icons_com_55902),
+                            AddSpinaers("71~80",R.drawable.gender_neutral_user_icon_icons_com_55902),
+                            AddSpinaers("81~90",R.drawable.gender_neutral_user_icon_icons_com_55902),
+                            AddSpinaers("91~100",R.drawable.gender_neutral_user_icon_icons_com_55902),
+                            AddSpinaers("101~",R.drawable.gender_neutral_user_icon_icons_com_55902),
+
+                            ),
+                        fix = { text , icon ->
+                            viewModel.userDataClass.age = text
                         },
                         text = viewModel.userDataClass.age,
                         comeIcon = ImageVector.vectorResource(id = R.drawable.gender_neutral_user_icon_icons_com_55902),
-                        keyboardType = KeyboardType.Number,
-
-                        )
+                    )
                     Spacer(modifier = Modifier.padding(top = padding))
 
                     EditTextField(

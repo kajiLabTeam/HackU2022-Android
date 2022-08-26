@@ -28,8 +28,8 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
     var userId = ""
 
     fun loginPost(activity: Activity){
-        userDataClass.ble = UUID.randomUUID().toString()
         if(isNewProfile){
+            userDataClass.ble = UUID.randomUUID().toString()
             apiLoginMethod.loginPost(context,userDataClass){
                 val gson = Gson()
                 val json = gson.toJson(it)
@@ -41,6 +41,14 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
                 activity.finish()
             }
         }else{
+            apiLoginMethod.loginPut(data.getString("userId","").toString(),context,userDataClass){
+                val gson = Gson()
+                val json = gson.toJson(it)
+                editor.putString("userData",json)
+                editor.putString("userId", it.id)
+                editor.putString("ble", it.ble)
+                editor.apply()
+            }
 
         }
 
@@ -59,6 +67,8 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
         userDataClass.mail = userData.mail
         userId = userData.id
     }
+
+
 
 
 

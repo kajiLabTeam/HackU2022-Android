@@ -50,8 +50,6 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
 
         viewModel.databaseBuild(this)
 
-        viewModel.cloudinaryBuild(this)
-
         viewModel.checkPermission(this,this)
 
         if(EasyPermissions.hasPermissions(this, *viewModel.permissions)){

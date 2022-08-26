@@ -94,15 +94,6 @@ class MainViewModel : ViewModel(){
         }
     }
 
-    fun cloudinaryBuild(context: Context){
-        val config = mapOf(
-            "cloud_name" to BuildConfig.CLOUD_NAME,
-            "api_key" to BuildConfig.API_KEY,
-            "api_secret" to BuildConfig.API_SECRET
-        )
-
-        MediaManager.init(context, config)
-    }
 
     fun databaseBuild(context: Context){
         this.db = Room.databaseBuilder(
@@ -254,8 +245,8 @@ class MainViewModel : ViewModel(){
                         val apiCoordinateMethod = ApiCoordinateMethod()
                         apiCoordinateMethod.coordinateGet(context,beacon.id1.toString()) { getCoordinateResponse ->
                             getLocation(context, activity){ location ->
-                                getCoordinateResponse.lat = location?.latitude?.toFloat()!!
-                                getCoordinateResponse.lon = location.longitude.toFloat()
+                                getCoordinateResponse.lat = location?.latitude?.toFloat() ?:0f
+                                getCoordinateResponse.lon = location?.longitude?.toFloat() ?:0f
 
                                 GlobalScope.launch{
                                     getCoordinateResponseDAO.insert(getCoordinateResponse)

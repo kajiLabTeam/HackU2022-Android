@@ -141,4 +141,46 @@ class ApiLoginMethod {
 
 
     }
+
+    fun loginPut(userId:String,context: Context, userDataClass:PostLoginRequestBody, nextStepFunc:(PostLoginResponse) -> Unit){
+        val gson = Gson()
+
+        val jsonData = gson.toJson(userDataClass)
+
+        val JSON_MEDIA = "application/json; charset=utf-8".toMediaType()
+
+        val serverUrl = context.getString(R.string.server_url)
+
+        // Requestを作成
+        val request = Request.Builder()
+            .url(serverUrl + "users/$userId")
+            .put(jsonData.toRequestBody(JSON_MEDIA))
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+                // Responseの読み出し
+                if(response.code == 201){
+                    val responseBody = response.body?.string().orEmpty()
+
+                    Log.d("App", responseBody)
+
+                    val userDataClass = gson.fromJson(responseBody,PostLoginResponse::class.java)
+
+                    Log.d("App", userDataClass.toString())
+                    // 必要に応じてCallback
+                    //Todo 名前を変える　userDataClass
+
+                    nextStepFunc(userDataClass)
+                }
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("Error", e.toString())
+                // 必要に応じてCallback
+            }
+        })
+
+
+    }
 }

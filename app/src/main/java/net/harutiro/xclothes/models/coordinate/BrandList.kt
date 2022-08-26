@@ -22,6 +22,6 @@ class BrandList {
             count++
         }
 
-        return brandlist[count].iconDrawableId
+        return if(count >= brandlist.size) R.drawable.ic_baseline_radio_button_unchecked_24 else brandlist[count].iconDrawableId
     }
 }

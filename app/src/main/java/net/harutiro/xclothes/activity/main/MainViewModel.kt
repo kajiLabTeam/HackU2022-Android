@@ -94,15 +94,6 @@ class MainViewModel : ViewModel(){
         }
     }
 
-    fun cloudinaryBuild(context: Context){
-        val config = mapOf(
-            "cloud_name" to BuildConfig.CLOUD_NAME,
-            "api_key" to BuildConfig.API_KEY,
-            "api_secret" to BuildConfig.API_SECRET
-        )
-
-        MediaManager.init(context, config)
-    }
 
     fun databaseBuild(context: Context){
         this.db = Room.databaseBuilder(

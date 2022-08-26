@@ -29,6 +29,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.harutiro.xclothes.activity.evaluation.EvaluationActivity
 import net.harutiro.xclothes.activity.login.LoginActivity
+import net.harutiro.xclothes.models.like.ApiLikeMethod
 import net.harutiro.xclothes.models.login.ApiLoginMethod
 import net.harutiro.xclothes.models.login.get.GetLoginResponse
 import net.harutiro.xclothes.models.map.ApiMapMethod
@@ -231,6 +232,19 @@ fun SettingsScreen() {
                 }
             ) {
                 Text("Mapを受け取る")
+            }
+
+            Button(
+                onClick = {
+                    val data: SharedPreferences = activity.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
+
+                    val apiLikeMethod = ApiLikeMethod()
+                    apiLikeMethod.likeAllGet(context,data.getString("userId","").toString()){
+                        Log.d("apiget",it.toString())
+                    }
+                }
+            ) {
+                Text("自分のIDから評価をすべて受け取る")
             }
 
         }

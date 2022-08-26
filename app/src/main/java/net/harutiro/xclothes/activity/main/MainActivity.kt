@@ -25,6 +25,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.cloudinary.android.MediaManager
+import com.google.firebase.FirebaseApp
 import net.harutiro.xclothes.BuildConfig
 import net.harutiro.xclothes.MainScreen
 import net.harutiro.xclothes.R
@@ -41,6 +42,9 @@ class MainActivity : ComponentActivity(), RangeNotifier ,MonitorNotifier{
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        FirebaseApp.initializeApp(this)
+
 
         viewModel.userCheck(this,this)
 

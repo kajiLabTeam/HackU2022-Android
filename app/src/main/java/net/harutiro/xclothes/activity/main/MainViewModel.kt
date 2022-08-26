@@ -117,11 +117,11 @@ class MainViewModel : ViewModel(){
     }
 
     fun checkPermission(activity:Activity , context: Context){
-        //パーミッション確認
-        if (!EasyPermissions.hasPermissions(context, *permissions)) {
-            // パーミッションが許可されていない時の処理
-            EasyPermissions.requestPermissions(activity, "パーミッションに関する説明", PERMISSION_REQUEST_CODE, *permissions)
-        }
+//        //パーミッション確認
+//        if (!EasyPermissions.hasPermissions(context, *permissions)) {
+//            // パーミッションが許可されていない時の処理
+//            EasyPermissions.requestPermissions(activity, "パーミッションに関する説明", PERMISSION_REQUEST_CODE, *permissions)
+//        }
     }
 
     fun startService(context: Context,application: Application,){

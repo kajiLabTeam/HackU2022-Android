@@ -316,7 +316,7 @@ fun GoodButton(align: Modifier , onClick: () -> Unit) {
 
     val context = LocalContext.current
 
-
+    var isChecked by remember { mutableStateOf(true)}
 
     Button(
         shape = CircleShape,
@@ -324,8 +324,11 @@ fun GoodButton(align: Modifier , onClick: () -> Unit) {
         onClick = {
             Toast.makeText(context, "いいねしました", Toast.LENGTH_SHORT).show()
             onClick()
+            isChecked = false
         },
         contentPadding = PaddingValues(0.dp),
+        enabled = isChecked
+
     ){
         Icon(Icons.Filled.ThumbUp,"contentDescription")
     }

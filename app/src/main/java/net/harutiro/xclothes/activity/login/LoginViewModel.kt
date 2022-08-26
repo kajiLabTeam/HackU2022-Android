@@ -1,13 +1,17 @@
 package net.harutiro.xclothes.activity.login
 
+import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.SharedPreferences
+import android.os.Build
 import android.util.Log
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat.startIntentSenderForResult
+import androidx.core.app.AppLaunchChecker
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
@@ -24,6 +28,7 @@ import net.harutiro.xclothes.models.login.post.PostLoginRequestBody
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
+import pub.devrel.easypermissions.EasyPermissions
 import java.io.IOException
 
 class LoginViewModel: ViewModel() {
@@ -43,6 +48,27 @@ class LoginViewModel: ViewModel() {
     var userDataClass: PostLoginRequestBody = PostLoginRequestBody()
 
     val apiLoginMethod = ApiLoginMethod()
+
+    val PERMISSION_REQUEST_CODE = 1
+
+
+    //許可して欲しいパーミッションの記載、
+    //Android１２以上ではBlueToothの新しいパーミッションを追加する。
+    val permissions = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+        arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.BLUETOOTH_SCAN,
+            Manifest.permission.BLUETOOTH_ADVERTISE
+
+        )
+    }else{
+        arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+        )
+    }
 
     fun login(activity: Activity) {
         // Initialize Firebase Auth
@@ -81,6 +107,27 @@ class LoginViewModel: ViewModel() {
                 // do nothing and continue presenting the signed-out UI.
                 e.localizedMessage?.let { Log.d("Auth3", it) }
             }
+    }
+
+    fun checkFirstStart(context: Context,activity:Activity){
+        if(AppLaunchChecker.hasStartedFromLauncher(context)){
+            Log.d("AppLaunchChecker","2回目以降");
+        } else {
+            AlertDialog.Builder(context) // FragmentではActivityを取得して生成
+                .setTitle("位置情報の取り扱い")
+                .setMessage("このアプリでは位置情報によるアラート機能を可能にするために、現在地のデータが収集されます。\n" +
+                        "アプリを閉じている時や、使用していないときにも収集されます。\n" +
+                        "位置情報は、個人を特定できない統計的な情報として、\n" +
+                        "お知らせの配信、位置情報の利用を許可しない場合は、\n" +
+                        "この後表示されるダイアログで「許可しない」を選択してください。")
+                .setPositiveButton("OK") { dialog, which ->
+                    if (!EasyPermissions.hasPermissions(context, *permissions)) {
+                        // パーミッションが許可されていない時の処理
+                        EasyPermissions.requestPermissions(activity, "パーミッションに関する説明", PERMISSION_REQUEST_CODE, *permissions)
+                    }
+                }
+                .show()
+        }
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent? , activity: Activity , context: Context){

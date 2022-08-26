@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -23,11 +24,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.Gson
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.harutiro.xclothes.activity.evaluation.EvaluationActivity
 import net.harutiro.xclothes.activity.login.LoginActivity
 import net.harutiro.xclothes.models.login.ApiLoginMethod
+import net.harutiro.xclothes.models.login.get.GetLoginResponse
 import net.harutiro.xclothes.models.room.BleListDAO
 import net.harutiro.xclothes.models.room.BleListDatabase
 import net.harutiro.xclothes.service.ForegroundIbeaconOutputServise
@@ -132,6 +135,31 @@ fun SettingsScreen() {
                     GlobalScope.launch{
                         bleListDao.removeAll()
                     }
+
+                }
+            ){
+                Text("bleListDelete")
+            }
+
+            Button(
+                onClick = {
+                    val responseBody = "{\n" +
+                            "    \"id\": \"-0MlNSjap\",\n" +
+                            "    \"ble\": \"aaa\",\n" +
+                            "    \"mail\": \"fuma@aitech.ac.jp\",\n" +
+                            "    \"name\": \"fuma kkk\",\n" +
+                            "    \"gender\": 1,\n" +
+                            "    \"age\": \"16~20\",\n" +
+                            "    \"height\": 170,\n" +
+                            "    \"icon\": \"https://res.cloudinary.com/dhbnknlos/image/upload/v1661434595/My%20Uploads/lfurynpqtv6iahehcgnw.jpg\",\n" +
+                            "    \"created_at\": \"2022-08-25T15:41:00+09:00\",\n" +
+                            "    \"update_at\": \"2022-08-25T22:36:41+09:00\"\n" +
+                            "}"
+
+                    val gson = Gson()
+                    val userDataClass = gson.fromJson(responseBody, GetLoginResponse::class.java)
+
+                    Log.d("gson",userDataClass.toString())
 
                 }
             ){

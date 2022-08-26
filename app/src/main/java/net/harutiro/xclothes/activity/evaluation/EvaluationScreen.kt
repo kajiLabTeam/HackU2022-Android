@@ -116,7 +116,7 @@ fun SimpleAlertDialog(openDialog: Boolean, coordinate: GetCoordinateResponse, fi
                 fix()
             },
             title = {
-                Text("服の詳細だよ")
+                Text("服の詳細")
             },
             text = {
                 Column(

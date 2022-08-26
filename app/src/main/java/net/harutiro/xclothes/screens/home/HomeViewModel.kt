@@ -16,6 +16,9 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import net.harutiro.xclothes.models.like.ApiLikeMethod
+import net.harutiro.xclothes.models.like.get.GetLikeResponse
+import net.harutiro.xclothes.models.login.ApiLoginMethod
+import net.harutiro.xclothes.models.login.get.GetLoginResponse
 import net.harutiro.xclothes.models.map.ApiMapMethod
 import net.harutiro.xclothes.models.map.get.GetMapResponse
 import pub.devrel.easypermissions.EasyPermissions
@@ -34,6 +37,8 @@ class HomeViewModel (application: Application): AndroidViewModel(application) {
     var data: SharedPreferences = application.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
 
     val coordinates = mutableStateOf(mutableListOf<GetMapResponse>())
+
+    var likes = mutableStateOf(listOf<MutableList<GetLikeResponse>>())
 
 
     //許可して欲しいパーミッションの記載、
@@ -58,6 +63,23 @@ class HomeViewModel (application: Application): AndroidViewModel(application) {
         val apiMapMethod = ApiMapMethod()
         apiMapMethod.mapGet(context,data.getString("userId","").toString()){
             coordinates.value = it
+        }
+    }
+
+    fun myLikesGet(){
+        val apiLikeMethod = ApiLikeMethod()
+        apiLikeMethod.likeAllGet(context,data.getString("userId","").toString()){
+            likes.value = it
+        }
+
+    }
+
+    fun userGet(userId:String,getFunc:(GetLoginResponse) -> Unit){
+        val apiLoginMethod = ApiLoginMethod()
+        apiLoginMethod.loginUserIdGet(context,userId){ userDate , code ->
+
+            getFunc(userDate)
+
         }
     }
 

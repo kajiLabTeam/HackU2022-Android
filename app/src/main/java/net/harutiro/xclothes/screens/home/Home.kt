@@ -38,6 +38,7 @@ import net.harutiro.xclothes.models.coordinate.BrandList
 import net.harutiro.xclothes.models.coordinate.CategoryList
 import net.harutiro.xclothes.models.coordinate.CoordinateItems
 import net.harutiro.xclothes.models.coordinate.PriceList
+import net.harutiro.xclothes.models.login.get.GetLoginResponse
 import net.harutiro.xclothes.models.map.get.GetMapResponse
 import net.harutiro.xclothes.screens.home.HomeViewModel
 
@@ -48,6 +49,7 @@ fun HomeScreen(viewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.v
     val mContext = LocalContext.current
 
     viewModel.myCoordinates()
+    viewModel.myLikesGet()
 
     Scaffold(
         modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
@@ -80,11 +82,22 @@ fun Map(paddingValues: PaddingValues, viewModel: HomeViewModel) {
             .padding(paddingValues),
         cameraPositionState = cameraPositionState
     ) {
-        Marker(
-            state = MarkerState(position = viewModel.nowLocation),
-            title = "Singapore",
-            snippet = "Marker in Singapore"
-        )
+        viewModel.likes.value.forEach{ labels ->
+            labels.forEach{ it ->
+
+                val user = remember { mutableStateOf(GetLoginResponse())}
+
+                viewModel.userGet(it.send_user_id){ getUser ->
+                    user.value = getUser
+                }
+
+                Marker(
+                    state = MarkerState(position = LatLng(it.lat.toDouble(), it.lon.toDouble())),
+                    title = " 年齢：${user.value.age} 性別：${if(user.value.gender == 1) "男性" else "女性"}",
+                    snippet = ""
+                )
+            }
+        }
     }
 
     Box(
@@ -169,7 +182,7 @@ fun clothes(items:MutableList<GetMapResponse>, indexChanged:(Int)-> Unit) {
                     Text(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .padding(0.dp,4.dp),
+                            .padding(0.dp, 4.dp),
                         text = "\uD83D\uDC96１０"
                     )
 

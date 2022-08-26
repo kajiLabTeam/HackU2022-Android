@@ -92,7 +92,7 @@ fun ProfileScreen(userDataClass: PostLoginRequestBody, isNewProfile: Boolean , v
                             var genderNumber = if(text == "男性"){ 1 } else { 2 }
                             viewModel.userDataClass.gender = genderNumber
                         },
-                        text = viewModel.userDataClass.gender.toString(),
+                        text = if(viewModel.userDataClass.gender == 1) {"男性"} else {"女性"},
                         comeIcon = if(viewModel.userDataClass.gender == 1){
                             ImageVector.vectorResource(id = R.drawable.man_fill0_wght400_grad0_opsz48)
                         }else{

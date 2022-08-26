@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -177,7 +178,14 @@ fun clothes(viewModel: HomeViewModel,items:MutableList<GetMapResponse>, indexCha
                 exit = fadeOut(),
             ) {
 
-                Card(Modifier.width(itemWidthDp)) {
+                Card(Modifier
+                    .width(itemWidthDp)
+                    .clickable {
+                        viewModel.likeGet(item.id){
+                            viewModel.likes.value = listOf(it)
+                        }
+                    }
+                ) {
                     
                     MapPhotoView(urlRemember = item.image)
 

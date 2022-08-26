@@ -47,6 +47,8 @@ fun HomeScreen(viewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.v
 
     val mContext = LocalContext.current
 
+    viewModel.myCoordinates()
+
     Scaffold(
         modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 70.dp),
     ) {
@@ -99,32 +101,7 @@ fun Map(paddingValues: PaddingValues, viewModel: HomeViewModel) {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             clothes(
-                items = mutableListOf(
-                    GetMapResponse(
-                        id = "aaa",
-                        image = "https://res.cloudinary.com/dhbnknlos/image/upload/v1661433479/My%20Uploads/S__88317958_b4j9aj.jpg"
-                    ),
-                    GetMapResponse(
-                        id = "abb",
-                        image = "https://res.cloudinary.com/dhbnknlos/image/upload/v1661436878/My%20Uploads/S__49807382_myy9am.jpg"
-                    ),
-                    GetMapResponse(
-                        id = "ab2",
-                        image = "https://res.cloudinary.com/dhbnknlos/image/upload/v1661436878/My%20Uploads/S__49807382_myy9am.jpg"
-                    ),GetMapResponse(
-                        id = "33b",
-                        image = "https://res.cloudinary.com/dhbnknlos/image/upload/v1661436878/My%20Uploads/S__49807382_myy9am.jpg"
-                    ),GetMapResponse(
-                        id = "a55b",
-                        image = "https://res.cloudinary.com/dhbnknlos/image/upload/v1661436878/My%20Uploads/S__49807382_myy9am.jpg"
-                    ),GetMapResponse(
-                        id = "ab66b",
-                        image = "https://res.cloudinary.com/dhbnknlos/image/upload/v1661436878/My%20Uploads/S__49807382_myy9am.jpg"
-                    ),GetMapResponse(
-                        id = "ab777b",
-                        image = "https://res.cloudinary.com/dhbnknlos/image/upload/v1661436878/My%20Uploads/S__49807382_myy9am.jpg"
-                    ),
-                ),
+                items = viewModel.coordinates.value,
                 indexChanged = {}
             )
         }

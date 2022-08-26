@@ -9,11 +9,15 @@ import android.content.SharedPreferences
 import android.location.Location
 import android.os.Build
 import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
+import net.harutiro.xclothes.models.like.ApiLikeMethod
 import net.harutiro.xclothes.models.map.ApiMapMethod
+import net.harutiro.xclothes.models.map.get.GetMapResponse
 import pub.devrel.easypermissions.EasyPermissions
 
 class HomeViewModel (application: Application): AndroidViewModel(application) {
@@ -28,6 +32,8 @@ class HomeViewModel (application: Application): AndroidViewModel(application) {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     var data: SharedPreferences = application.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
+
+    val coordinates = mutableStateOf(mutableListOf<GetMapResponse>())
 
 
     //許可して欲しいパーミッションの記載、
@@ -51,7 +57,7 @@ class HomeViewModel (application: Application): AndroidViewModel(application) {
     fun myCoordinates(){
         val apiMapMethod = ApiMapMethod()
         apiMapMethod.mapGet(context,data.getString("userId","").toString()){
-
+            coordinates.value = it
         }
     }
 

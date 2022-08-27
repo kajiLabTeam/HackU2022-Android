@@ -1,7 +1,6 @@
 package net.harutiro.xclothes.activity.evaluation
 
 import android.app.Activity
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.LifecycleOwner
@@ -11,7 +10,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.harutiro.xclothes.models.coordinate.get.GetCoordinateResponse
-import net.harutiro.xclothes.models.like.post.ApiLikeMethod
+import net.harutiro.xclothes.models.like.ApiLikeMethod
 import net.harutiro.xclothes.models.like.post.PostLikeRequestBody
 import net.harutiro.xclothes.models.login.get.GetLoginResponse
 import net.harutiro.xclothes.models.room.BleListDAO

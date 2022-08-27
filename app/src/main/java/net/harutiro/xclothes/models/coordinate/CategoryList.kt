@@ -5,11 +5,11 @@ import net.harutiro.xclothes.models.AddSpinaers
 
 class CategoryList {
     val categoryList = listOf(
-        AddSpinaers("トップス", R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
-        AddSpinaers("Tシャツ", R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
-        AddSpinaers("ボトムス", R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
-        AddSpinaers("パンツ", R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
-        AddSpinaers("靴下", R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
+        AddSpinaers("ジャケット", R.drawable.jacket),
+        AddSpinaers("スカート", R.drawable.skirt),
+        AddSpinaers("ズボン", R.drawable.pants),
+        AddSpinaers("ワンピース", R.drawable.one_piece),
+        AddSpinaers("Tシャツ", R.drawable.s_thirt),
     )
 
     fun checkCategoryIcon(text:String):Int{

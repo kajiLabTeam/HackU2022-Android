@@ -39,6 +39,9 @@ import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import net.harutiro.xclothes.R
 import net.harutiro.xclothes.models.AddSpinaers
 import net.harutiro.xclothes.models.Clothes
+import net.harutiro.xclothes.models.coordinate.BrandList
+import net.harutiro.xclothes.models.coordinate.CategoryList
+import net.harutiro.xclothes.models.coordinate.PriceList
 import net.harutiro.xclothes.models.coordinate.post.PostCoordinateRequestBody
 import net.harutiro.xclothes.screens.add.AddViewModel
 import net.harutiro.xclothes.ui.theme.XclothesTheme
@@ -200,11 +203,7 @@ fun ClothesList(viewModel: AddViewModel){
 
                             Spinner(
                                 questionLabel = "ブランド" ,
-                                suggestions = listOf(
-                                    AddSpinaers("GU",R.drawable.gu_logo),
-                                    AddSpinaers("ユニクロ",R.drawable.uniqlo),
-                                    AddSpinaers("しまむら",R.drawable.simamura),
-                                ),
+                                suggestions = BrandList().brandlist,
                                 fix = { text , icon ->
                                     viewModel.clothe[index] = Clothes(
                                         id = name.id,
@@ -222,13 +221,7 @@ fun ClothesList(viewModel: AddViewModel){
 
                             Spinner(
                                 questionLabel = "カテゴリ",
-                                suggestions = listOf(
-                                    AddSpinaers("トップス",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
-                                    AddSpinaers("Tシャツ",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
-                                    AddSpinaers("ボトムス",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
-                                    AddSpinaers("パンツ",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
-                                    AddSpinaers("靴下",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
-                                ),
+                                suggestions = CategoryList().categoryList,
                                 fix = { text , icon ->
                                     viewModel.clothe[index] = Clothes(
                                         id = name.id,
@@ -246,13 +239,7 @@ fun ClothesList(viewModel: AddViewModel){
 
                             Spinner(
                                 questionLabel = "価格帯",
-                                suggestions = listOf(
-                                    AddSpinaers("0~1000",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
-                                    AddSpinaers("1001~3000",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
-                                    AddSpinaers("3001~5000",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
-                                    AddSpinaers("5001~10000",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
-                                    AddSpinaers("10001~",R.drawable.currency_yen_fill0_wght400_grad0_opsz48__1_),
-                                ),
+                                suggestions = PriceList().priceList,
                                 fix = { text , icon ->
                                     viewModel.clothe[index] = Clothes(
                                         id = name.id,

@@ -260,6 +260,32 @@ fun SettingsScreen() {
                 Text("一つの服についての評価をもらえる")
             }
 
+            Button(
+                onClick = {
+                    val data: SharedPreferences = activity.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
+
+                    val apiMapMethod = ApiMapMethod()
+                    apiMapMethod.mapPublicGet(context){
+                        Log.d("apiget",it.toString())
+                    }
+                }
+            ) {
+                Text("すべてのパブリックのマップを取得")
+            }
+
+            Button(
+                onClick = {
+                    val data: SharedPreferences = activity.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
+
+                    val apiLikeMethod = ApiLikeMethod()
+                    apiLikeMethod.likeAllGet(context,data.getString("userId","").toString()){
+                        Log.d("apiget",it.toString())
+                    }
+                }
+            ) {
+                Text("すべてのパブリックから評価をすべて受け取る")
+            }
+
         }
 
     }

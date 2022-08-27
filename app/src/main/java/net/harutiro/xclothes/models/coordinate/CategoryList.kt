@@ -9,8 +9,10 @@ class CategoryList {
         AddSpinaers("スカート", R.drawable.skirt),
         AddSpinaers("ズボン", R.drawable.pants),
         AddSpinaers("ワンピース", R.drawable.one_piece),
-        AddSpinaers("Tシャツ", R.drawable.s_thirt),
-    )
+        AddSpinaers("トップス", R.drawable.s_thirt),
+        AddSpinaers("その他", R.drawable.ic_baseline_radio_button_unchecked_24),
+
+        )
 
     fun checkCategoryIcon(text:String):Int{
         var count = 0

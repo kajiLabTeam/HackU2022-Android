@@ -278,7 +278,7 @@ fun SettingsScreen() {
                     val data: SharedPreferences = activity.getSharedPreferences("DataSave", Context.MODE_PRIVATE)
 
                     val apiLikeMethod = ApiLikeMethod()
-                    apiLikeMethod.likeAllGet(context,data.getString("userId","").toString()){
+                    apiLikeMethod.likePublicAllGet(context){
                         Log.d("apiget",it.toString())
                     }
                 }

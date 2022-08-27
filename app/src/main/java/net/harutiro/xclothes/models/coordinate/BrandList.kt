@@ -19,6 +19,7 @@ class BrandList {
         AddSpinaers("WEGO", R.drawable.wego),
         AddSpinaers("ZARA", R.drawable.zara),
         AddSpinaers("無印良品", R.drawable.mujirushiryohin),
+        AddSpinaers("その他", R.drawable.ic_baseline_radio_button_unchecked_24),
 
         )
 

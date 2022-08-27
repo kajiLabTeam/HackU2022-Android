@@ -59,7 +59,7 @@ fun HomeScreen(viewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.v
         Box(
             contentAlignment = Alignment.BottomStart
         ) {
-            Map(it, viewModel)
+            HomeMap(it, viewModel)
         }
     }
 
@@ -67,7 +67,7 @@ fun HomeScreen(viewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.v
 }
 
 @Composable
-fun Map(paddingValues: PaddingValues, viewModel: HomeViewModel) {
+fun HomeMap(paddingValues: PaddingValues, viewModel: HomeViewModel) {
 
 
     val cameraPositionState = rememberCameraPositionState {}
@@ -115,7 +115,7 @@ fun Map(paddingValues: PaddingValues, viewModel: HomeViewModel) {
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            clothes(
+            HomeClothes(
                 viewModel = viewModel,
                 items = viewModel.coordinates.value,
                 indexChanged = {}
@@ -127,7 +127,7 @@ fun Map(paddingValues: PaddingValues, viewModel: HomeViewModel) {
 
 @OptIn(ExperimentalSnapperApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun clothes(viewModel: HomeViewModel,items:MutableList<GetMapResponse>, indexChanged:(Int)-> Unit) {
+fun HomeClothes(viewModel: HomeViewModel,items:MutableList<GetMapResponse>, indexChanged:(Int)-> Unit) {
     val lazyListState: LazyListState = rememberLazyListState()
     val layoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
 
@@ -187,7 +187,7 @@ fun clothes(viewModel: HomeViewModel,items:MutableList<GetMapResponse>, indexCha
                     }
                 ) {
                     
-                    MapPhotoView(urlRemember = item.image)
+                    HomeMapPhotoView(urlRemember = item.image)
 
 
                     val likePeople = remember { mutableStateOf(0)}
@@ -217,7 +217,7 @@ fun clothes(viewModel: HomeViewModel,items:MutableList<GetMapResponse>, indexCha
 }
 
 @Composable
-fun MapPhotoView(urlRemember:String){
+fun HomeMapPhotoView(urlRemember:String){
     AsyncImage(
         model = urlRemember,
         contentDescription = "My Picture",

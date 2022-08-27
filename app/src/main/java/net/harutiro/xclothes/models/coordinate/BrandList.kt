@@ -15,7 +15,7 @@ class BrandList {
         AddSpinaers("H&M", R.drawable.h_m),
         AddSpinaers("PaulSmith", R.drawable.paulsmith),
         AddSpinaers("RAGEBLUE", R.drawable.rageblue),
-        AddSpinaers("RifhtOn", R.drawable.right_on),
+        AddSpinaers("RightOn", R.drawable.right_on),
         AddSpinaers("WEGO", R.drawable.wego),
         AddSpinaers("ZARA", R.drawable.zara),
         AddSpinaers("無印良品", R.drawable.mujirushiryohin),
